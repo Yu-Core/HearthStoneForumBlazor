@@ -1,0 +1,59 @@
+﻿/*轮播图样式*/
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.wrap {
+    height: 20vw;
+    min-height:150px;
+    width: 40vw;
+    min-width:300px;
+    overflow: hidden;
+    position: relative;
+}
+
+    .wrap ul {
+        position: absolute;
+        margin:0;
+        padding:0;
+    }
+
+        .wrap ul li {
+            height: 20vw;
+            min-height:150px;
+            transition:ease;
+        }
+
+            .wrap ul li img {
+                width: 40vw;
+                min-width:300px;
+                object-fit: cover;
+            }
+
+    .wrap ol {
+        position: absolute;
+        left: 2vw;
+        top: 1vw;
+        padding: 0;
+    }
+
+        .wrap ol li {
+            float: left;
+            margin-right: 1px;
+            width: 2vw;
+            height: 2vw;
+            line-height: 2vw;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+            background-color: rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        .wrap ol .on {
+            background-color: rgba(255,255,255,0.5);
+            color: black;
+        }
+
