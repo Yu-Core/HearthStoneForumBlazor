@@ -13,6 +13,6 @@ namespace HearthStoneForum.Model
         public string? Title { get; set; }
         [SugarColumn(ColumnDataType = "text")]
         public string? Description { get; set; }
-        public DateTime? CreatedTime { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }

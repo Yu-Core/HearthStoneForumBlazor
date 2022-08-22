@@ -1,10 +1,11 @@
 ﻿export function CarouselStart() {
     var wrap = document.getElementById('carousel-main'),
-        pic = document.getElementById('carousel-pic').getElementsByTagName("li"),
+        pic = document.getElementById('carousel-pic').getElementsByTagName('li'),
         list = document.getElementById('carousel-list').getElementsByTagName('li'),
         index = 0,
         timer = null;
 
+    
     // 定义并调用自动播放函数
     timer = setInterval(autoPlay, 2000);
 

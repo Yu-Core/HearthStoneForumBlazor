@@ -13,6 +13,8 @@ namespace HearthStoneForum.WebApi.Extend
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<ICarouselRepository, CarouselRepository>();
             services.AddScoped<ICarouselService, CarouselService>();
+            services.AddScoped<INoticeRepository, NoticeRepository>();
+            services.AddScoped<INoticeService, NoticeService>();
             return services;
         }
     }
