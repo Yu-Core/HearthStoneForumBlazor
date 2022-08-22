@@ -4,6 +4,23 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+html {
+    font-size: 62.5% !important;
+}
+
+@media only screen and (min-width: 481px) {
+    html {
+        font-size: 94% !important;
+    }
+}
+
+@media only screen and (min-width: 561px) {
+    html {
+        font-size: 109% !important;
+    }
+}
+
+
 h1:focus {
     outline: none;
 }
@@ -67,27 +84,7 @@ a, .btn-link {
 .border-2-solid-grey {
     border: 2px solid grey;
 }
-#carousel-warp{
-    width:40vw;
-    min-width:300px;
-    height:20vw;
-    min-height:150px;
-    overflow:hidden;
-}
-#notice-warp {
-    width: 26vw;
-    min-width:200px;
-    height:20vw;
-    min-height:150px;
-    border: 2px solid grey;
-    border-left: none;
-    color: #777777;
-    font-size:1vw;
-    overflow:hidden;
-}
-#notice-head{
-    color:red;
-    font-size:1.5vw;
-    text-align:center;
-    justify-content:center;
+.navigation-button {
+    min-width: 36px !important;
+    min-height:20px !important;
 }

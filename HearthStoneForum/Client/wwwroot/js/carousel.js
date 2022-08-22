@@ -1,7 +1,7 @@
 ﻿export function CarouselStart() {
-    var wrap = document.getElementById('wrap'),
-        pic = document.getElementById('pic').getElementsByTagName("li"),
-        list = document.getElementById('list').getElementsByTagName('li'),
+    var wrap = document.getElementById('carousel-main'),
+        pic = document.getElementById('carousel-pic').getElementsByTagName("li"),
+        list = document.getElementById('carousel-list').getElementsByTagName('li'),
         index = 0,
         timer = null;
 

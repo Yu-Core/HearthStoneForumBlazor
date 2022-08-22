@@ -1,14 +1,19 @@
 ﻿@inherits LayoutComponentBase
 <MApp>
     <MAppBar App ElevateOnScroll ScrollTarget="#scrolling">
-        <MSheet Class="d-flex justify-content-center mx-auto bg-transparent" MaxWidth="1000">
-            @foreach (var item in navigationFloats)
-            {
-                <MButton Href="@item.Href" Text class="flex-grow-1" XLarge>
-                    @item.Title
-                </MButton>
-            }
-        </MSheet>
+        <ChildContent>
+            <div class="d-flex justify-content-center flex-grow-1 bg-transparent w-100">
+                <MSheet Class="d-flex justify-content-around bg-transparent w-100" MaxWidth="900">
+                    @foreach (var item in navigationButtons)
+                    {
+                        <MButton Class="navigation-button flex-grow-1 btn-sm px-0" Href="@item.Href" Text>
+                            @item.Title
+                        </MButton>
+                    }
+                </MSheet>
+            </div>
+        </ChildContent>
+
     </MAppBar>
 
     <!-- 根据应用组件来调整你的内容 -->
@@ -47,18 +52,18 @@
 </MApp>
 
 @code {
-    public class NavigationFloat
+    public class NavigationButton
     {
         public string? Title { set; get; }
         public string? Href { set; get; }
     }
-    public List<NavigationFloat> navigationFloats = new List<NavigationFloat>
+    public List<NavigationButton> navigationButtons = new List<NavigationButton>
     {
-        new NavigationFloat(){Title="论坛首页",Href=""},
-        new NavigationFloat(){Title="论坛公告",Href=""},
-        new NavigationFloat(){Title="排行榜",Href=""},
-        new NavigationFloat(){Title="游戏下载",Href=""},
-        new NavigationFloat(){Title="新手指南",Href=""}
+        new NavigationButton(){Title="论坛首页",Href=""},
+        new NavigationButton(){Title="论坛公告",Href=""},
+        new NavigationButton(){Title="排行榜",Href=""},
+        new NavigationButton(){Title="游戏下载",Href=""},
+        new NavigationButton(){Title="新手指南",Href=""}
     };
 }
 

@@ -4,64 +4,52 @@
 
 
 <PageTitle>炉石传说游戏论坛</PageTitle>
-<MSheet Id="main-warp">
-    <MRow Id="main-top">
-        <MCol Id="main-top-left" Class="m-3">
-            <MRow Id="top-left-warp" Class="flex-nowrap">
-                <MCol Id="carousel-warp" Class="p-0 rounded-l-lg" Cols="@("auto")">
-                    <div class="wrap" id='wrap'>
-                        <ul id="pic">
-                            @foreach (var item in Carousels)
-                            {
-                                <li>
-                                    <img src="@item.ImagePath" alt="@item.Title">
-                                </li>
-                            }
-                        </ul>
-                        <ol id="list">
-                            @for (int i = 0; i < Carousels.Count; i++)
-                            {
-                                <li class="@(i==0?"on":"")">@(i+1)</li>
-                            }
-                        </ol>
-                    </div>
-                </MCol>
-
-                <MCol Id="notice-warp" Class="py-5 rounded-r-lg" Cols="@("auto")">
-                    <MRow Id="notice-head" Class="my-2 text-center">
-                        最新公告
-                    </MRow>
+<div class="main-warp">
+    <div class="main-top">
+        <div class="main-top-left flex-column flex-sm-row">
+            <div class="carousel-warp">
+                <div class="carousel-main" id='carousel-main'>
+                    <ul id="carousel-pic">
+                        @foreach (var item in Carousels)
+                        {
+                            <li>
+                                <img src="@item.ImagePath" alt="@item.Title">
+                            </li>
+                        }
+                    </ul>
+                    <ol id="carousel-list" class="d-none d-md-flex">
+                        @for (int i = 0; i < Carousels.Count; i++)
+                        {
+                            <li class="@(i==0?"on":"")">@(i+1)</li>
+                        }
+                    </ol>
+                </div>
+            </div>
+            <div class="notice-warp rounded p-2 px-3 px-sm-5">
+                <div class="notice-head">
+                    最新公告
+                </div>
+                <div class="notice-list">
                     @for (var i = 0; i < 4; i++)
                     {
-                        @if (i != 0)
-                        {
-                            <MDivider></MDivider>
-                        }
-                        <MRow Class="notice-content justify-content-between flex-nowrap">
-                            <MCol Class="notice-content-left" Cols="@("auto")">
-                                炉石传说19.6补丁说明
-                            </MCol>
-                            <MCol Class="notice-content-right" Cols="@("auto")">
-                                2021/02/20
-                            </MCol>
-                        </MRow>
+                        <div class="notice-list-item">
+                            <div class="notice-list-item-left">王师北定中原日，家祭无忘告乃翁</div>
+                            <div class="notice-list-item-right">2021-2-3</div>
+                        </div>
                     }
-                </MCol>
-            </MRow>
-        </MCol>
-        <MCol Id="main-top-right" Class="m-3 flex">
-
-        </MCol>
-    </MRow>
-    <MRow Id="main-bottom">
-        <MCol Id="main-bottom-left" Class="m-3">
-
-        </MCol>
-        <MCol Id="main-bottom-right" Class="m-3">
-
-        </MCol>
-    </MRow>
-</MSheet>
+                </div>
+            </div>
+        </div>
+        <div class="main-top-right">
+        </div>
+    </div>
+    <div class="main-bottom">
+        <div class="main-bottom-left">
+        </div>
+        <div class="main-bottom-right">
+        </div>
+    </div>
+</div>
 @code {
     private List<Carousel> Carousels = new List<Carousel>();
 
