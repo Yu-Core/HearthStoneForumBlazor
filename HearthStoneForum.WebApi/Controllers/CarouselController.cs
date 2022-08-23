@@ -42,7 +42,7 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> Create(Carousel carousel)
         {
             bool b = await _iCarouselService.CreateAsync(carousel);
-            if (!b) return ApiResultHelper.Error("用户添加失败，服务器发生错误");
+            if (!b) return ApiResultHelper.Error("添加失败");
 
             return ApiResultHelper.Success(carousel);
         }
@@ -57,7 +57,7 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> Edit(int id,Carousel carousel)
         {
             var oldCarousel = await _iCarouselService.FindAsync(id);
-            if (oldCarousel == null) return ApiResultHelper.Error("没有找到该用户");
+            if (oldCarousel == null) return ApiResultHelper.Error("没有找到该记录");
 
             bool b = await _iCarouselService.EditAsync(carousel);
             if (!b) return ApiResultHelper.Error("修改失败");

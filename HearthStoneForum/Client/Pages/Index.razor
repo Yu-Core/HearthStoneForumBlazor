@@ -22,12 +22,13 @@
 @code {
     private List<Carousel> Carousels = new List<Carousel>();
     private List<Notice> Notices = new();
+    private int TodaySignCount = 0;
 
     protected override async Task OnInitializedAsync()
     {
         Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data;
         Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices")).Data;
-
+        TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/today_count")).Data;
     }
 
     

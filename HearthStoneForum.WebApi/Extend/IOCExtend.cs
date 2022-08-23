@@ -15,6 +15,8 @@ namespace HearthStoneForum.WebApi.Extend
             services.AddScoped<ICarouselService, CarouselService>();
             services.AddScoped<INoticeRepository, NoticeRepository>();
             services.AddScoped<INoticeService, NoticeService>();
+            services.AddScoped<ISignRepository, SignRepository>();
+            services.AddScoped<ISignService, SignService>();
             return services;
         }
     }

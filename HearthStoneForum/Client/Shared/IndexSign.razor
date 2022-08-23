@@ -5,7 +5,8 @@
         </div>
         <div class="list-item-content">
             <div class="content-title">签到</div>
-            <div class="content-subtitle my-1 my-sm-0">今日已签到</div>
+            <div class="content-subtitle my-1 my-sm-0">今日已签到@(TodaySignCount)人
+            </div>
         </div>
     </a>
 </div>
@@ -37,5 +38,7 @@
 </div>
 
 @code {
+    [Parameter]
+    public int TodaySignCount{ set; get; }
 
 }
