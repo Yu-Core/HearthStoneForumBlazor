@@ -1,35 +1,31 @@
 ﻿export function CarouselStart() {
-    var wrap = document.getElementById('carousel-main'),
+
+    var wrap = $("#carousel-wrap"),
+        listwrap = $("#carousel-list"),
         pic = document.getElementById('carousel-pic').getElementsByTagName('li'),
         list = document.getElementById('carousel-list').getElementsByTagName('li'),
         index = 0,
         timer = null;
 
-
     // 定义并调用自动播放函数
     timer = setInterval(autoPlay, 2000);
 
     // 鼠标划过整个容器时停止自动播放
-    wrap.onmouseover = function () {
+    wrap.on("mouseover",'div', function () {
         clearInterval(timer);
-    }
+    })
 
     // 鼠标离开整个容器时继续播放至下一张
-    wrap.onmouseout = function () {
+    wrap.on("mouseout",'div', function () {
         timer = setInterval(autoPlay, 2000);
-    }
-     //遍历所有数字导航实现划过切换至对应的图片
-    setTimeout(function () {
-        for (var i = 0; i < list.length; i++) {
-            list[i].onmouseover = function () {
-                clearInterval(timer);
+    })
+
+     // 实现划过切换至对应的图片
+    listwrap.on("mouseover",'li', function () {
+        clearInterval(timer);
                 index = this.innerText - 1;
                 changePic(index);
-            };
-        };
-    },100)
-    
-
+    })
 
     function autoPlay() {
         if (++index >= pic.length) index = 0;
