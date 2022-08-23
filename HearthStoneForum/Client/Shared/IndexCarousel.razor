@@ -1,0 +1,38 @@
+﻿
+@inject IJSRuntime JS
+
+<div class="carousel-warp">
+    <div class="carousel-main" id='carousel-main'>
+        <ul id="carousel-pic">
+            @foreach (var item in Data)
+            {
+                <li style="display:@(Data.IndexOf(item)==0?"block":"none")">
+                    <img src="@item.ImagePath" alt="@item.Title">
+                </li>
+            }
+        </ul>
+        <ol id="carousel-list" class="d-none d-md-block">
+            @for (int i = 0; i < Data.Count; i++)
+            {
+                <li class="@(i==0?"on":"")">@(i+1)</li>
+            }
+        </ol>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<Carousel> Data { set; get; }
+
+    private IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import",
+                "./js/carousel.js");
+            await module.InvokeVoidAsync("CarouselStart");
+        }
+    }
+}

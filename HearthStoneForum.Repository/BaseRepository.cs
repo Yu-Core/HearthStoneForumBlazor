@@ -48,12 +48,12 @@ namespace HearthStoneForum.Repository
             return base.GetSingleAsync(func);
         }
 
-        public Task<List<T>> QueryAsync()
+        public virtual Task<List<T>> QueryAsync()
         {
             return base.GetListAsync();
         }
 
-        public Task<List<T>> QueryAsync(Expression<Func<T, bool>> func)
+        public virtual Task<List<T>> QueryAsync(Expression<Func<T, bool>> func)
         {
             return base.GetListAsync(func);
         }

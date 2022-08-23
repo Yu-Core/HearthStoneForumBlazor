@@ -1,82 +1,15 @@
 ﻿@page "/"
 @inject HttpClient Http
-@inject IJSRuntime JS
-
 
 <PageTitle>炉石传说游戏论坛</PageTitle>
 <div class="main-warp">
     <div class="main-top flex-column flex-sm-row">
         <div class="main-top-left flex-column flex-sm-row">
-            <div class="carousel-warp">
-                <div class="carousel-main" id='carousel-main'>
-                    <ul id="carousel-pic">
-                        @foreach (var item in Carousels)
-                        {
-                            <li style="display:@(Carousels.IndexOf(item)==0?"block":"none")">
-                                <img src="@item.ImagePath" alt="@item.Title">
-                            </li>
-                        }
-                    </ul>
-                    <ol id="carousel-list" class="d-none d-md-block">
-                        @for (int i = 0; i < Carousels.Count; i++)
-                        {
-                            <li class="@(i==0?"on":"")">@(i+1)</li>
-                        }
-                    </ol>
-                </div>
-            </div>
-            <div class="notice-warp py-2 px-3 px-sm-5">
-                <div class="notice-head">
-                    最新公告
-                </div>
-                <div class="notice-list">
-                    @foreach (var item in Notices)
-                    {
-                        <div class="notice-list-item my-3 my-sm-0">
-                            <div class="notice-list-item-left">
-                                @item.Title
-                            </div>
-                            <div class="notice-list-item-right">
-                                @item.CreatedTime.ToString("yyyy/MM/dd")
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
+            <IndexCarousel Data="@Carousels"></IndexCarousel>
+            <IndexNotice Data="@Notices"></IndexNotice>
         </div>
         <div class="main-top-right rounded-lg py-1 py-sm-3 px-2 px-sm-5">
-            <div class="sign-wrap top-right-list py-1 py-sm-0">
-                
-                    <div class="list-item-icon">
-                        <MIcon XLarge>mdi-calendar-month</MIcon>
-                    </div>
-                    <div class="list-item-content">
-                        <div class="content-title">签到</div>
-                        <div class="content-subtitle my-1 my-sm-0">今日已签到</div>
-                    </div>
-            </div>
-            <div class="history-wrap top-right-list py-1 py-sm-0">
-                <div class="list-item-icon">
-                    <MIcon XLarge>mdi-book-open-variant</MIcon>
-                </div>
-                <div class="list-item-content">
-                    <div class="content-title">炉石历史</div>
-                    <div class="content-subtitle my-1 my-sm-0">了解更多炉石传说历史版本</div>
-                </div>
-            </div>
-            <div class="time-wrap top-right-list py-1 py-sm-0">
-                <div class="list-item-icon">
-                    <MIcon XLarge>mdi-clock-time-nine-outline</MIcon>
-                </div>
-                <div class="list-item-content">
-                    <div class="content-title">
-                        @DateTime.Now.ToString("d")
-                    </div>
-                    <div class="content-subtitle my-1 my-sm-0">
-                        @LunarCalendar.GetChineseDate(DateTime.Now)
-                    </div>
-                </div>
-            </div>
+            <IndexSign></IndexSign>
         </div>
     </div>
     <div class="main-bottom">
@@ -97,16 +30,6 @@
 
     }
 
-
-    private IJSObjectReference? module;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            module = await JS.InvokeAsync<IJSObjectReference>("import",
-                "./js/carousel.js");
-            await module.InvokeVoidAsync("CarouselStart");
-        }
-    }
+    
+    
 }

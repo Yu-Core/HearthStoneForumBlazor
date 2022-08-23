@@ -5,7 +5,7 @@
         index = 0,
         timer = null;
 
-    
+
     // 定义并调用自动播放函数
     timer = setInterval(autoPlay, 2000);
 
@@ -18,14 +18,18 @@
     wrap.onmouseout = function () {
         timer = setInterval(autoPlay, 2000);
     }
-    // 遍历所有数字导航实现划过切换至对应的图片
-    for (var i = 0; i < list.length; i++) {
-        list[i].onmouseover = function () {
-            clearInterval(timer);
-            index = this.innerText - 1;
-            changePic(index);
+     //遍历所有数字导航实现划过切换至对应的图片
+    setTimeout(function () {
+        for (var i = 0; i < list.length; i++) {
+            list[i].onmouseover = function () {
+                clearInterval(timer);
+                index = this.innerText - 1;
+                changePic(index);
+            };
         };
-    };
+    },100)
+    
+
 
     function autoPlay() {
         if (++index >= pic.length) index = 0;
