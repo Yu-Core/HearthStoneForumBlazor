@@ -53,9 +53,12 @@
     overflow: hidden;
     white-space: nowrap;
 }
+    .notice-list-item-left:hover {
+        transform: translateY(-8%);
+    }
 
-.notice-list-item-right {
-    justify-content: end;
-    flex-grow: 0;
-    margin-left: 10px;
-}
+    .notice-list-item-right {
+        justify-content: end;
+        flex-grow: 0;
+        margin-left: 10px;
+    }
