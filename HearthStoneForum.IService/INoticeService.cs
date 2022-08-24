@@ -9,5 +9,6 @@ namespace HearthStoneForum.IService
 {
     public interface INoticeService : IBaseService<Notice>
     {
+        Task<List<Notice>> GetNewNotices();
     }
 }

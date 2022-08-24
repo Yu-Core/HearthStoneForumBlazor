@@ -25,7 +25,7 @@ namespace HearthStoneForum.WebApi.Controllers
             return ApiResultHelper.Success(data);
         }
         [HttpGet("today_count")]
-        public async Task<ActionResult<ApiResult>> GetTodaySignCount()
+        public ActionResult<ApiResult> GetTodaySignCount()
         {
             var count = _iSignService.GetTodaySignCount();
             return ApiResultHelper.Success(count);

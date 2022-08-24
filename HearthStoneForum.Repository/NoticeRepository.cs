@@ -10,10 +10,10 @@ namespace HearthStoneForum.Repository
 {
     public class NoticeRepository : BaseRepository<Notice>, INoticeRepository
     {
-        public override async Task<List<Notice>> QueryAsync()
+        public async Task<List<Notice>> GetNewNotices()
         {
             return (await base.QueryAsync())
-                .OrderBy(it => it.CreatedTime)
+                .OrderByDescending(it => it.CreatedTime)
                 .Take(4)
                 .ToList();
         }

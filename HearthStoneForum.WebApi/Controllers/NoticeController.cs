@@ -23,6 +23,13 @@ namespace HearthStoneForum.WebApi.Controllers
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }
+        [HttpGet("new_notices")]
+        public async Task<ActionResult<ApiResult>> GetNewNotices()
+        {
+            var data = await _iNoticeService.GetNewNotices();
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data);
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResult>> GetNotice(int id)
         {

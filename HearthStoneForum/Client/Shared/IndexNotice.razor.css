@@ -54,7 +54,7 @@
     white-space: nowrap;
 }
     .notice-list-item-left:hover {
-        transform: translateY(-8%);
+        transform: translateY(-3%);
     }
 
     .notice-list-item-right {

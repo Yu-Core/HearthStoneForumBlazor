@@ -5,11 +5,11 @@
     <div class="notice-list">
         @foreach (var item in Data)
         {
-            <div class="notice-list-item my-3 my-sm-0">
+            <div class="notice-list-item py-3 py-sm-0">
                 <div class="notice-list-item-left">
-                    <a>
+                    <MButton Text>
                         @item.Title
-                    </a>
+                    </MButton>
                 </div>
                 <div class="notice-list-item-right">
                     @item.CreatedTime.ToString("yyyy/MM/dd")
@@ -20,5 +20,5 @@
 </div>
 @code {
     [Parameter]
-    public List<Notice> Data { set; get; }
+    public List<Notice>? Data { set; get; }
 }

@@ -8,7 +8,7 @@
             <IndexCarousel Data="@Carousels"></IndexCarousel>
             <IndexNotice Data="@Notices"></IndexNotice>
         </div>
-        <div class="main-top-right rounded-lg py-1 py-sm-3 px-2 px-sm-5">
+        <div class="main-top-right rounded-lg overflow-hidden">
             <IndexSign></IndexSign>
         </div>
     </div>
@@ -27,7 +27,7 @@
     protected override async Task OnInitializedAsync()
     {
         Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data;
-        Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices")).Data;
+        Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data;
         TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/today_count")).Data;
     }
 

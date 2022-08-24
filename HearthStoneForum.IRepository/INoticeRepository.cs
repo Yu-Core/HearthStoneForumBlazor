@@ -9,5 +9,6 @@ namespace HearthStoneForum.IRepository
 {
     public interface INoticeRepository : IBaseRepository<Notice>
     {
+        Task<List<Notice>> GetNewNotices();
     }
 }

@@ -17,5 +17,10 @@ namespace HearthStoneForum.Service
             base._iBaseRepository = iNoticeREpository;
             this._iNoticeREpository = iNoticeREpository;
         }
+
+        public async Task<List<Notice>> GetNewNotices()
+        {
+            return await _iNoticeREpository.GetNewNotices();
+        }
     }
 }
