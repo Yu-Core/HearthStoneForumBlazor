@@ -6,7 +6,7 @@
     justify-content: center;
     color: #777777;
     font-size: 0.85rem;
-    background-color: #E0E0E0;
+    background-color: #EEEEEE;
     border-radius: 8px;
 }
 
@@ -53,12 +53,13 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
     .notice-list-item-left:hover {
         transform: translateY(-3%);
     }
 
-    .notice-list-item-right {
-        justify-content: end;
-        flex-grow: 0;
-        margin-left: 10px;
-    }
+.notice-list-item-right {
+    justify-content: end;
+    flex-grow: 0;
+    margin-left: 10px;
+}

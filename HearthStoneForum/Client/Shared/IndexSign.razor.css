@@ -1,29 +1,25 @@
 ﻿
-.top-right-list {
-    width: 100%;
+
+
+.list-content {
     display: flex;
     flex-grow: 1;
+    flex-direction: column;
+    padding-left: 20px;
+    overflow: hidden;
 }
 
-    .top-right-list .list-content {
+    .list-content .list-title {
         display: flex;
         flex-grow: 1;
-        flex-direction: column;
-        padding-left:20px;
-        overflow:hidden;
+        align-items: end;
+        font-size: 1.3rem;
     }
 
-        .top-right-list .list-content .list-title {
-            display: flex;
-            flex-grow: 1;
-            align-items: end;
-            font-size: 1.3rem;
-        }
-
-        .top-right-list .list-content .list-subtitle {
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
-            font-size: 0.75rem;
-            white-space: nowrap;
-        }
+    .list-content .list-subtitle {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }

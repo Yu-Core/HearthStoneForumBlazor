@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HearthStoneForum.Model
 {
-    public class AreaL:BaseId
+    public class Area:BaseId
     {
         [SugarColumn(ColumnDataType = "nvarchar(64)")]
         public string? Name { get; set; }

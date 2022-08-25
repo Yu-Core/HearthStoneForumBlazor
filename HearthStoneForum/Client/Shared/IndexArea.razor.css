@@ -1,0 +1,38 @@
+﻿
+.area-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.area-card {
+    width: 49%;
+    height: 14vw;
+    min-height: 150px;
+    margin-bottom: 2%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: #EEEEEE;
+}
+
+    .area-card .title {
+        height: 20%;
+        min-height:30px;
+        color: red;
+        font-size: 1.1rem !important;
+        overflow: hidden;
+    }
+
+    .area-card .subtitle {
+        flex-grow: 1;
+        font-size: 0.8rem;
+        overflow: hidden;
+    }
+
+@media only screen and (min-width: 600px) {
+    .area-card {
+        width: 32%;
+    }
+}

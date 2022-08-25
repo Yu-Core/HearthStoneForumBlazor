@@ -8,12 +8,13 @@
             <IndexCarousel Data="@Carousels"></IndexCarousel>
             <IndexNotice Data="@Notices"></IndexNotice>
         </div>
-        <div class="main-top-right rounded-lg overflow-hidden">
+        <div class="main-top-right rounded-lg">
             <IndexSign></IndexSign>
         </div>
     </div>
     <div class="main-bottom">
         <div class="main-bottom-left">
+            <IndexArea Data="@Areas"></IndexArea>
         </div>
         <div class="main-bottom-right">
         </div>
@@ -23,12 +24,14 @@
     private List<Carousel> Carousels = new List<Carousel>();
     private List<Notice> Notices = new();
     private int TodaySignCount = 0;
+    private List<Area> Areas = new();
 
     protected override async Task OnInitializedAsync()
     {
         Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data;
         Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data;
         TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/today_count")).Data;
+        Areas = (await Http.GetFromJsonAsync<ApiResult<List<Area>>>("areas")).Data;
     }
 
     

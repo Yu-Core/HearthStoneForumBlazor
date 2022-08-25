@@ -1,4 +1,4 @@
-﻿.main-top-left, .main-top-right, .main-bottom-right {
+﻿.main-top-left, .main-top-right, .main-bottom-left, .main-bottom-right {
     margin: 10px;
 }
 
@@ -15,7 +15,7 @@
     display: flex;
 }
 
-.main-top-left {
+.main-top-left, .main-bottom-left {
     display: flex;
     flex-grow: 1;
 }
@@ -23,6 +23,11 @@
 @media only screen and (min-width: 600px) {
 
     .main-top-right {
+        width: 20vw !important;
+        min-width: 200px;
+    }
+
+    .main-bottom-right {
         width: 20vw !important;
         min-width: 200px;
     }
@@ -35,10 +40,9 @@
     flex-direction: column;
     align-items: center;
     width: auto;
-    background-color: #E0E0E0;
+    background-color: #EEEEEE;
 }
 
     .main-top-right * {
         flex-grow: 1;
     }
-

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
     <None Include="wwwroot\js\carousel.js" />
   </ItemGroup>
 
