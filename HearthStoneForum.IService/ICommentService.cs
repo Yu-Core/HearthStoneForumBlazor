@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HearthStoneForum.IRepository
+namespace HearthStoneForum.IService
 {
-    public interface ISignRepository : IBaseRepository<Sign>
+    public interface ICommentService : IBaseService<Comment>
     {
-        int GetTodaySignCount();
     }
 }

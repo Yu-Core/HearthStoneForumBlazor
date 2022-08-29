@@ -12,11 +12,12 @@
             <IndexSign></IndexSign>
         </div>
     </div>
-    <div class="main-bottom">
+    <div class="main-bottom flex-column flex-sm-row">
         <div class="main-bottom-left">
             <IndexArea Data="@Areas"></IndexArea>
         </div>
-        <div class="main-bottom-right">
+        <div class="main-bottom-right elevation-2">
+            <IndexRecommend NewInvitations="@NewInvitations" RecommendInvitations="@RecommendInvitations"></IndexRecommend>
         </div>
     </div>
 </div>
@@ -25,6 +26,8 @@
     private List<Notice> Notices = new();
     private int TodaySignCount = 0;
     private List<Area> Areas = new();
+    private List<InvitationDTORecommend> RecommendInvitations = new();
+    private List<InvitationDTORecommend> NewInvitations = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,6 +35,8 @@
         Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data;
         TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/today_count")).Data;
         Areas = (await Http.GetFromJsonAsync<ApiResult<List<Area>>>("areas")).Data;
+        RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTORecommend>>>("invitations/recommend")).Data;
+        NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTORecommend>>>("invitations/new")).Data;
     }
 
     

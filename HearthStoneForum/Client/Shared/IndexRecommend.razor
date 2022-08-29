@@ -1,5 +1,35 @@
-﻿
+﻿<MTabs Class="w-100 rounded-lg" BackgroundColor="grey lighten-3">
+    <MTab>热门推荐</MTab>
+    <MTab>最新发布</MTab>
+    <MTabItem>
+        <div class="invitation-list">
+            @foreach (var item in RecommendInvitations)
+            {
+                <div>
+                    <MButton Text Href="">
+                        @item.Title
+                    </MButton>
+                </div>
+            }
+        </div>
+    </MTabItem>
+    <MTabItem>
+        <div class="invitation-list">
+            @foreach (var item in NewInvitations)
+            {
+                <div>
+                    <MButton Text Href="">
+                        @item.Title
+                    </MButton>
+                </div>
+            }
+        </div>
+    </MTabItem>
+</MTabs>
 
 @code {
-
+    [Parameter]
+    public List<InvitationDTORecommend> RecommendInvitations{ get; set; }
+    [Parameter]
+    public List<InvitationDTORecommend> NewInvitations{ get; set; }
 }

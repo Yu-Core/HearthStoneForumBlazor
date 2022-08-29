@@ -19,33 +19,29 @@
     <!-- 根据应用组件来调整你的内容 -->
     <MMain Id="scrolling" Class="overflow-y-auto">
         <!-- 给应用提供合适的间距 -->
-        <MContainer Fluid Style="height: 1500px;">
+        <MContainer Fluid>
             @Body
         </MContainer>
     </MMain>
 
-    <MSheet Class="grey darken-4 grey--text lighten--4">
-        <MContainer Style="font-size:xx-small">
-            <MRow Class="justify-content-center flex-wrap">
-                <MCol Cols="2">
-                    <MImage MaxWidth="150" Src="images/logo_blizzard.png"></MImage>
-                </MCol>
-                <MCol Cols="2">
-                    <MImage MaxWidth="150" Src="images/logo_ne.png"></MImage>
-                </MCol>
-                <MCol Cols="6" Class="text-start">
-                    <p>©2021 xxxx有限公司版权所有 由xxxxx网络科技发展有限公司运营 著作权侵权</p>
-                    <p>文网进字[2021]001号 沪网文〔2021〕1234-567号 增值电信业务经营许可证编号：沪B2－20210001</p>
-                    <p>沪ICP备：沪B2－20080012 法律文件</p>
-                    <p>新出审字[2013]1510号 文化部网络游戏举报与联系邮箱：wlyxjb@gmail.com 《互联网文化管理暂行规定》</p>
-                    <p>互联网违法和不良信息举报电话：0571-28090163 沪公网安备 31011502022167号</p>
-                </MCol>
-            </MRow>
-            <MRow Class="text-center">
-                <p>积极健康的游戏心态是健康游戏的开端，本游戏故事情节设置紧凑，请您合理控制游戏时间，避免沉溺游戏影响生活，注意自我保护，防范网络陷阱。</p>
-                <p>健康游戏忠告：抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。</p>
-            </MRow>
-        </MContainer>
+    <MSheet Class="d-flex flex-column grey darken-4 grey--text lighten--4" Style="font-size:xx-small">
+        <div class="footer-right d-flex justify-content-center">
+            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center">
+                <img Src="images/logo_blizzard.png">
+                <img Src="images/logo_ne.png">
+            </div>
+            <div>
+                <p>©2021 xxxx有限公司版权所有 由xxxxx网络科技发展有限公司运营 著作权侵权</p>
+                <p>文网进字[2021]001号 沪网文〔2021〕1234-567号 增值电信业务经营许可证编号：沪B2－20210001</p>
+                <p>沪ICP备：沪B2－20080012 法律文件</p>
+                <p>新出审字[2013]1510号 文化部网络游戏举报与联系邮箱：wlyxjb@gmail.com 《互联网文化管理暂行规定》</p>
+                <p>互联网违法和不良信息举报电话：0571-28090163 沪公网安备 31011502022167号</p>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center">
+            <p>积极健康的游戏心态是健康游戏的开端，本游戏故事情节设置紧凑，请您合理控制游戏时间，避免沉溺游戏影响生活，注意自我保护，防范网络陷阱。</p>
+            <p>健康游戏忠告：抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。</p>
+        </div>
 
     </MSheet>
 

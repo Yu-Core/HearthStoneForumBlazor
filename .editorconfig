@@ -62,6 +62,9 @@ csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_conditional_delegate_call = true:suggestion
 csharp_style_prefer_parameter_null_checking = true:suggestion
 
+# CS8620: 由于引用类型的可为 null 性差异，实参不能用于形参。
+dotnet_diagnostic.CS8620.severity = silent
+
 [*.vb]
 #### 命名样式 ####
 

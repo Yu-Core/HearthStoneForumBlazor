@@ -35,7 +35,7 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> GetCarouselByName(string name)
         {
             var data = await _iCarouselService.QueryAsync(it => it.Title.ToLower().Contains(name.ToLower()));
-            if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的用户");
+            if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");
             return ApiResultHelper.Success(data);
         }
         [HttpPost]

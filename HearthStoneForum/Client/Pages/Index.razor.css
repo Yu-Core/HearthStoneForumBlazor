@@ -3,15 +3,15 @@
 }
 
 .main-warp {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
 }
 
-    .main-warp .main-top, .main-bottom {
+    .main-warp, .main-top, .main-bottom {
         flex-grow: 1;
     }
 
-.main-top {
+.main-top, .main-bottom {
     display: flex;
 }
 
@@ -30,6 +30,7 @@
     .main-bottom-right {
         width: 20vw !important;
         min-width: 200px;
+        flex-shrink: 0;
     }
 }
 
@@ -46,3 +47,9 @@
     .main-top-right * {
         flex-grow: 1;
     }
+
+.main-bottom-right {
+    width: auto;
+    border-radius:8px;
+    background-color: #EEEEEE;
+}

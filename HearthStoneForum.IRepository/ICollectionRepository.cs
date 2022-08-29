@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace HearthStoneForum.IRepository
 {
-    public interface ISignRepository : IBaseRepository<Sign>
+    public interface ICollectionRepository : IBaseRepository<Collection>
     {
-        int GetTodaySignCount();
     }
 }

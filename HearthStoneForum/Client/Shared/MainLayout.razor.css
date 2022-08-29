@@ -91,3 +91,6 @@ main {
     color: black;
     background-color: white;
 }
+.footer-right p{
+    margin-bottom:8px;
+}
