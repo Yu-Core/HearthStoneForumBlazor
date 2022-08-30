@@ -27,6 +27,7 @@ namespace HearthStoneForum.WebApi.Extend
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICollectionRepository, CollectionRepository>();
             services.AddScoped<ICollectionService, CollectionService>();
+            services.AddScoped<IRankService, RankService>();
             return services;
         }
     }

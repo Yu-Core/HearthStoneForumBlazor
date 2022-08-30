@@ -1,0 +1,38 @@
+﻿@page "/Ranks"
+@inject HttpClient Http
+
+
+
+@foreach (var item in ranks)
+{
+    <div class="d-flex">
+        <div>@(item.Rank)</div>
+        <div>@(item.BattleTag)</div>
+        @if (RatingShow())
+        {
+            <div>@(item.Rating)</div>
+        }
+        
+    </div>
+}
+
+
+@code {
+    private RankData rankData = new();
+    private List<Ranks> ranks = new();
+    protected override async Task OnInitializedAsync()
+    {
+        rankData = (await Http.GetFromJsonAsync<ApiResult<RankData>>("ranks")).Data;
+        ranks = rankData.Ranks;
+    }
+    private bool RatingShow(){
+        switch(rankData.Type){
+            case "BG":
+                return true;
+            case "MRC":
+                return true;
+            default:
+                return false;
+        }
+    }
+}
