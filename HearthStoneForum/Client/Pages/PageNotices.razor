@@ -1,0 +1,61 @@
+﻿@page "/Notices"
+@inject HttpClient Http
+
+<div class="main">
+    <div class="notice-wrap">
+        <div class="breadcrumbs">
+            你所在的位置：<MBreadcrumbs>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Href="">炉石论坛</MBreadcrumbsItem>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Disabled>论坛公告</MBreadcrumbsItem>
+            </MBreadcrumbs>
+        </div>
+        <div class="notice-head">
+            <h2>论坛公告</h2>
+        </div>
+        <div class="notice-content">
+            @for (var i = 0; i < Notices.Count; i++)
+            {
+                
+                    <a href="@("NoticeInfo/"+Notices[i].Id)">
+                        <div class="notice-row">
+                            <div class="notice-title">
+                                @Notices[i].Title
+                            </div>
+                            <div class="notice-time">
+                                @Notices[i].CreatedTime.ToString("d")
+                            </div>
+                        </div>
+                    </a>
+            }
+        </div>
+        <div class="text-center">
+            <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(total/size)"></MPagination>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Notice> Notices{ get; set; } = new();
+    private int _page = 1;
+    private int page {
+        get => _page;
+        set{
+            _page = value;
+            ChangeNotices();
+        }
+    }
+    private int size = 20;
+    private int total = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/page?page=" + page + "&size=" + size);
+        Notices = result.Data;
+        total = result.Total;
+    }
+    private async void ChangeNotices(){
+        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/page?page=" + page + "&size=" + size);
+        Notices = result.Data;
+        StateHasChanged();
+    }
+    
+}

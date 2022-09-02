@@ -67,5 +67,15 @@ namespace HearthStoneForum.Service
         {
             return _iBaseRepository.QueryDTOAsync(func);
         }
+
+        public Task<List<DTO>> QueryDTOAsync<DTO>(int page, int size, RefAsync<int> total) where DTO : class, new()
+        {
+            return _iBaseRepository.QueryDTOAsync<DTO>(page, size, total);
+        }
+
+        public Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func, int page, int size, RefAsync<int> total) where DTO : class, new()
+        {
+            return _iBaseRepository.QueryDTOAsync<DTO>(func, page, size, total);
+        }
     }
 }

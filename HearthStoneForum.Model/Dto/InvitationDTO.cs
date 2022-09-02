@@ -15,6 +15,8 @@ namespace HearthStoneForum.Model.Dto
         public string? AreaName { get; set; }
         public string[]? ImagePaths { get; set; }
         public int Views { get; set; }
+        public DateTime CreatedTime { get; set; }
+
 
         public List<Likes>? Likes { get; set; }
         public List<Comment>? Comments { get; set; }

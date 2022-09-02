@@ -1,0 +1,33 @@
+﻿@page "/NoticeInfo/{id:int}"
+@inject HttpClient Http
+
+<div class="main">
+    <div class="notice-wrap">
+        <div class="breadcrumbs">
+            你所在的位置：<MBreadcrumbs>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Href="">炉石论坛</MBreadcrumbsItem>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Href="Notices">论坛公告</MBreadcrumbsItem>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Disabled>@Notice.Title</MBreadcrumbsItem>
+            </MBreadcrumbs>
+        </div>
+        <div class="notice-head">
+            <h2>@Notice.Title</h2>
+        </div>
+        <div class="notice-content">
+
+            @Notice.Description
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private Notice Notice = new();
+    [Parameter]
+    public int id { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<ApiResult<Notice>>("notices/" + id);
+        Notice = result.Data;
+    }
+}

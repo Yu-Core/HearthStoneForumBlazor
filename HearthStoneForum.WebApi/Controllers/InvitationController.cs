@@ -4,6 +4,8 @@ using HearthStoneForum.Model.Dto;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SqlSugar;
+using System.Xml.Linq;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
@@ -50,6 +52,14 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> GetRecommendInvitation()
         {
             var data = await _iInvitationService.GetRecommendInvitations();
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data);
+        }
+        [HttpGet("area")]
+        public async Task<ActionResult<ApiResult>> GetInvitationByAreaId(int id, int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.AreaId == id);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }

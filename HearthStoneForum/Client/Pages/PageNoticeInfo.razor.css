@@ -1,0 +1,27 @@
+﻿.main {
+    display: flex;
+    justify-content: center;
+}
+
+.notice-wrap {
+    width: 100%;
+    max-width: 1024px;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+}
+
+    .breadcrumbs a {
+        font-size: 0.9rem;
+    }
+
+.notice-head {
+    text-align:center;
+    margin-bottom: 32px;
+}
+
+.notice-content {
+    
+}

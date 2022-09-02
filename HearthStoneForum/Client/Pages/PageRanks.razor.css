@@ -1,0 +1,55 @@
+﻿.rank-wrap {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items:center;
+}
+
+.rank-head * {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    text-align:center;
+}
+
+.rank-content {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    max-width: 1024px;
+}
+.rank-content .head{
+    display:flex;
+}
+
+    .rank-content .list {
+        display: flex;
+        flex-direction: column;
+        width:100%;
+    }
+        .rank-content .list .list-item:nth-child(2n+1) {
+            background-color: #EEEEEE;
+        }
+
+
+.left {
+    width: 150px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.middle {
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    display:flex;
+    justify-content:start;
+    align-items:center;
+}
+@media only screen and (min-width: 600px) {
+    .middle {
+        justify-content: center;
+    }
+}

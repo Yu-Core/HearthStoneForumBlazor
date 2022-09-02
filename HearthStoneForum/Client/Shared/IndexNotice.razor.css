@@ -1,4 +1,4 @@
-﻿.notice-warp {
+﻿.notice-wrap {
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
@@ -11,7 +11,7 @@
 }
 
 @media only screen and (min-width: 600px) {
-    .notice-warp {
+    .notice-wrap {
         border-radius: 0 8px 8px 0 !important;
     }
 }

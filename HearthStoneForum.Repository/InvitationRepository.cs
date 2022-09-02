@@ -57,7 +57,8 @@ namespace HearthStoneForum.Repository
                     Content = i.Content,
                     UserId = i.UserId,
                     Views = i.Views,
-                    ImagePaths = i.ImagePaths
+                    ImagePaths = i.ImagePaths,
+                    CreatedTime = i.CreatedTime
                 })
                 .MergeTable()
                 .Mapper(it => it.Likes = Context.Queryable<Likes>().Where(l => l.InvitationId == it.Id).ToList())
@@ -84,7 +85,8 @@ namespace HearthStoneForum.Repository
                     Content = i.Content,
                     UserId = i.UserId,
                     Views = i.Views,
-                    ImagePaths = i.ImagePaths
+                    ImagePaths = i.ImagePaths,
+                    CreatedTime = i.CreatedTime
                 })
                 .MergeTable()
                 .Mapper(it => it.Likes = Context.Queryable<Likes>().Where(l => l.InvitationId == it.Id).ToList())
@@ -98,6 +100,65 @@ namespace HearthStoneForum.Repository
 
                 .Where(func as Expression<Func<InvitationDTO, bool>>)
                 .ToListAsync(it => new DTO());
+        }
+
+        public override Task<List<DTO>> QueryDTOAsync<DTO>(int page, int size, RefAsync<int> total)
+        {
+            return base.Context.Queryable<Invitation, Area>((i, a) => new JoinQueryInfos(
+                JoinType.Left, i.AreaId == a.Id
+                ))
+                .Select((i, a) => new InvitationDTO()
+                {
+                    Id = i.Id,
+                    AreaId = i.AreaId,
+                    AreaName = a.Name,
+                    Title = i.Title,
+                    Content = i.Content,
+                    UserId = i.UserId,
+                    Views = i.Views,
+                    ImagePaths = i.ImagePaths,
+                    CreatedTime = i.CreatedTime
+                })
+                .MergeTable()
+                .Mapper(it => it.Likes = Context.Queryable<Likes>().Where(l => l.InvitationId == it.Id).ToList())
+                .Mapper(it => it.Comments = Context.Queryable<Comment>().Where(l => l.InvitationId == it.Id).ToList())
+                .Mapper(it => it.Collections = Context.Queryable<Collection>().Where(l => l.InvitationId == it.Id).ToList())
+
+                .Mapper(it => it.LikeCount = (it.Likes ?? new List<Likes>()).Count)
+                .Mapper(it => it.CommentCount = (it.Comments ?? new List<Comment>()).Count)
+                .Mapper(it => it.CollectionCount = (it.Collections ?? new List<Collection>()).Count)
+                .Mapper(it => it.Recommend = it.Views + it.LikeCount + it.CollectionCount + it.CommentCount)
+                .ToPageListAsync(page, size, total,it=>new DTO());
+        }
+
+        public override Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func, int page, int size, RefAsync<int> total)
+        {
+            return base.Context.Queryable<Invitation, Area>((i, a) => new JoinQueryInfos(
+                JoinType.Left, i.AreaId == a.Id
+                ))
+                .Select((i, a) => new InvitationDTO()
+                {
+                    Id = i.Id,
+                    AreaId = i.AreaId,
+                    AreaName = a.Name,
+                    Title = i.Title,
+                    Content = i.Content,
+                    UserId = i.UserId,
+                    Views = i.Views,
+                    ImagePaths = i.ImagePaths,
+                    CreatedTime = i.CreatedTime
+                })
+                .MergeTable()
+                .Mapper(it => it.Likes = Context.Queryable<Likes>().Where(l => l.InvitationId == it.Id).ToList())
+                .Mapper(it => it.Comments = Context.Queryable<Comment>().Where(l => l.InvitationId == it.Id).ToList())
+                .Mapper(it => it.Collections = Context.Queryable<Collection>().Where(l => l.InvitationId == it.Id).ToList())
+
+                .Mapper(it => it.LikeCount = (it.Likes ?? new List<Likes>()).Count)
+                .Mapper(it => it.CommentCount = (it.Comments ?? new List<Comment>()).Count)
+                .Mapper(it => it.CollectionCount = (it.Collections ?? new List<Collection>()).Count)
+                .Mapper(it => it.Recommend = it.Views + it.LikeCount + it.CollectionCount + it.CommentCount)
+                .Where(func as Expression<Func<InvitationDTO, bool>>)
+                .ToPageListAsync(page, size, total, it => new DTO());
         }
     }
 }

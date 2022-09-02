@@ -77,5 +77,15 @@ namespace HearthStoneForum.Repository
         {
             throw new NotImplementedException("The Method cannot be used,Please override subclasses");
         }
+
+        public virtual Task<List<DTO>> QueryDTOAsync<DTO>(int page, int size, RefAsync<int> total) where DTO : class, new()
+        {
+            throw new NotImplementedException("The Method cannot be used,Please override subclasses");
+        }
+
+        public virtual Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func, int page, int size, RefAsync<int> total) where DTO : class, new()
+        {
+            throw new NotImplementedException("The Method cannot be used,Please override subclasses");
+        }
     }
 }

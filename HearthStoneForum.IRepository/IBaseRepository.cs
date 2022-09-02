@@ -47,5 +47,22 @@ namespace HearthStoneForum.IRepository
 
         Task<List<DTO>> QueryDTOAsync<DTO>() where DTO : class,new();
         Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func) where DTO : class, new();
+        /// <summary>
+        /// DTO分页查询
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<DTO>> QueryDTOAsync<DTO>(int page, int size, RefAsync<int> total) where DTO : class, new();
+        /// <summary>
+        /// DTO自定义条件分页查询
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func, int page, int size, RefAsync<int> total) where DTO : class, new();
     }
 }

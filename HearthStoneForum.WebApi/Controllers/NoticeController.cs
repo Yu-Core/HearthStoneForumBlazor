@@ -3,6 +3,7 @@ using HearthStoneForum.Model;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SqlSugar;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
@@ -22,6 +23,14 @@ namespace HearthStoneForum.WebApi.Controllers
             var data = await _iNoticeService.QueryAsync();
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
+        }
+        [HttpGet("page")]
+        public async Task<ActionResult<ApiResult>> GetNoticePage(int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iNoticeService.QueryAsync(page, size, total);
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data,total);
         }
         [HttpGet("new_notices")]
         public async Task<ActionResult<ApiResult>> GetNewNotices()

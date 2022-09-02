@@ -1,35 +1,68 @@
 ﻿@page "/Ranks"
 @inject HttpClient Http
 
-
-
-@foreach (var item in ranks)
-{
-    <div class="d-flex">
-        <div>@(item.Rank)</div>
-        <div>@(item.BattleTag)</div>
-        @if (RatingShow())
-        {
-            <div>@(item.Rating)</div>
-        }
-        
+<div class="rank-wrap">
+    <div class="rank-head">
+        <h2>@(ranks.Count)强 - @Mode</h2>
+        <p>以下是在@(Mode)中排名前@(ranks.Count)名的玩家。</p>
+        <p>最后更新:@(DateTime.Now.ToString("yyyy-MM-dd"))</p>
     </div>
-}
+    <div class="rank-content">
+        <div class="head">
+            <div class="left">
+                排名
+            </div>
+            <div class="middle">
+                战网昵称
+            </div>
+            @if(rankData.Type == "BG"){
+                <div class="right">
+                    积分
+                </div>
+            }
+        </div>
+        <div class="list">
+            @foreach (var item in ranks)
+            {
+                <div class="d-flex list-item">
+                    <div class="left">@(item.Rank)</div>
+                    <div class="middle">@(item.BattleTag)</div>
+                    @if (RatingShow)
+                    {
+                        <div class="right">@(item.Rating)</div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
 
 
 @code {
     private RankData rankData = new();
     private List<Ranks> ranks = new();
+    private bool RatingShow = false;
+    private string Mode = "标准模式";
     protected override async Task OnInitializedAsync()
     {
         rankData = (await Http.GetFromJsonAsync<ApiResult<RankData>>("ranks")).Data;
         ranks = rankData.Ranks;
+        RatingShow = GetRatingShow((RankType)Enum.Parse(typeof(RankType),rankData.Type,true));
+
     }
-    private bool RatingShow(){
-        switch(rankData.Type){
-            case "BG":
+    private bool GetRatingShow(RankType rankType){
+        switch(rankType){
+            case RankType.STD:
+                return false;
+            case RankType.WLD:
+                return false;
+            case RankType.BG:
                 return true;
-            case "MRC":
+            case RankType.CLS:
+                return false;
+            case RankType.MRC:
                 return true;
             default:
                 return false;

@@ -1,0 +1,47 @@
+﻿@page "/Invitations/{id:int}"
+@inject HttpClient Http
+
+<div class="main">
+    <div class="invitation-wrap">
+        <div class="breadcrumbs">
+                你所在的位置：<MBreadcrumbs>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Href="">炉石论坛</MBreadcrumbsItem>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Disabled>@(Area.Name)</MBreadcrumbsItem>
+                </MBreadcrumbs>
+        </div>
+        <div class="invitation-head">
+            <h2>@(Area.Name)</h2>
+        </div>
+        <div class="invitation-content">
+        </div>
+        <div class="text-center">
+            <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(total/size)"></MPagination>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int id { get; set; }
+    private int _page = 1;
+    private int page{
+        get => _page;
+        set{
+            _page = value;
+
+        }
+    }
+
+    private int size = 20;
+    private int total = 0;
+    private Area Area = new();
+    private List<InvitationDTO> Invitations = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Area = (await Http.GetFromJsonAsync<ApiResult<Area>>("areas/" + id)).Data;
+        Invitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTO>>>("invitations/area?id=" + id)).Data;
+    }
+    private void ChangeInvitations(){
+
+    }
+}
