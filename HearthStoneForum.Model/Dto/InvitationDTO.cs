@@ -17,13 +17,8 @@ namespace HearthStoneForum.Model.Dto
         public int Views { get; set; }
         public DateTime CreatedTime { get; set; }
 
-
-        public List<Likes>? Likes { get; set; }
-        public List<Comment>? Comments { get; set; }
-        public List<Collection>? Collections { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
         public int CollectionCount { get; set; }
-        public int Recommend { get; set; }
     }
 }

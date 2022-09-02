@@ -59,7 +59,7 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> GetInvitationByAreaId(int id, int page, int size)
         {
             RefAsync<int> total = 0;
-            var data = await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.AreaId == id);
+            var data = await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.AreaId == id,page,size,total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }
