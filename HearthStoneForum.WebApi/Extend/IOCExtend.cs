@@ -28,6 +28,8 @@ namespace HearthStoneForum.WebApi.Extend
             services.AddScoped<ICollectionRepository, CollectionRepository>();
             services.AddScoped<ICollectionService, CollectionService>();
             services.AddScoped<IRankService, RankService>();
+            services.AddScoped<IDownloadRepository, DownloadRepository>();
+            services.AddScoped<IDownloadService, DownloadService>();
             return services;
         }
     }

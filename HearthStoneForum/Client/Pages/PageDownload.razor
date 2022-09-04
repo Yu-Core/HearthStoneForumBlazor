@@ -3,27 +3,108 @@
 
 <div class="main">
     <div class="download-wrap">
-        <div class="pc">
-            <div>PC端下载</div>
-            <div>
-                <div></div>
+        <div class="pc download-mode">
+            <h2>PC端下载</h2>
+            <div class="download-border">
+                <div class="download-btn">
+                    <MHover>
+                        <a href="@(DownloadPC.UrlPath)">
+                            <div @attributes="context.Attrs" class="@($"{context.Class} elevation-{(context.Hover ? 12 : 2)}")">
+                                <MIcon XLarge>@DownloadPC.Icon</MIcon>
+                                @DownloadPC.Title
+                            </div>
+                        </a>
+                    </MHover>
+                    <MHover>
+                        <a href="@(DownloadMac.UrlPath)">
+                            <div @attributes="context.Attrs" class="@($"{context.Class} elevation-{(context.Hover ? 12 : 2)}")">
+                                <MIcon XLarge>@DownloadMac.Icon</MIcon>
+                                @DownloadMac.Title
+                            </div>
+                        </a>
+                    </MHover>
+                </div>
             </div>
         </div>
-        <div class="mobile">
-            <div>移动端下载</div>
-            <div>
-                <div></div>
+        <div class="mobile download-mode">
+            <h2>移动端下载</h2>
+            <div class="download-border">
+                <div class="qr-code">
+                    <img src="https://hearthstone.nosdn.127.net/3/download/v2/QR-code.png" />
+                </div>
+                <div class="download-btn">
+                    <MHover>
+                        <a href="@(DownloadIOS.UrlPath)">
+                            <div @attributes="context.Attrs" class="@($"{context.Class} elevation-{(context.Hover ? 12 : 2)}")">
+                                <MIcon XLarge>@DownloadIOS.Icon</MIcon>
+                                @DownloadIOS.Title
+                            </div>
+                        </a>
+                    </MHover>
+                    <MHover>
+                        <a href="@(DownloadAndroid.UrlPath)">
+                            <div @attributes="context.Attrs" class="@($"{context.Class} elevation-{(context.Hover ? 12 : 2)}")">
+                                <MIcon XLarge>@DownloadAndroid.Icon</MIcon>
+                                @DownloadAndroid.Title
+                            </div>
+                        </a>
+                    </MHover>
+                </div>
             </div>
         </div>
-        <div class="tools">
-            <div>常用工具</div>
-            <div>
-                <div></div>
+        <div class="tools download-mode">
+            <h2>常用工具</h2>
+            <div class="download-border">
+                <div class="download-btn">
+                    <MHover>
+                        <a href="@(DownloadCardTool.UrlPath)">
+                            <div @attributes="context.Attrs" class="@($"{context.Class} elevation-{(context.Hover ? 12 : 2)}")">
+                                <MIcon XLarge>@DownloadCardTool.Icon</MIcon>
+                                @DownloadCardTool.Title
+                            </div>
+                        </a>
+                    </MHover>
+                    <div class="download-btn2">
+                        <MHover>
+                            <a href="@(DownloadPlugin.UrlPath)">
+                                <div @attributes="context.Attrs" class="@($"{context.Class} elevation-{(context.Hover ? 12 : 2)}")">
+                                    <MIcon XLarge>@DownloadPlugin.Icon</MIcon>
+                                    @DownloadPlugin.Title
+                                </div>
+                            </a>
+                        </MHover>
+                        <MHover>
+                            <a href="@(DownloadCarry.UrlPath)">
+                                <div @attributes="context.Attrs" class="@($"{context.Class} elevation-{(context.Hover ? 12 : 2)}")">
+                                    <MIcon XLarge>@DownloadCarry.Icon</MIcon>
+                                    @DownloadCarry.Title
+                                </div>
+                            </a>
+                        </MHover>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @code {
+    private Download DownloadPC = new();
+    private Download DownloadMac = new();
+    private Download DownloadAndroid = new();
+    private Download DownloadIOS = new();
+    private Download DownloadCardTool = new();
+    private Download DownloadPlugin = new();
+    private Download DownloadCarry = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        DownloadPC = (await Http.GetFromJsonAsync<ApiResult<Download>>("downloads/search?name=Windows")).Data ?? new();
+        DownloadMac = (await Http.GetFromJsonAsync<ApiResult<Download>>("downloads/search?name=Mac")).Data ?? new();
+        DownloadAndroid = (await Http.GetFromJsonAsync<ApiResult<Download>>("downloads/search?name=Android")).Data ?? new();
+        DownloadIOS = (await Http.GetFromJsonAsync<ApiResult<Download>>("downloads/search?name=IOS")).Data ?? new();
+        DownloadCardTool = (await Http.GetFromJsonAsync<ApiResult<Download>>("downloads/search?name=CardTool")).Data ?? new();
+        DownloadPlugin = (await Http.GetFromJsonAsync<ApiResult<Download>>("downloads/search?name=OfficialAddon")).Data ?? new();
+        DownloadCarry = (await Http.GetFromJsonAsync<ApiResult<Download>>("downloads/search?name=Carry")).Data ?? new();
+    }
 }

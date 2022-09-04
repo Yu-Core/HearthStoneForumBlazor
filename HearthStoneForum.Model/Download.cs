@@ -11,7 +11,11 @@ namespace HearthStoneForum.Model
     {
         [SugarColumn(ColumnDataType = "nvarchar(64)")]
         public string? Name { get; set; }
+        [SugarColumn(ColumnDataType = "nvarchar(64)")]
+        public string? Title { get; set; }
+        [SugarColumn(ColumnDataType = "nvarchar(32)")]
+        public string? Icon { get; set; }
         [SugarColumn(ColumnDataType = "nvarchar(2083)")]
-        public string? DownloadPath { get; set; }
+        public string? UrlPath { get; set; }
     }
 }
