@@ -25,7 +25,7 @@
     private List<Carousel> Carousels = new List<Carousel>();
     private List<Notice> Notices = new();
     private int TodaySignCount = 0;
-    private List<Area> Areas = new();
+    private List<AreaDTO> Areas = new();
     private List<InvitationDTORecommend> RecommendInvitations = new();
     private List<InvitationDTORecommend> NewInvitations = new();
 
@@ -34,7 +34,7 @@
         Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data;
         Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data;
         TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/today_count")).Data;
-        Areas = (await Http.GetFromJsonAsync<ApiResult<List<Area>>>("areas")).Data;
+        Areas = (await Http.GetFromJsonAsync<ApiResult<List<AreaDTO>>>("areas")).Data;
         RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTORecommend>>>("invitations/recommend")).Data;
         NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTORecommend>>>("invitations/new")).Data;
     }

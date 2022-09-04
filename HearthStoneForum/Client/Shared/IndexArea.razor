@@ -2,14 +2,16 @@
     @foreach (var item in Data)
     {
         <MHover Class="area-hover">
-            <div @attributes="context.Attrs" class="area-card @($"{context.Class} py-2 py-sm-3 px-2 px-sm-5 transition-swing elevation-{(context.Hover ? 12 : 2)}")">
-                <div class="title">
-                    @item.Name
+            <a href="@("/Invitations/"+item.Id)">
+                <div @attributes="context.Attrs" class="area-card @($"{context.Class} py-2 py-sm-3 px-2 px-sm-5 transition-swing elevation-{(context.Hover ? 12 : 2)}")">
+                    <div class="title">
+                        @item.Name
+                    </div>
+                    <div class="subtitle">
+                        @item.Description
+                    </div>
                 </div>
-                <div class="subtitle">
-                    @item.Description
-                </div>
-            </div>
+            </a>
         </MHover>
 
     }
@@ -17,5 +19,5 @@
 
 @code {
     [Parameter]
-    public List<Area> Data { set; get; }
+    public List<AreaDTO> Data { set; get; }
 }

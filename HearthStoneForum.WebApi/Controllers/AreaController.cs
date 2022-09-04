@@ -27,7 +27,7 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResult>> GetArea(int id)
         {
-            var area = await _iAreaService.QueryDTOAsync<AreaDTO>(it=>it.Id == id);
+            var area = (await _iAreaService.QueryDTOAsync<AreaDTO>(it=>it.Id == id)).FirstOrDefault();
             if (area == null) return ApiResultHelper.Error("没有更多的值");
 
             return ApiResultHelper.Success(area);

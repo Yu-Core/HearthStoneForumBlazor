@@ -11,6 +11,7 @@ namespace HearthStoneForum.Model.Dto
         public string? Title { get; set; }
         public string? Content { get; set; }
         public int UserId { get; set; }
+        public string? UserName { get; set; }
         public int AreaId { get; set; }
         public string? AreaName { get; set; }
         public string[]? ImagePaths { get; set; }

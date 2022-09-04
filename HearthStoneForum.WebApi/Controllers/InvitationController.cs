@@ -29,7 +29,7 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResult>> GetInvitation(int id)
         {
-            var invitation = await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.Id == id);
+            var invitation = (await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.Id == id)).FirstOrDefault();
             if (invitation == null) return ApiResultHelper.Error("没有更多的值");
 
             return ApiResultHelper.Success(invitation);

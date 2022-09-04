@@ -21,10 +21,10 @@ namespace HearthStoneForum.Repository
                     Title = it.Title,
                     Id = it.Id
                 })
-                .Mapper(it=>it.LikesCount = Context.Queryable<Likes>().Where(l=>l.InvitationId == it.Id).Count())
-                .Mapper(it=>it.CommentCount = Context.Queryable<Comment>().Where(c1=>c1.InvitationId == it.Id).Count())
-                .Mapper(it=>it.CollectionCount = Context.Queryable<Collection>().Where(c2=>c2.InvitationId == it.Id).Count())
-                .Mapper(it=>it.Recommend = it.LikesCount + it.CommentCount + it.CollectionCount )
+                .Mapper(it => it.LikesCount = Context.Queryable<Likes>().Where(l => l.InvitationId == it.Id).Count())
+                .Mapper(it => it.CommentCount = Context.Queryable<Comment>().Where(c1 => c1.InvitationId == it.Id).Count())
+                .Mapper(it => it.CollectionCount = Context.Queryable<Collection>().Where(c2 => c2.InvitationId == it.Id).Count())
+                .Mapper(it => it.Recommend = it.LikesCount + it.CommentCount + it.CollectionCount)
 
                 .ToListAsync();
             return data.OrderByDescending(it => it.Recommend).ToList();
@@ -69,11 +69,12 @@ namespace HearthStoneForum.Repository
 
             return base.Context.Queryable<Invitation>()
                 .LeftJoin<Area>((i, a) => i.AreaId == a.Id)
-                .LeftJoin(LikeCount, (i, a, l) => i.Id == l.InvitationId)
-                .LeftJoin(CommentCount, (i, a, l, c1) => i.Id == c1.InvitationId)
-                .LeftJoin(CollectionCount, (i, a, l, c1, c2) => i.Id == c2.InvitationId)
+                .LeftJoin<UserInfo>((i, a, u) => i.UserId == u.Id)
+                .LeftJoin(LikeCount, (i, a, u, l) => i.Id == l.InvitationId)
+                .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
+                .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -81,6 +82,7 @@ namespace HearthStoneForum.Repository
                     Title = i.Title,
                     Content = i.Content,
                     UserId = i.UserId,
+                    UserName = u.UserName,
                     Views = i.Views,
                     ImagePaths = i.ImagePaths,
                     CreatedTime = i.CreatedTime,
@@ -117,11 +119,12 @@ namespace HearthStoneForum.Repository
 
             return base.Context.Queryable<Invitation>()
                 .LeftJoin<Area>((i, a) => i.AreaId == a.Id)
-                .LeftJoin(LikeCount, (i, a, l) => i.Id == l.InvitationId)
-                .LeftJoin(CommentCount, (i, a, l, c1) => i.Id == c1.InvitationId)
-                .LeftJoin(CollectionCount, (i, a, l, c1, c2) => i.Id == c2.InvitationId)
+                .LeftJoin<UserInfo>((i, a, u) => i.UserId == u.Id)
+                .LeftJoin(LikeCount, (i, a, u, l) => i.Id == l.InvitationId)
+                .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
+                .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -129,6 +132,7 @@ namespace HearthStoneForum.Repository
                     Title = i.Title,
                     Content = i.Content,
                     UserId = i.UserId,
+                    UserName = u.UserName,
                     Views = i.Views,
                     ImagePaths = i.ImagePaths,
                     CreatedTime = i.CreatedTime,
@@ -167,11 +171,12 @@ namespace HearthStoneForum.Repository
 
             return base.Context.Queryable<Invitation>()
                 .LeftJoin<Area>((i, a) => i.AreaId == a.Id)
-                .LeftJoin(LikeCount, (i, a, l) => i.Id == l.InvitationId)
-                .LeftJoin(CommentCount, (i, a, l, c1) => i.Id == c1.InvitationId)
-                .LeftJoin(CollectionCount, (i, a, l, c1, c2) => i.Id == c2.InvitationId)
+                .LeftJoin<UserInfo>((i, a, u) => i.UserId == u.Id)
+                .LeftJoin(LikeCount, (i, a, u, l) => i.Id == l.InvitationId)
+                .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
+                .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -179,6 +184,7 @@ namespace HearthStoneForum.Repository
                     Title = i.Title,
                     Content = i.Content,
                     UserId = i.UserId,
+                    UserName = u.UserName,
                     Views = i.Views,
                     ImagePaths = i.ImagePaths,
                     CreatedTime = i.CreatedTime,
@@ -187,7 +193,7 @@ namespace HearthStoneForum.Repository
                     CollectionCount = c2.Count
                 })
                 .MergeTable()
-                .ToPageListAsync(page, size, total,it=>new DTO());
+                .ToPageListAsync(page, size, total, it => new DTO());
         }
 
         public override Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func, int page, int size, RefAsync<int> total)
@@ -216,11 +222,12 @@ namespace HearthStoneForum.Repository
 
             return base.Context.Queryable<Invitation>()
                 .LeftJoin<Area>((i, a) => i.AreaId == a.Id)
-                .LeftJoin(LikeCount, (i, a, l) => i.Id == l.InvitationId)
-                .LeftJoin(CommentCount, (i, a, l, c1) => i.Id == c1.InvitationId)
-                .LeftJoin(CollectionCount, (i, a, l, c1, c2) => i.Id == c2.InvitationId)
+                .LeftJoin<UserInfo>((i, a, u) => i.UserId == u.Id)
+                .LeftJoin(LikeCount, (i, a, u, l) => i.Id == l.InvitationId)
+                .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
+                .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -228,6 +235,7 @@ namespace HearthStoneForum.Repository
                     Title = i.Title,
                     Content = i.Content,
                     UserId = i.UserId,
+                    UserName = u.UserName,
                     Views = i.Views,
                     ImagePaths = i.ImagePaths,
                     CreatedTime = i.CreatedTime,

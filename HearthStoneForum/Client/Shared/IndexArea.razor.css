@@ -9,11 +9,17 @@
     .area-wrap :nth-child(n+3) {
         margin-top: 2%;
     }
+    .area-wrap a {
+        width: 49%;
+        height: 14vw;
+        min-height: 150px;
+        color: inherit;
+        text-decoration: inherit;
+    }
 
 .area-card {
-    width: 49%;
-    height: 14vw;
-    min-height: 150px;
+    width:100%;
+    height:100%;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -41,7 +47,7 @@
     .area-wrap :nth-child(3){
         margin-top:0;
     }
-    .area-card {
+    .area-wrap a {
         width: 32%;
     }
 

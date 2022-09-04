@@ -1,0 +1,86 @@
+﻿.main {
+    display: flex;
+    justify-content: center;
+}
+
+.invitation-wrap {
+    width: 100%;
+    max-width: 1024px;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+}
+
+    .breadcrumbs a {
+        font-size: 0.9rem;
+    }
+
+.invitation-head {
+    margin-bottom: 32px;
+}
+
+.invitation-content {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    width:100%;
+    flex-direction: column;
+}
+
+
+    .invitation-content a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+        .invitation-content a:nth-child(2n) {
+            background-color: #EEEEEE;
+        }
+
+        .invitation-content a:nth-child(2n+1) {
+            background-color: transparent;
+        }
+
+        .invitation-content a:hover .list-row {
+            background-color: rgba(0,0,0,0.2);
+        }
+.list-head {
+    display: flex;
+    padding: 16px;
+}
+.list-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+}
+.invitation-title {
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.invitation-user {
+    width: 10%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.invitation-views {
+    width: 10%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.invitation-comment {
+    width: 10%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.invitation-time {
+    width: 20%;
+    text-align:right;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
