@@ -52,6 +52,10 @@
 .qr-code{
     display:none;
 }
+    .qr-code img {
+        width: 150px;
+        height: 150px;
+    }
 @media only screen and (min-width: 1294px) {
     .download-wrap {
         flex-direction:row;

@@ -4,9 +4,8 @@
     flex-shrink: 1;
     flex-direction: column;
     justify-content: center;
-    color: #777777;
     font-size: 0.85rem;
-    background-color: #EEEEEE;
+    background-color: #fff;
     border-radius: 8px;
 }
 
@@ -22,6 +21,7 @@
     flex-shrink: 0;
     height: 20%;
     font-size: 1.2rem;
+    font-weight:700;
     justify-content: center;
     align-items: center;
 }
@@ -32,11 +32,14 @@
     flex-grow: 1;
 }
 
+    .notice-list .notice-list-item:nth-child(n+2) {
+        border-top: 1px solid grey;
+    }
+
 .notice-list-item {
     display: flex;
     flex-grow: 1;
     justify-content: space-between;
-    border-top: 1px solid #F5F5F5;
 }
 
     .notice-list-item * {

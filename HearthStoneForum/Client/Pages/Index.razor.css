@@ -41,7 +41,7 @@
     flex-direction: column;
     align-items: center;
     width: auto;
-    background-color: #EEEEEE;
+    background-color: #fff;
 }
 
     .main-top-right * {
@@ -50,6 +50,6 @@
 
 .main-bottom-right {
     width: auto;
-    border-radius:8px;
-    background-color: #EEEEEE;
+    border-radius: 8px;
+    background-color: #fff;
 }

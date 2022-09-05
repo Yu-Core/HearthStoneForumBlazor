@@ -14,5 +14,7 @@ namespace HearthStoneForum.Model
         [SugarColumn(ColumnDataType = "text")]
         public string? Description { get; set; }
         public DateTime CreatedTime { get; set; }
+        [SugarColumn(ColumnDataType = "nvarchar(2083)")]
+        public string? ImagePath { get; set; }
     }
 }

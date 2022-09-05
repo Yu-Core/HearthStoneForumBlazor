@@ -1,11 +1,11 @@
-﻿<div class="notice-wrap py-2 px-3 px-sm-5">
+﻿<div class="notice-wrap py-2 px-3 px-sm-5 elevation-2">
     <div class="notice-head">
         最新公告
     </div>
     <div class="notice-list">
         @foreach (var item in Data)
         {
-            <div class="notice-list-item py-3 py-sm-0">
+            <div class="notice-list-item ">
                 <div class="notice-list-item-left">
                     <MButton Text Href="@("NoticeInfo/"+item.Id)">
                         @item.Title
