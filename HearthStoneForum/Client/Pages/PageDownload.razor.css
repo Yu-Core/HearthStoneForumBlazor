@@ -49,8 +49,8 @@
 .download-btn2 a{
     flex-grow:1;
 }
-.qr-code{
-    display:none;
+.qr-code {
+    display: none;
 }
     .qr-code img {
         width: 150px;
