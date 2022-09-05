@@ -1,7 +1,7 @@
 ﻿@foreach (var item in topRightList)
 {
     <MHover>
-        <MCard @attributes="context.Attrs" Elevation="@(context.Hover ? 12 : 2)" Class="@($"{context.Class} .top-right-list d-flex w-100 h-100 bg-transparent rounded-lg px-5 py-2 py-sm-0")" Href="@(item.Href)">
+        <MCard @attributes="context.Attrs" Elevation="@(context.Hover ? 12 : 2)" Class="@($"{context.Class} .top-right-list d-flex w-100 h-100 bg-transparent rounded-lg px-5 py-2 py-md-0")" Href="@(item.Href)">
             <MIcon XLarge>@(item.Icon)</MIcon>
             <div class="list-content">
                 <div class="list-title">
