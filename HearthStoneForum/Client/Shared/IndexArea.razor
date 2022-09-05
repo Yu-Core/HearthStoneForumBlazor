@@ -3,17 +3,22 @@
     {
         <MHover Class="area-hover">
             <a href="@("/Invitations/"+item.Id)">
-                <div @attributes="context.Attrs" class="area-card @($"{context.Class} py-2 py-sm-3 px-2 px-sm-5 transition-swing elevation-{(context.Hover ? 12 : 2)}")">
-                    <div class="title">
-                        @item.Name
+                <div @attributes="context.Attrs" class="area-card @($"{context.Class} transition-swing elevation-{(context.Hover ? 24 : 6)}")">
+                    <div class="area-img">
+                        <MImage Src="@(item.ImagePath)">
+                        </MImage>
                     </div>
-                    <div class="subtitle">
-                        @item.Description
+                    <div class="area-content py-2 py-sm-5 px-2 px-sm-5">
+                        <div class="area-title">
+                            @item.Name
+                        </div>
+                        <div class="area-subtitle pt-0 pt-sm-2">
+                            @item.Description
+                        </div>
                     </div>
                 </div>
             </a>
         </MHover>
-
     }
 </div>
 

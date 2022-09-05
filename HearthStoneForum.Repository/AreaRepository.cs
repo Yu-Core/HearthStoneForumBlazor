@@ -19,7 +19,8 @@ namespace HearthStoneForum.Repository
                 {
                     Id = it.Id,
                     Name = it.Name,
-                    Description = it.Description
+                    Description = it.Description,
+                    ImagePath = it.ImagePath
                 } as DTO)
                 .ToListAsync();
         }
@@ -30,7 +31,8 @@ namespace HearthStoneForum.Repository
                 {
                     Id = it.Id,
                     Name = it.Name,
-                    Description = it.Description
+                    Description = it.Description,
+                    ImagePath= it.ImagePath
                 } as DTO)
                 .Where(func)
                 .ToListAsync();

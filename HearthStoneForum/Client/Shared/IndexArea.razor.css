@@ -7,48 +7,64 @@
 }
 
     .area-wrap :nth-child(n+3) {
-        margin-top: 2%;
+        margin-top: 4%;
     }
+
     .area-wrap a {
         width: 49%;
-        height: 14vw;
-        min-height: 150px;
+        height: 26vw;
+        min-height: 200px;
         color: inherit;
         text-decoration: inherit;
     }
 
+
 .area-card {
     width: 100%;
     height: 100%;
-    border-radius: 8px;
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     background-color: #fff;
+    overflow: hidden;
 }
 
-    .area-card .title {
-        height: 20%;
-        min-height: 30px;
-        font-size: 1.1rem !important;
-        overflow: hidden;
-        font-weight:700;
+    .area-card:hover {
+        transform:scale(1.05);
     }
 
-    .area-card .subtitle {
-        flex-grow: 1;
-        font-size: 0.8rem;
+.area-img {
+    height: 61%;
+    overflow: hidden;
+}
+
+.area-content {
+    display: flex;
+    flex-direction: column;
+    height: 39%;
+}
+
+    .area-content .area-title {
+        font-size: 1.1rem !important;
+        font-weight: 700;
+    }
+
+    .area-content .area-subtitle {
+        font-size: 0.7rem;
         overflow: hidden;
+        color: #757575;
     }
 
 @media only screen and (min-width: 600px) {
-    .area-wrap :nth-child(n+4) {
-        margin-top: 2%;
-    }
-    .area-wrap :nth-child(3){
-        margin-top:0;
-    }
-    .area-wrap a {
-        width: 32%;
+    .area-wrap :nth-child(3) {
+        margin-top: 0%;
     }
 
+    .area-wrap :nth-child(4) {
+        margin-top: 0%;
+    }
+
+    .area-wrap a {
+        width: 21%;
+    }
 }

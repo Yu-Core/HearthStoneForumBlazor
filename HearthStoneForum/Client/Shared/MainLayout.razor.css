@@ -91,6 +91,23 @@ main {
     color: black;
     background-color: white;
 }
-.footer-right p{
+.footer-top p{
     margin-bottom:8px;
 }
+.footer-img{
+    /*width:10vw;
+    height:10vw;
+    min-width:100px;
+    min-height:100px;*/
+    width:100px;
+    height:100px;
+    background-image: url(images/Year-of-Gryphon_ClockLens.jfif);
+    background-size:cover;
+    background-position:center center;
+    margin:16px;
+    border-radius:16px;
+}
+    .footer-img:hover {
+        background-image: url(images/Year-of-Gryphon_Constellation.jfif);
+    }
+

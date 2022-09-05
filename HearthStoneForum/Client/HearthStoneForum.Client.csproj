@@ -14,6 +14,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\bg_li.png" />
+    <Content Remove="wwwroot\images\bodybg.jpg" />
+    <Content Remove="wwwroot\images\bottombg.jpg" />
+    <Content Remove="wwwroot\images\col-rank.png" />
+    <Content Remove="wwwroot\images\favicon.ico" />
+    <Content Remove="wwwroot\images\headBg.jpg" />
+    <Content Remove="wwwroot\images\logo_blizzard.png" />
+    <Content Remove="wwwroot\images\logo_ne.png" />
+    <Content Remove="wwwroot\images\module_line.jpg" />
+    <Content Remove="wwwroot\images\more.png" />
+    <Content Remove="wwwroot\images\NavigationButton.png" />
+    <Content Remove="wwwroot\images\parchment2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Masa.Blazor" Version="0.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.7" PrivateAssets="all" />
