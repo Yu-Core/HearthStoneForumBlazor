@@ -1,7 +1,7 @@
 # HearthStoneForumBlazor
 
 #### 介绍
-炉石传说论坛的Blazor重制版，使用Blazor和.NET 6 WebApi前后端分离构建。
+炉石传说论坛的Blazor重制版，使用Blazor和ASP.NET Core WebApi前后端分离构建。
 
 #### 信息
 
