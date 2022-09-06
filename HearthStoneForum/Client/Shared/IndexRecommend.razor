@@ -5,10 +5,12 @@
         <div class="invitation-list">
             @foreach (var item in RecommendInvitations)
             {
-                <div>
-                    <MButton Text Href="">
-                        @item.Title
-                    </MButton>
+                <div class="invitation-list-item">
+                    <a>
+                        <div class="invitation-title">
+                            @item.Title
+                        </div>
+                    </a>
                 </div>
             }
         </div>
@@ -17,10 +19,12 @@
         <div class="invitation-list">
             @foreach (var item in NewInvitations)
             {
-                <div>
-                    <MButton Text Href="">
-                        @item.Title
-                    </MButton>
+                <div class="invitation-list-item">
+                    <a>
+                        <div class="invitation-title">
+                            @item.Title
+                        </div>
+                    </a>
                 </div>
             }
         </div>
@@ -29,7 +33,7 @@
 
 @code {
     [Parameter]
-    public List<InvitationDTORecommend> RecommendInvitations{ get; set; }
+    public List<InvitationDTORecommend> RecommendInvitations { get; set; }
     [Parameter]
-    public List<InvitationDTORecommend> NewInvitations{ get; set; }
+    public List<InvitationDTORecommend> NewInvitations { get; set; }
 }

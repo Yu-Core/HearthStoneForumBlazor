@@ -7,7 +7,7 @@
             @foreach (var item in Data)
             {
                 <li style="display:@(Data.IndexOf(item)==0?"block":"none")">
-                    <img src="@item.ImagePath" alt="@item.Title">
+                    <img class="elevation-3" src="@item.ImagePath" alt="@item.Title">
                 </li>
             }
         </ul>

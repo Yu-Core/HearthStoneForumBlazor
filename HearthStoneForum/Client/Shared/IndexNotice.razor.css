@@ -9,7 +9,7 @@
     border-radius: 8px;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 960px) {
     .notice-wrap {
         border-radius: 0 8px 8px 0 !important;
     }

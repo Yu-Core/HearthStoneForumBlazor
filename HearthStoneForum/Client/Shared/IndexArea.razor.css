@@ -12,7 +12,7 @@
 
     .area-wrap a {
         width: 49%;
-        height: 26vw;
+        height: 23vw;
         min-height: 200px;
         color: inherit;
         text-decoration: inherit;
@@ -27,29 +27,71 @@
     flex-direction: column;
     background-color: #fff;
     overflow: hidden;
+    position: relative;
 }
 
     .area-card:hover {
-        transform:scale(1.05);
+        /*transform: scale(1.05);*/
     }
 
+        .area-card:hover .area-img {
+            height: 40%;
+            transition: all 0.3s;
+        }
+
+            .area-card:hover .area-img::before {
+                height: 40%;
+                background-color: rgba(0,0,0,0.6);
+                transition: height 0.3s;
+            }
+
+        .area-card:hover .area-content {
+            justify-content:initial;
+            height: 60%;
+            transition: all 0.3s;
+        }
+        .area-card:hover .area-title {
+            justify-content: start;
+            transition: all 1s;
+        }
+        .area-card:hover .area-subtitle{
+            display:block;
+        }
+
 .area-img {
-    height: 61%;
+    height: 75%;
     overflow: hidden;
+    transition: all 0.5s;
 }
+    /* 使用伪类before做遮罩*/
+    .area-img::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 75%;
+        z-index: 1;
+        background-color: transparent;
+        transition: height 0.5s;
+    }
 
 .area-content {
     display: flex;
     flex-direction: column;
-    height: 39%;
+    justify-content:center;
+    height: 25%;
+    transition: all 0.5s;
 }
 
     .area-content .area-title {
+        display:flex;
+        justify-content:center;
         font-size: 1.1rem !important;
         font-weight: 700;
+        transition: all 1s;
     }
 
     .area-content .area-subtitle {
+        display: none;
         font-size: 0.7rem;
         overflow: hidden;
         color: #757575;
