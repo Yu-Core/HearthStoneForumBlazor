@@ -27,14 +27,14 @@ main {
         text-decoration: none;
     }
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+            text-decoration: underline;
+        }
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        .top-row ::deep a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
 @media (max-width: 640.98px) {
     .top-row:not(.auth) {
@@ -68,11 +68,11 @@ main {
         z-index: 1;
     }
 
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
+        .top-row.auth ::deep a:first-child {
+            flex: 1;
+            text-align: right;
+            width: 0;
+        }
 
     .top-row, article {
         padding-left: 2rem !important;
@@ -80,20 +80,19 @@ main {
     }
 }
 
-.navigation-drap{
-    background-color:rgba(0,0,0,0.7);
-    color:white;
+.navigation-list {
+    width:100%;
+    max-width:900px;
+    display:flex;
+    justify-content:space-between;
 }
-.navigation-btn {
-    background-color: transparent;
+
+    
+
+.footer-top p {
+    margin-bottom: 8px;
 }
-.navigation-btn:hover {
-    color: black;
-    background-color: white;
-}
-.footer-top p{
-    margin-bottom:8px;
-}
+
 .footer-img {
     width: 100px;
     height: 100px;
@@ -104,9 +103,9 @@ main {
     border-radius: 16px;
     transition: all 0.5s;
 }
+
 .footer-img-wrap:hover .footer-img {
     background-image: url(images/Year-of-Gryphon_Constellation.jfif);
     transform: rotateY(180deg);
     transition: all 0.75s;
 }
-

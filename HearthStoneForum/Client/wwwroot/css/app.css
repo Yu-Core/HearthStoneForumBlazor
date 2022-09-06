@@ -80,11 +80,13 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-
-.border-2-solid-grey {
-    border: 2px solid grey;
+.navigation-list .navigation-btn {
+    border-radius: 32px;
 }
-.navigation-button {
-    min-width: 36px !important;
-    min-height:20px !important;
+.navigation-list .navigation-btn::before {
+    border-radius: 32px;
+    opacity:0 !important;
+}
+.navigation-list .navigation-btn:hover::before{
+    opacity:.12!important;
 }
