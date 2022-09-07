@@ -2,7 +2,7 @@
     @foreach (var item in Data)
     {
         <MHover Class="area-hover">
-            <a href="@("/Invitations/"+item.Id)">
+            <a href="@("/invitations/"+item.Id)">
                 <div @attributes="context.Attrs" class="area-card @($"{context.Class} transition-swing elevation-{(context.Hover ? 24 : 6)}")">
                     <div class="area-img">
                         <MImage Src="@(item.ImagePath)">

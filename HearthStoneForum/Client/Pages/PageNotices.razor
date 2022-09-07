@@ -1,4 +1,4 @@
-﻿@page "/Notices"
+﻿@page "/notices"
 @inject HttpClient Http
 
 <div class="main">
@@ -16,7 +16,7 @@
             @for (var i = 0; i < Notices.Count; i++)
             {
                 
-                    <a href="@("NoticeInfo/"+Notices[i].Id)">
+                    <a href="@("noticeInfo/"+Notices[i].Id)">
                         <div class="notice-row">
                             <div class="notice-title">
                                 @Notices[i].Title

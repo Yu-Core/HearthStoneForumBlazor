@@ -1,0 +1,50 @@
+﻿@page "/login"
+@layout BlankLayout
+@inject IJSRuntime JS
+
+<div class="main">
+    <div class="login-video">
+        <video autoplay="autoplay" loop="loop" muted="muted" >
+            <source src="video/LichKing.mp4" type="audio/mp4" />
+        </video>
+    </div>
+    <div class="login-card">
+        <div class="login-logo">
+            <img src="images/logo_lushichuanshuo.png" />
+        </div>
+        <div class="login-username">
+            <MTextField Solo Dense TValue="string" Placeholder="请输入用户名"></MTextField>
+        </div>
+        <div class="login-password">
+            <MTextField Solo Dense TValue="string" Placeholder="请输入密码"></MTextField>
+        </div>
+        <div class="login-CAPTCHA">
+            <div class="drag-wrap">
+                <div class="drag-bg"></div>
+                <div class="drag-text" >请拖动滑块解锁</div>
+                <div class="drag-btn">&gt;&gt;</div>
+            </div>
+            <MCheckbox Class="drag-data"></MCheckbox>
+        </div>
+        <div class="login-other">
+            <MButton Text Color="white" Small Depressed>注册账号</MButton>
+            <MButton Text Color="white" Small Depressed>找回密码</MButton>
+        </div>
+        <div class="login-btn">
+            <MButton Color="info" Block>登录</MButton>
+        </div>
+    </div>
+</div>
+@code {
+    private IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import",
+                "./js/drag.js");
+            await module.InvokeVoidAsync("DragStart");
+        }
+    }
+}

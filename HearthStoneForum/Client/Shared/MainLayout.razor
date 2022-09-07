@@ -4,7 +4,7 @@
         <div class="d-flex d-md-none">
             <MAppBarNavIcon @onclick="() => drawer = true"></MAppBarNavIcon>
         </div>
-        <MListItemGroup @bind-Value="selectItem" Class="w-100 d-none d-md-flex justify-content-center">
+        <MListItemGroup @bind-Value="selectItem" Class="w-100 d-none d-md-flex">
             <div class="navigation-list">
                 @foreach (var item in navigationButtons)
                 {
@@ -15,9 +15,19 @@
             </div>
         </MListItemGroup>
         <MSpacer Class="d-flex d-md-none"></MSpacer>
-        <MButton Icon>
-            <MIcon Large>mdi-account-circle</MIcon>
-        </MButton>
+        <MTextField Class="navigation-search" Dense TValue="string" HideDetails="@("false")" Solo Placeholder="搜索" AppendIcon="mdi-magnify"></MTextField>
+        <MSpacer Class="d-flex d-md-none"></MSpacer>
+
+        <div class="d-none">
+            <MButton Icon>
+                <MIcon Large>mdi-account-circle</MIcon>
+            </MButton>
+        </div>
+        <div class="ms-2">
+            <MButton Href="login" Text>
+                登录
+            </MButton>
+        </div>
     </MAppBar>
 
     <MNavigationDrawer App @bind-Value="drawer" Temporary>
@@ -78,9 +88,9 @@
     private List<NavigationButton> navigationButtons = new List<NavigationButton>
     {
         new NavigationButton(){Title="首页",Icon="mdi-home",Href=""},
-        new NavigationButton(){Title="公告",Icon="mdi-bulletin-board",Href="Notices"},
-        new NavigationButton(){Title="排名",Icon="mdi-format-list-numbered",Href="Ranks"},
-        new NavigationButton(){Title="下载",Icon="mdi-download",Href="Download"},
+        new NavigationButton(){Title="公告",Icon="mdi-bulletin-board",Href="notices"},
+        new NavigationButton(){Title="排名",Icon="mdi-format-list-numbered",Href="ranks"},
+        new NavigationButton(){Title="下载",Icon="mdi-download",Href="download"},
         new NavigationButton(){Title="指南",Icon="mdi-new-box",Href=""}
     };
 }

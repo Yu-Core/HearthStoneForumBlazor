@@ -85,8 +85,5 @@ a, .btn-link {
 }
 .navigation-list .navigation-btn::before {
     border-radius: 32px;
-    opacity:0 !important;
-}
-.navigation-list .navigation-btn:hover::before{
-    opacity:.12!important;
+    
 }
