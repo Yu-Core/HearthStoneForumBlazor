@@ -45,8 +45,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(options =>
 {
-    //options.SetIsOriginAllowed(_ => true);//允许所有ip跨域，不安全
-    options.WithOrigins("https://localhost:7221"); // 允许特定ip跨域
+    options.SetIsOriginAllowed(_ => true);//允许所有ip跨域，不安全
+    //options.WithOrigins("https://localhost:7221"); // 允许特定ip跨域
+    //options.WithOrigins("https://localhost:44373"); // 允许特定ip跨域
     //options.AllowAnyOrigin();//这种写法会报错
 
     options.AllowAnyHeader()
