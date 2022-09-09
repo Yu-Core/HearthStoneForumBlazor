@@ -1,0 +1,29 @@
+﻿.main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(images/Illidan.jpg);
+    background-size: cover;
+    background-position: center top;
+}
+
+.register-video video {
+    display:none;
+    position: fixed;
+    width: max(177vh,100vw);
+    height: 100vh;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+}
+
+@media only screen and (min-width: 600px) {
+    .main{
+        background-image:none;
+    }
+    .register-video video{
+        display:block;
+    }
+}

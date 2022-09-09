@@ -1,0 +1,37 @@
+﻿@page "/register"
+@layout BlankLayout
+@inject IJSRuntime JS
+@using System.Text.RegularExpressions;
+@using System.ComponentModel.DataAnnotations
+@using FluentValidation;
+
+<div class="main">
+    <div class="register-video">
+        <video autoplay="autoplay" loop="loop" muted="muted">
+            <source src="video/Illidan.mov" type="video/mp4" />
+        </video>
+    </div>
+    <div class="register-card">
+
+    </div>
+</div>
+
+@code {
+    private MForm? _form;
+    private Model _model = new();
+    private bool password_show = false;
+
+    private class Model
+    {
+        [Required(ErrorMessage = "用户名不能为空")]
+        [MaxLength(16, ErrorMessage = "账号长度必须在3到20之间")]
+        [MinLength(4, ErrorMessage = "账号长度必须在3到20之间")]
+        public string? UserName { get; set; }
+        [Required(ErrorMessage = "密码不能为空")]
+        [MaxLength(16, ErrorMessage = "密码长度必须在5到20之间")]
+        [MinLength(4, ErrorMessage = "密码长度必须在5到20之间")]
+        public string? Password { get; set; }
+        [RegularExpression("True", ErrorMessage = "请通过滑块验证")]
+        public bool CAPTCHA { get; set; } = false;
+    }
+}

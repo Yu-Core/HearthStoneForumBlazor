@@ -4,44 +4,67 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: url(images/LichKing.gif);
+    background-size: cover;
+    background-position: center top;
 }
+
 .login-video video {
+    display:none;
     position: fixed;
     width: max(177vh,100vw);
     height: 100vh;
     top: 0;
-    left: calc(-177vh * 0.21 + 50vw);
+    /*left: calc(-177vh * 0.21 + 50vw);*/
+    left:0;
     object-fit: cover;
 }
+
 .login-card {
     min-width: 80%;
     min-height: 30vw;
-    background-color: rgba(0,0,0,0.5);
     box-shadow: 2px 2px 10px #909090;
+    background-color: rgba(0,0,0,0.8);
     border-radius: 8px;
-    z-index:1;
-    padding:2vw;
-    text-align:center;
-}
-.login-logo img{
-    width:50vw;
-    object-fit:contain;
+    z-index: 1;
+    padding: 5%;
+    text-align: center;
 }
 
-.login-other{
-    display:flex;
-    justify-content:space-between;
+.login-logo img {
+    width: 50vw;
+    object-fit: contain;
 }
-.login-CAPTCHA{
-    display:flex;
+
+.login-other {
+    display: flex;
+    justify-content: space-between;
 }
-.drag-wrap{
-    width:100%;
+
+    .login-other .btn {
+        color: #fff;
+        font-size: 12px;
+    }
+
+        .login-other .btn:hover {
+            color: #BDBDBD;
+        }
+
+.login-CAPTCHA {
+    display: flex;
+    position: relative;
 }
+
+.drag-wrap {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
 .drag-content {
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 38px;
+    line-height: 38px;
     background-color: #e8e8e8;
     position: relative;
     margin: 0 auto;
@@ -68,7 +91,7 @@
 
 .drag-btn {
     width: 40px;
-    height: 40px;
+    height: 38px;
     position: absolute;
     border: 1px solid #ccc;
     cursor: move;
@@ -81,19 +104,26 @@
 }
 
 
+
 @media only screen and (min-width: 600px) {
-    .main{
-        justify-content:end;
+    .main {
+        justify-content: end;
+        background-image:none;
     }
+
     .login-video video {
-        left:0;
+        /*left: 0;*/
+        display:block;
     }
+
     .login-logo img {
         width: 16vw;
     }
+
     .login-card {
         min-width: 22vw;
         margin-right: 10vw;
+        padding: 2vw;
         background-color: rgba(255,255,255,0.3);
     }
 }

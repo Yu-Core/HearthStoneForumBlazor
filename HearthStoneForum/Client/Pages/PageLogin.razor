@@ -1,52 +1,73 @@
 ﻿@page "/login"
 @layout BlankLayout
 @inject IJSRuntime JS
+@using System.Text.RegularExpressions;
+@using System.ComponentModel.DataAnnotations
+@using FluentValidation;
 
 <div class="main">
     <div class="login-video">
-        <video autoplay="autoplay" loop="loop" muted="muted" >
-            <source src="video/LichKing.mp4" type="audio/mp4" />
+        <video autoplay="autoplay" loop="loop" muted="muted">
+            <source src="video/LichKing.mp4" type="video/mp4" />
         </video>
     </div>
     <div class="login-card">
-        <div class="login-logo">
-            <img src="images/logo_lushichuanshuo.png" />
-        </div>
-        <div class="login-username">
-            <MTextField Solo Dense TValue="string" Placeholder="请输入用户名"></MTextField>
-        </div>
-        <div class="login-password">
-            <MTextField Solo Dense TValue="string" Placeholder="请输入密码"></MTextField>
-        </div>
-        <div class="login-CAPTCHA">
-            <div class="drag-wrap">
-                <div class="drag-content">
-                    <div class="drag-bg"></div>
-                    <div class="drag-text">请拖动滑块解锁</div>
-                    <div class="drag-btn">&gt;&gt;</div>
-                </div>
+        <MForm EnableValidation Model="_model" @ref="_form">
+            <div class="login-logo">
+                <img src="images/logo_lushichuanshuo.png" />
             </div>
-        </div>
-        <div class="login-other">
-            <MButton Text Color="white" Small Depressed>注册账号</MButton>
-            <MButton Text Color="white" Small Depressed>找回密码</MButton>
-        </div>
-        <div class="login-btn">
-            @t
-            <MButton Color="info" Block>登录</MButton>
-        </div>
+            <div class="login-username">
+                <MTextField Solo
+                            Dense
+                            TValue="string"
+                            Placeholder="请输入用户名"
+                            @bind-Value="_model.UserName">
+                </MTextField>
+            </div>
+            <div class="login-password">
+                <MTextField Solo
+                            Dense
+                            TValue="string"
+                            Placeholder="请输入密码"
+                            @bind-Value="_model.Password"
+                            AppendIcon="@(password_show ? "mdi-eye" : "mdi-eye-off")"
+                            Type="@(password_show ? "text" : "password")"
+                            OnAppendClick="() => password_show = !password_show">
+                </MTextField>
+            </div>
+            <div class="login-CAPTCHA">
+                <div class="drag-wrap">
+                    <div class="drag-content">
+                        <div class="drag-bg"></div>
+                        <div class="drag-text">请拖动滑块解锁</div>
+                        <div class="drag-btn">&gt;&gt;</div>
+                    </div>
+                </div>
+                <MCheckbox @bind-Value="_model.CAPTCHA" Dense Height="40" Class="mt-0 pt-0 ps-3 mb-2"></MCheckbox>
+            </div>
+            <div class="login-btn">
+                <MButton Color="info" Height="38" Block Type="submit">登录</MButton>
+            </div>
+            <div class="login-other">
+                <a>
+                    <div class="btn">忘记密码？</div>
+                </a>
+                <a href="/register">
+                    <div class="btn">去注册</div>
+                </a>
+            </div>
+        </MForm>
+
     </div>
 </div>
 @code {
     private IJSObjectReference? module;
-    public string t { set; get; } = "hello";
     private DotNetObjectReference<PageLogin>? objRef;
+    //private bool _valid = true;
+    private MForm? _form;
+    private Model _model = new();
+    private bool password_show = false;
 
-    [JSInvokable]
-    public void CAPTCHASuccess(){
-        t = "";
-        StateHasChanged();
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -55,9 +76,30 @@
             module = await JS.InvokeAsync<IJSObjectReference>("import",
                 "./js/drag.js");
             objRef = DotNetObjectReference.Create(this);
-            await module.InvokeVoidAsync("DragHelp",objRef);
+            await module.InvokeVoidAsync("DragHelp", objRef);
 
             await module.InvokeVoidAsync("DragStart");
         }
+    }
+
+    private class Model
+    {
+        [Required(ErrorMessage = "用户名不能为空")]
+        [MaxLength(16, ErrorMessage = "账号长度必须在3到20之间")]
+        [MinLength(4, ErrorMessage = "账号长度必须在3到20之间")]
+        public string? UserName { get; set; }
+        [Required(ErrorMessage = "密码不能为空")]
+        [MaxLength(16, ErrorMessage = "密码长度必须在5到20之间")]
+        [MinLength(4, ErrorMessage = "密码长度必须在5到20之间")]
+        public string? Password { get; set; }
+        [RegularExpression("True", ErrorMessage = "请通过滑块验证")]
+        public bool CAPTCHA { get; set; } = false;
+    }
+
+    [JSInvokable]
+    public void CAPTCHASuccess()
+    {
+        _model.CAPTCHA = true;
+        _form.ValidateAsync();
     }
 }
