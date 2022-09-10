@@ -20,6 +20,7 @@
                 <MTextField Solo
                             Dense
                             TValue="string"
+                            Clearable
                             Placeholder="请输入用户名"
                             @bind-Value="_model.UserName">
                 </MTextField>
@@ -28,6 +29,7 @@
                 <MTextField Solo
                             Dense
                             TValue="string"
+                            Clearable
                             Placeholder="请输入密码"
                             @bind-Value="_model.Password"
                             AppendIcon="@(password_show ? "mdi-eye" : "mdi-eye-off")"

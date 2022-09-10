@@ -1,6 +1,7 @@
 ﻿.main {
     width: 100vw;
-    height: 100vh;
+    position: fixed;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -107,6 +108,8 @@
 
 @media only screen and (min-width: 600px) {
     .main {
+        position:initial;
+        height:100vh;
         justify-content: end;
         background-image:none;
     }

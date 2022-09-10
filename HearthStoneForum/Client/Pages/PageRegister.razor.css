@@ -1,6 +1,7 @@
 ﻿.main {
     width: 100vw;
-    height: 100vh;
+    position: fixed;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +11,7 @@
 }
 
 .register-video video {
-    display:none;
+    display: none;
     position: fixed;
     width: max(177vh,100vw);
     height: 100vh;
@@ -19,11 +20,36 @@
     object-fit: cover;
 }
 
-@media only screen and (min-width: 600px) {
-    .main{
-        background-image:none;
+.register-card {
+    width: 90%;
+    max-width: 700px;
+}
+
+.step-card {
+    padding: 16px 8px;
+    background-color: transparent;
+    text-align:center;
+}
+.step-card a{
+    text-decoration:none;
+}
+    .step-card a:hover {
+        text-decoration: underline;
     }
-    .register-video video{
-        display:block;
+
+.verification{
+    display:flex;
+}
+
+
+@media only screen and (min-width: 600px) {
+    .main {
+        background-image: none;
+        position: initial;
+        height: 100vh;
+    }
+
+    .register-video video {
+        display: block;
     }
 }

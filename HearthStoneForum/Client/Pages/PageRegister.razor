@@ -12,26 +12,162 @@
         </video>
     </div>
     <div class="register-card">
+        <MForm @bind-Value="_valid" Model="_model" EnableValidation @ref="_form">
+            <MStepper Color="rgba(255,255,255,0.5)" Value="_step">
+                <MStepperHeader>
+                    <MStepperStep Step="1" Complete="_step>1">
+                        填写账号密码
+                    </MStepperStep>
+                    <MDivider></MDivider>
+                    <MStepperStep Step="2" Complete="_step>2">
+                        验证邮箱
+                    </MStepperStep>
+                    <MDivider></MDivider>
+                    <MStepperStep Step="3">
+                        完成注册
+                    </MStepperStep>
+                </MStepperHeader>
 
+                <MStepperItems>
+                    <MStepperContent Step="1">
+                        <div class="step-card">
+                            <MTextField Solo
+                                        TValue="string"
+                                        Clearable
+                                        Placeholder="请输入用户名"
+                                        @bind-Value="_model.UserName">
+                            </MTextField>
+                            <MTextField Solo
+                                        TValue="string"
+                                        Placeholder="请输入密码"
+                                        Clearable
+                                        @bind-Value="_model.Password"
+                                        AppendIcon="@(password_show ? "mdi-eye" : "mdi-eye-off")"
+                                        Type="@(password_show ? "text" : "password")"
+                                        OnAppendClick="() => password_show = !password_show">
+                            </MTextField>
+                            <MTextField Solo
+                                        TValue="string"
+                                        Placeholder="再次输入密码"
+                                        Clearable
+                                        @bind-Value="_model.ConfirmPassword"
+                                        AppendIcon="@(confirm_password_show ? "mdi-eye" : "mdi-eye-off")"
+                                        Type="@(confirm_password_show ? "text" : "password")"
+                                        OnAppendClick="() => confirm_password_show = !confirm_password_show">
+                            </MTextField>
+                            <MCheckbox @bind-Value="_check_agreement">
+                                <LabelContent>
+                                    用户勾选即代表同意
+                                    <a target="_blank" href="#">《还没想好的账号服务条款》</a>
+                                    和
+                                    <a target="_blank" href="#">《还没想好的隐私政策》</a>
+                                </LabelContent>
+                            </MCheckbox>
+                            <MSnackbar @bind-Value="_agree_show" Class="text-center" Timeout="2000" Centered>
+                                您需要同意相关条款才能注册
+                            </MSnackbar>
+                            <MButton Color="primary" Block OnClick="Next_step1">下一步</MButton>
+                        </div>
+
+                    </MStepperContent>
+                    <MStepperContent Step="2">
+                        <div class="step-card">
+                            <MTextField Solo
+                                        TValue="string"
+                                        Placeholder="请输入邮箱地址"
+                                        @bind-Value="_model.EmailAddress">
+                            </MTextField>
+                            <div class="verification">
+                                <MTextField Solo
+                                            TValue="string"
+                                            @bind-Value="_verification_code"
+                                            Placeholder="请输入验证码">
+                                </MTextField>
+                                <MButton Large Class="ms-2" Style="height:46px;" OnClick="GetVerificationCode">获取验证码</MButton>
+                            </div>
+
+                            <MButton Color="primary" Block OnClick="Next_step2">注册</MButton>
+                        </div>
+                    </MStepperContent>
+                    <MStepperContent Step="3">
+                        <div class="step-card">
+                            <div class="mb-5">
+                                <p>@_model.UserName</p>
+                                <h4>注册成功</h4>
+                            </div>
+                            <MButton Color="primary" Block OnClick="Next_step2">去首页</MButton>
+                        </div>
+                    </MStepperContent>
+                </MStepperItems>
+            </MStepper>
+        </MForm>
     </div>
 </div>
 
 @code {
+    private bool _valid = true;
     private MForm? _form;
     private Model _model = new();
     private bool password_show = false;
+    private bool confirm_password_show = false;
+    private int _step = 1;
+    private bool _check_agreement = false;
+    private bool _agree_show = false;
+    private string? _verification_code;
 
     private class Model
     {
-        [Required(ErrorMessage = "用户名不能为空")]
-        [MaxLength(16, ErrorMessage = "账号长度必须在3到20之间")]
-        [MinLength(4, ErrorMessage = "账号长度必须在3到20之间")]
+        [Required(ErrorMessage = "账号不能为空")]
+        [MaxLength(20, ErrorMessage = "账号长度必须在3到20之间")]
+        [MinLength(3, ErrorMessage = "账号长度必须在3到20之间")]
         public string? UserName { get; set; }
         [Required(ErrorMessage = "密码不能为空")]
-        [MaxLength(16, ErrorMessage = "密码长度必须在5到20之间")]
-        [MinLength(4, ErrorMessage = "密码长度必须在5到20之间")]
+        [MaxLength(20, ErrorMessage = "密码长度必须在5到20之间")]
+        [MinLength(5, ErrorMessage = "密码长度必须在5到20之间")]
         public string? Password { get; set; }
-        [RegularExpression("True", ErrorMessage = "请通过滑块验证")]
-        public bool CAPTCHA { get; set; } = false;
+        [Required(ErrorMessage = "密码不能为空")]
+        [MaxLength(20, ErrorMessage = "密码长度必须在5到20之间")]
+        [MinLength(5, ErrorMessage = "密码长度必须在5到20之间")]
+        [Compare("Password", ErrorMessage = "两次输入不一致")]
+        public string? ConfirmPassword { get; set; }
+        [Required(ErrorMessage = "邮箱不能为空")]
+        [EmailAddress(ErrorMessage = "邮箱地址无效")]
+        public string? EmailAddress { get; set; } = "XXXX@xxx.com";
+    }
+
+    private void Next_step1()
+    {
+        _form.ValidateAsync();
+        if (_valid)
+        {
+            if (!_check_agreement)
+            {
+                _agree_show = true;
+            }
+            else
+            {
+                _step = 2;
+                _model.EmailAddress = string.Empty;
+            }
+
+        }
+    }
+    private void Next_step2()
+    {
+        _form.ValidateAsync();
+        if (_valid)
+        {
+            _step = 3;
+        }
+    }
+    private void GetVerificationCode()
+    {
+        _form.ValidateAsync();
+        if (_valid)
+        {
+            Random random = new Random();
+            _verification_code = random.Next(111111, 1000000).ToString();
+        }
+
     }
 }
