@@ -1,6 +1,6 @@
 ﻿using HearthStoneForum.IRepository;
 using HearthStoneForum.Model;
-using HearthStoneForum.Model.Dto;
+using HearthStoneForum.Model.DTOView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,26 +15,31 @@ namespace HearthStoneForum.Repository
         public override async Task<List<DTO>> QueryDTOAsync<DTO>()
         {
             return await base.Context.Queryable<Area>()
-                .Select(it => new AreaDTO()
+                .Select(it => new AreaDTOView()
                 {
                     Id = it.Id,
                     Name = it.Name,
                     Description = it.Description,
-                    ImagePath = it.ImagePath
-                } as DTO)
-                .ToListAsync();
+                    ImagePath = it.ImagePath,
+                    Sort = it.Sort
+                })
+                .OrderBy(it=>it.Sort)
+                .ToListAsync(it=>new DTO());
         }
         public override async Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func)
         {
             return await base.Context.Queryable<Area>()
-                .Select(it => new AreaDTO()
+                .OrderBy(it => it.Sort)
+                .OrderBy(it => it.Id)
+                .Select(it => new AreaDTOView()
                 {
                     Id = it.Id,
                     Name = it.Name,
                     Description = it.Description,
-                    ImagePath= it.ImagePath
+                    ImagePath= it.ImagePath,
+                    Sort = it.Sort
                 } as DTO)
-                .Where(func)
+                .Where(func) 
                 .ToListAsync();
         }
     }

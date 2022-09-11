@@ -1,0 +1,153 @@
+﻿@page "/guide"
+@layout BlankLayout
+
+<div class="main">
+    @foreach (var item in Heroes)
+    {
+        <div class="hero-background @(item.Click?"click-background":"") @(item.HasClick?"hasclick-background":"")" style="@("background-image:url("+item.BackgroundUrl+");")">
+        </div>
+    }
+    <div class="hero-card">
+        <div class="hero-title">
+            <h1>化身英雄 征战沙场</h1>
+            化身为聪慧的潜行者、强大的法师、或是在十大英雄职业中任选其一，一切通通免费！
+        </div>
+        <div class="hero-content">
+            <div class="hero-headimg">
+                @foreach (var item in Heroes)
+                {
+                    <div>
+                        <MButton Style="@(item.Click?"transform:scale(1.2);":"")" Width="65" Height="65" Icon OnClick="()=>Change(item)">
+                            <img src="@(item.HeadImgUrl)">
+                        </MButton>
+                    </div>
+
+                }
+            </div>
+            <div class="hero-text">
+                <div class="hero-name"><h5>@_profession：@_name</h5></div>
+                <div class="hero-description">@_description</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public class Hero
+    {
+        public string? Name;
+        public string? Profession;
+        public string? Description;
+        public string? HeadImgUrl;
+        public string? BackgroundUrl;
+        public bool Click = false;
+        public bool HasClick = false;
+    }
+    private string? _name = Heroes[0].Name;
+    private string? _profession = Heroes[0].Profession;
+    private string? _description = Heroes[0].Description;
+
+
+    private void Change(Hero hero)
+    {
+        _name = hero.Name;
+        _profession = hero.Profession;
+        _description = hero.Description;
+        Hero hero1 = new Hero();
+        foreach (var item in Heroes)
+        {
+            if (item.Click == true) hero1 = item;
+            if (item.HasClick == true) item.HasClick = false;
+        }
+        hero1.Click = false;
+        hero1.HasClick = true;
+        hero.Click = true;
+    }
+
+
+
+    private static readonly List<Hero> Heroes = new(){
+        new Hero()
+        {
+            Name="伊利丹·怒风",
+            Profession="恶魔猎手",
+            Description="为你的攻击、法术和盟友赋予夺回的恶魔之力，用愤怒与狂热击败你的对手。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/10.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/10.jpg",
+            Click = true
+        },
+        new Hero()
+        {
+            Name="吉安娜·普罗德摩尔",
+            Profession="法师",
+            Description="使宇宙的力量屈从于自身的意志，从而释放出强大而毁灭性的魔法。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/1.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/1.jpg"
+        },
+        new Hero()
+        {
+            Name="古尔丹",
+            Profession="术士",
+            Description="缔造黑暗契约、掌控恶魔军团，使用禁忌的学识来获得胜利。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/6.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/6.jpg"
+        },
+        new Hero()
+        {
+            Name="萨尔",
+            Profession="萨满祭司",
+            Description="利用元素强大的力量来碾碎你的对手。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/7.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/7.jpg"
+        },
+        new Hero()
+        {
+            Name="乌瑟尔·光明使者",
+            Profession="圣骑士",
+            Description="增强自身的力量，使你宛若战场上坚不可摧的正义堡垒。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/4.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/4.jpg"
+        },
+        new Hero()
+        {
+            Name="加尔鲁什·地狱咆哮",
+            Profession="战士",
+            Description="带着强大的武器、坚韧的护甲和嗜血的随从冲锋陷阵。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/3.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/3.jpg"
+        },
+        new Hero()
+        {
+            Name="玛法里奥·怒风",
+            Profession="德鲁伊",
+            Description="掌控自然之力，并且能够在面对敌人时见招拆招。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/9.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/9.jpg"
+        },
+        new Hero()
+        {
+            Name="雷克萨",
+            Profession="猎人",
+            Description="通过陷阱、充满法术的箭囊和可靠的动物伙伴来追踪猎物。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/5.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/5.jpg"
+        },
+        new Hero()
+        {
+            Name="瓦莉拉·萨古纳尔",
+            Profession="潜行者",
+            Description="作为一名潜藏的刺客，通过偷窃、欺骗和背后袭击来赢得胜利。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/2.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/2.jpg"
+        },
+        new Hero()
+        {
+            Name="安度因·乌瑞恩",
+            Profession="牧师",
+            Description="强化你的随从、击垮敌人的意志，并征服所有的对手。",
+            HeadImgUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/8.icon.png",
+            BackgroundUrl="https://hearthstone.nosdn.127.net/3/V2/guide-for-new/hero/8.jpg",
+            HasClick = true
+        }
+    };
+}

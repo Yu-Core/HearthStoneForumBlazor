@@ -10,4 +10,8 @@
     <PackageReference Include="SqlSugarCore" Version="5.1.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOEdit\" />
+  </ItemGroup>
+
 </Project>

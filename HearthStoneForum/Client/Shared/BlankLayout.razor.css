@@ -1,0 +1,36 @@
+﻿.logo-wrap {
+    position: absolute;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    z-index: 99;
+    height: calc(32px + 9rem);
+}
+
+
+.logo-content {
+    margin-top: 16px;
+}
+
+    .logo-content:hover .logo-img {
+        transform: rotateZ(360deg);
+        transition: all 1.5s ease;
+    }
+
+.logo-img {
+    background-image: url(images/logo_hearthstone.png);
+    background-size: cover;
+    width: 9rem;
+    height: 9rem;
+    transition: all 1s;
+}
+
+@media only screen and (min-width: 600px) {
+    .logo-wrap:hover .logo-content {
+        display: block;
+    }
+
+    .logo-content {
+        display: none;
+    }
+}

@@ -1,6 +1,6 @@
 ﻿using HearthStoneForum.IRepository;
 using HearthStoneForum.Model;
-using HearthStoneForum.Model.Dto;
+using HearthStoneForum.Model.DTOView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace HearthStoneForum.Repository
 
 
             return await Context.Queryable<UserInfo>()
-                .Select(u => new UserInfoDTO()
+                .Select(u => new UserInfoDTOView()
                 {
                     Id = u.Id,
                     UserName = u.UserName,
@@ -37,7 +37,7 @@ namespace HearthStoneForum.Repository
         public override async Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func)
         {
                 return await Context.Queryable<UserInfo>()
-                .Select(u => new UserInfoDTO()
+                .Select(u => new UserInfoDTOView()
                 {
                     Id = u.Id,
                     UserName = u.UserName,

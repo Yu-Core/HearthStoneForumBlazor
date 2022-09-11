@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using HearthStoneForum.IService;
 using HearthStoneForum.WebApi.Utility.ApiResult;
-using HearthStoneForum.Model.Dto;
 using HearthStoneForum.Model;
 using AutoMapper;
+using HearthStoneForum.Model.DTOView;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
@@ -23,7 +23,7 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResult>> GetUserInfo()
         {
-            var data = await _iUserInfoService.QueryDTOAsync<UserInfoDTO>();
+            var data = await _iUserInfoService.QueryDTOAsync<UserInfoDTOView>();
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }
@@ -33,13 +33,13 @@ namespace HearthStoneForum.WebApi.Controllers
             var userInfo = await _iUserInfoService.FindAsync(id);
             if (userInfo == null) return ApiResultHelper.Error("没有更多的值");
             
-            var userInfoDTO = _iMapper.Map<UserInfo,UserInfoDTO>(userInfo);
-            return ApiResultHelper.Success(userInfoDTO);
+            var userInfoDTOView = _iMapper.Map<UserInfo,UserInfoDTOView>(userInfo);
+            return ApiResultHelper.Success(userInfoDTOView);
         }
         [HttpGet("search")]
         public async Task<ActionResult<ApiResult>> GetUserInfoByName(string name)
         {
-            var data = await _iUserInfoService.QueryDTOAsync<UserInfoDTO>(it => it.Name.ToLower().Contains(name.ToLower()));
+            var data = await _iUserInfoService.QueryDTOAsync<UserInfoDTOView>(it => it.Name.ToLower().Contains(name.ToLower()));
             if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的用户");
             return ApiResultHelper.Success(data);
         }
@@ -57,8 +57,8 @@ namespace HearthStoneForum.WebApi.Controllers
             bool b = await _iUserInfoService.CreateAsync(userInfo);
             if (!b) return ApiResultHelper.Error("用户添加失败，服务器发生错误");
 
-            var userInfoDTO = _iMapper.Map<UserInfoDTO>(userInfo);
-            return ApiResultHelper.Success(userInfoDTO);
+            var UserInfoDTOView = _iMapper.Map<UserInfoDTOView>(userInfo);
+            return ApiResultHelper.Success(UserInfoDTOView);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResult>> Delete(int id)

@@ -1,7 +1,7 @@
 ﻿using HearthStoneForum.IRepository;
 using HearthStoneForum.IService;
 using HearthStoneForum.Model;
-using HearthStoneForum.Model.Dto;
+using HearthStoneForum.Model.DTOView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +19,12 @@ namespace HearthStoneForum.Service
             _iInvitationRepository = iInvitationRepository;
         }
 
-        public async Task<List<InvitationDTORecommend>> GetNewInvitations()
+        public async Task<List<InvitationDTOViewRecommend>> GetNewInvitations()
         {
             return await _iInvitationRepository.GetNewInvitations();
         }
 
-        public async Task<List<InvitationDTORecommend>> GetRecommendInvitations()
+        public async Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations()
         {
             return await _iInvitationRepository.GetRecommendInvitations();
         }

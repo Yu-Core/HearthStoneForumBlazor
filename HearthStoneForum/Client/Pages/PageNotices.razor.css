@@ -43,6 +43,7 @@
         }
         .notice-content a:hover .notice-row{
             background-color:rgba(0,0,0,0.2);
+            transition:all 0.5s ease;
         }
 
         .notice-row {

@@ -1,5 +1,5 @@
 ﻿using HearthStoneForum.Model;
-using HearthStoneForum.Model.Dto;
+using HearthStoneForum.Model.DTOView;
 using System;
 using System.Collections.Generic;
 using System.Linq;

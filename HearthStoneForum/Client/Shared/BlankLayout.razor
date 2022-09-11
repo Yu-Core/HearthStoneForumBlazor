@@ -1,5 +1,23 @@
 ﻿@inherits LayoutComponentBase
 <MApp>
+    <div class="logo-wrap">
+        <div class="logo-content">
+            <div class="logo-btn">
+                <MTooltip Bottom>
+                    <ActivatorContent>
+                        <a href="/" @attributes="@context.Attrs">
+                            <div class="logo-img"></div>
+                        </a>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <span>返回首页</span>
+                    </ChildContent>
+                </MTooltip>
+                
+            </div>
+        </div>
+    </div>
+   
     <MMain>
         @Body
     </MMain>

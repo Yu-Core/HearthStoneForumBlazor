@@ -20,9 +20,29 @@
             </a>
         </MHover>
     }
+    @foreach (var item in SupplyData)
+    {
+        <a href="#" class="d-none">
+            <div  class="area-card ">
+            </div>
+        </a>
+    }
 </div>
 
 @code {
     [Parameter]
-    public List<AreaDTO> Data { set; get; }
+    public List<AreaDTOView> Data { set; get; }
+
+    private List<AreaDTOView> SupplyData { set; get; } = new();
+
+    protected override void OnInitialized()
+    {
+        if (Data.Count % 4 > 1)
+        {
+            for (var i = 0; i < 4 - Data.Count % 4; i++)
+            {
+                SupplyData.Add(new AreaDTOView());
+            }
+        }
+    }
 }

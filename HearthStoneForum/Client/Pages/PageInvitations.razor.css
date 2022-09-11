@@ -45,6 +45,7 @@
 
         .invitation-content a:hover .list-row {
             background-color: rgba(0,0,0,0.2);
+            transition:all 1s ease;
         }
 .list-head {
     display: flex;

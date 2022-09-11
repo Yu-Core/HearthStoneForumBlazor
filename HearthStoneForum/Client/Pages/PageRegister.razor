@@ -1,6 +1,5 @@
 ﻿@page "/register"
 @layout BlankLayout
-@inject IJSRuntime JS
 @using System.Text.RegularExpressions;
 @using System.ComponentModel.DataAnnotations
 @using FluentValidation;
@@ -57,16 +56,26 @@
                             </MTextField>
                             <MCheckbox @bind-Value="_check_agreement">
                                 <LabelContent>
-                                    用户勾选即代表同意
-                                    <a target="_blank" href="#">《还没想好的账号服务条款》</a>
-                                    和
-                                    <a target="_blank" href="#">《还没想好的隐私政策》</a>
+                                    <div>
+                                        用户勾选即代表同意
+                                        <a target="_blank" href="#">《还没想好的账号服务条款》</a>
+                                        和
+                                        <a target="_blank" href="#">《还没想好的隐私政策》</a>
+                                    </div>
                                 </LabelContent>
                             </MCheckbox>
-                            <MSnackbar @bind-Value="_agree_show" Class="text-center" Timeout="2000" Centered>
+                            <MSnackbar @bind-Value="_agree_show"
+                                       Class="text-center"
+                                       Timeout="2000"
+                                       Centered>
                                 您需要同意相关条款才能注册
                             </MSnackbar>
-                            <MButton Color="primary" Block OnClick="Next_step1">下一步</MButton>
+                            <MButton Color="primary"
+                                     Large
+                                     Block
+                                     OnClick="Next_step1">
+                                下一步
+                            </MButton>
                         </div>
 
                     </MStepperContent>
@@ -83,10 +92,20 @@
                                             @bind-Value="_verification_code"
                                             Placeholder="请输入验证码">
                                 </MTextField>
-                                <MButton Large Class="ms-2" Style="height:46px;" OnClick="GetVerificationCode">获取验证码</MButton>
+                                <MButton Large
+                                         Class="ms-2"
+                                         Style="height:46px;"
+                                         OnClick="GetVerificationCode">
+                                    获取验证码
+                                </MButton>
                             </div>
 
-                            <MButton Color="primary" Block OnClick="Next_step2">注册</MButton>
+                            <MButton Color="primary"
+                                     Large
+                                     Block
+                                     OnClick="Next_step2">
+                                注册
+                            </MButton>
                         </div>
                     </MStepperContent>
                     <MStepperContent Step="3">
@@ -95,7 +114,12 @@
                                 <p>@_model.UserName</p>
                                 <h4>注册成功</h4>
                             </div>
-                            <MButton Color="primary" Block OnClick="Next_step2">去首页</MButton>
+                            <MButton Color="primary"
+                                     Large
+                                     Block
+                                     Href="/">
+                                去首页
+                            </MButton>
                         </div>
                     </MStepperContent>
                 </MStepperItems>

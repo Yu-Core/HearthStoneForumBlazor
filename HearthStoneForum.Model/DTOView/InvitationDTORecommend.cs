@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HearthStoneForum.Model.Dto
+namespace HearthStoneForum.Model.DTOView
 {
-    public class InvitationDTORecommend:BaseId
+    public class InvitationDTOViewRecommend : BaseId
     {
         public string? Title { get; set; }
         public int LikesCount { get; set; }

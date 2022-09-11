@@ -16,5 +16,7 @@ namespace HearthStoneForum.Model
         public DateTime CreatedTime { get; set; }
         [SugarColumn(ColumnDataType = "nvarchar(2083)")]
         public string? ImagePath { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public long Sort { get; set; }
     }
 }

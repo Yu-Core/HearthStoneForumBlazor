@@ -1,6 +1,6 @@
 ﻿using HearthStoneForum.IRepository;
 using HearthStoneForum.Model;
-using HearthStoneForum.Model.Dto;
+using HearthStoneForum.Model.DTOView;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,10 @@ namespace HearthStoneForum.Repository
 {
     public class InvitationRepository : BaseRepository<Invitation>, IInvitationRepository
     {
-        public async Task<List<InvitationDTORecommend>> GetRecommendInvitations()
+        public async Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations()
         {
             var data = await base.Context.Queryable<Invitation>()
-                .Select(it => new InvitationDTORecommend()
+                .Select(it => new InvitationDTOViewRecommend()
                 {
                     Title = it.Title,
                     Id = it.Id
@@ -31,11 +31,11 @@ namespace HearthStoneForum.Repository
         }
 
 
-        public async Task<List<InvitationDTORecommend>> GetNewInvitations()
+        public async Task<List<InvitationDTOViewRecommend>> GetNewInvitations()
         {
             return await base.Context.Queryable<Invitation>()
                 .OrderByDescending(it => it.CreatedTime)
-                .Select(it => new InvitationDTORecommend()
+                .Select(it => new InvitationDTOViewRecommend()
                 {
                     Id = it.Id,
                     Title = it.Title
@@ -74,7 +74,7 @@ namespace HearthStoneForum.Repository
                 .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
                 .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTOView()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -124,7 +124,7 @@ namespace HearthStoneForum.Repository
                 .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
                 .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTOView()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -141,7 +141,7 @@ namespace HearthStoneForum.Repository
                     CollectionCount = c2.Count
                 })
                 .MergeTable()
-                .Where(func as Expression<Func<InvitationDTO, bool>>)
+                .Where(func as Expression<Func<InvitationDTOView, bool>>)
                 .ToListAsync(it => new DTO());
         }
 
@@ -176,7 +176,7 @@ namespace HearthStoneForum.Repository
                 .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
                 .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTOView()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -227,7 +227,7 @@ namespace HearthStoneForum.Repository
                 .LeftJoin(CommentCount, (i, a, u, l, c1) => i.Id == c1.InvitationId)
                 .LeftJoin(CollectionCount, (i, a, u, l, c1, c2) => i.Id == c2.InvitationId)
 
-                .Select((i, a, u, l, c1, c2) => new InvitationDTO()
+                .Select((i, a, u, l, c1, c2) => new InvitationDTOView()
                 {
                     Id = i.Id,
                     AreaId = i.AreaId,
@@ -244,7 +244,7 @@ namespace HearthStoneForum.Repository
                     CollectionCount = c2.Count
                 })
                 .MergeTable()
-                .Where(func as Expression<Func<InvitationDTO, bool>>)
+                .Where(func as Expression<Func<InvitationDTOView, bool>>)
                 .ToPageListAsync(page, size, total, it => new DTO());
         }
     }

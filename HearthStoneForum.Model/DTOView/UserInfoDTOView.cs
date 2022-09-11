@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HearthStoneForum.Model.Dto
+namespace HearthStoneForum.Model.DTOView
 {
-    public class UserInfoDTO : BaseId
+    public class UserInfoDTOView : BaseId
     {
         public string? UserName { get; set; }
         public string? Name { get; set; }

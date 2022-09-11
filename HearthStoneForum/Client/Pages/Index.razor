@@ -25,18 +25,18 @@
     private List<Carousel> Carousels = new List<Carousel>();
     private List<Notice> Notices = new();
     private int TodaySignCount = 0;
-    private List<AreaDTO> Areas = new();
-    private List<InvitationDTORecommend> RecommendInvitations = new();
-    private List<InvitationDTORecommend> NewInvitations = new();
+    private List<AreaDTOView> Areas = new();
+    private List<InvitationDTOViewRecommend> RecommendInvitations = new();
+    private List<InvitationDTOViewRecommend> NewInvitations = new();
 
     protected override async Task OnInitializedAsync()
     {
         Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data;
         Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data;
         TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/today_count")).Data;
-        Areas = (await Http.GetFromJsonAsync<ApiResult<List<AreaDTO>>>("areas")).Data;
-        RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTORecommend>>>("invitations/recommend")).Data;
-        NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTORecommend>>>("invitations/new")).Data;
+        Areas = (await Http.GetFromJsonAsync<ApiResult<List<AreaDTOView>>>("areas")).Data;
+        RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/recommend")).Data;
+        NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/new")).Data;
     }
 
     

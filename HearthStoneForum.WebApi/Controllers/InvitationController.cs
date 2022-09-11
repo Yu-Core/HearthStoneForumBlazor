@@ -1,6 +1,6 @@
 ﻿using HearthStoneForum.IService;
 using HearthStoneForum.Model;
-using HearthStoneForum.Model.Dto;
+using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,14 +22,14 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResult>> GetInvitation()
         {
-            var data = await _iInvitationService.QueryDTOAsync<InvitationDTO>();
+            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>();
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResult>> GetInvitation(int id)
         {
-            var invitation = (await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.Id == id)).FirstOrDefault();
+            var invitation = (await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.Id == id)).FirstOrDefault();
             if (invitation == null) return ApiResultHelper.Error("没有更多的值");
 
             return ApiResultHelper.Success(invitation);
@@ -37,7 +37,7 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<ApiResult>> GetInvitationByName(string name)
         {
-            var data = await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.Title.ToLower().Contains(name.ToLower()));
+            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.Title.ToLower().Contains(name.ToLower()));
             if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");
             return ApiResultHelper.Success(data);
         }
@@ -59,7 +59,7 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> GetInvitationByAreaId(int id, int page, int size)
         {
             RefAsync<int> total = 0;
-            var data = await _iInvitationService.QueryDTOAsync<InvitationDTO>(it => it.AreaId == id,page,size,total);
+            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.AreaId == id,page,size,total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }

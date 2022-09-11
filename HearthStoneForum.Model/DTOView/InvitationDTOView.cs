@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HearthStoneForum.Model.Dto
+namespace HearthStoneForum.Model.DTOView
 {
-    public class InvitationDTO : BaseId
+    public class InvitationDTOView : BaseId
     {
         public string? Title { get; set; }
         public string? Content { get; set; }

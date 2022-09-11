@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HearthStoneForum.Model;
-using HearthStoneForum.Model.Dto;
+using HearthStoneForum.Model.DTOAdd;
+using HearthStoneForum.Model.DTOView;
 
 namespace HearthStoneForum.WebApi.Utility.AutoMapper
 {
@@ -8,8 +9,9 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
     {
         public AutoMapperConfig()
         {
-            CreateMap<UserInfo, UserInfoDTO>();
-
+            CreateMap<UserInfo, UserInfoDTOView>();
+            CreateMap<AreaDTOAdd, Area>().ForMember(des => des.CreatedTime, source => source.MapFrom(src => DateTime.Now))
+                .ForMember(des => des.Sort, source => source.MapFrom(src => DateTimeUtil.DateTimeToLongTimeStamp(DateTime.Now)));
 
 
 

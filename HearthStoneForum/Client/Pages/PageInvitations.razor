@@ -39,8 +39,8 @@
     </div>
 </div>
 @code {
-    private AreaDTO Area = new AreaDTO();
-    private List<InvitationDTO> Invitations = new();
+    private AreaDTOView Area = new AreaDTOView();
+    private List<InvitationDTOView> Invitations = new();
     [Parameter]
     public int id { get; set; }
     private int _page = 1;
@@ -60,9 +60,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<ApiResult<AreaDTO>>("areas/" + id);
+        var result = await Http.GetFromJsonAsync<ApiResult<AreaDTOView>>("areas/" + id);
         Area = result.Data;
-        var resultInvitations = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTO>>>("invitations/area?id=" + id + "&page=" + page + "&size=" + size);
+        var resultInvitations = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOView>>>("invitations/area?id=" + id + "&page=" + page + "&size=" + size);
         if (resultInvitations.Data != null)
         {
             Invitations = resultInvitations.Data;
@@ -72,7 +72,7 @@
 
     private async void ChangeInvitations()
     {
-        var resultInvitations = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTO>>>("invitations/area?id=" + id + "&page=" + page + "&size=" + size);
+        var resultInvitations = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOView>>>("invitations/area?id=" + id + "&page=" + page + "&size=" + size);
         Invitations = resultInvitations.Data;
         StateHasChanged();
     }
