@@ -20,29 +20,39 @@
             </a>
         </MHover>
     }
-    @foreach (var item in SupplyData)
+    @for (var i = 0; i < SupplayDataCount; i++)
     {
-        <a href="#" class="d-none">
-            <div  class="area-card ">
-            </div>
-        </a>
+        <a class="d-none d-sm-block area-supply"></a>
+    }
+    @for (var i = 0; i < SupplayDataCountMoblie; i++)
+    {
+        <a class="d-block d-sm-none area-supply"></a>
     }
 </div>
 
 @code {
     [Parameter]
-    public List<AreaDTOView> Data { set; get; }
+    public List<AreaDTOView> Data { get; set; }
 
-    private List<AreaDTOView> SupplyData { set; get; } = new();
+    private int SupplayDataCount { set; get; }
+    private int SupplayDataCountMoblie { set; get; }
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        if (Data.Count % 4 > 1)
+        SupplayDataCount = SupplyDataCount(4);
+        SupplayDataCountMoblie = SupplyDataCount(2);
+    }
+
+    private int SupplyDataCount(int intDivisor)
+    {
+        int count = Data.Count;
+        if (count % intDivisor == 0)
         {
-            for (var i = 0; i < 4 - Data.Count % 4; i++)
-            {
-                SupplyData.Add(new AreaDTOView());
-            }
+            return 0;
+        }
+        else
+        {
+            return intDivisor - count % intDivisor;
         }
     }
 }

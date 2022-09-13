@@ -2,6 +2,7 @@
 using HearthStoneForum.Model;
 using HearthStoneForum.Model.DTOAdd;
 using HearthStoneForum.Model.DTOView;
+using HearthStoneForum.WebApi.Utility._MD5;
 
 namespace HearthStoneForum.WebApi.Utility.AutoMapper
 {
@@ -12,7 +13,18 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
             CreateMap<UserInfo, UserInfoDTOView>();
             CreateMap<AreaDTOAdd, Area>().ForMember(des => des.CreatedTime, source => source.MapFrom(src => DateTime.Now))
                 .ForMember(des => des.Sort, source => source.MapFrom(src => DateTimeUtil.DateTimeToLongTimeStamp(DateTime.Now)));
-
+            CreateMap<UserInfoDTOAdd, UserInfo>().ConstructUsing(dto => new UserInfo
+            {
+                UserName = dto.UserName,
+                Password = MD5Helper.MD5Encrytp32(dto.Password ?? "PassWord"),
+                Email = dto.Email,
+                Sex = Sex.未知,
+                CreatedTime = DateTime.Now,
+                LastLogin = DateTime.Now,
+                Name = "用户" + dto.UserName,
+                HeadId = 0,
+                Phone = String.Empty
+            });
 
 
             //CreateMap<PreachDTOCreate, Preach>().ConstructUsing(dto => new Preach

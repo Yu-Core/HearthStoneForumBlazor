@@ -19,6 +19,10 @@
         text-decoration: inherit;
     }
 
+.area-supply {
+    z-index:-1;
+}
+
 .area-card {
     width: 100%;
     height: 100%;

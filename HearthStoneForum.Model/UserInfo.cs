@@ -27,6 +27,6 @@ namespace HearthStoneForum.Model
     }
     public enum Sex
     {
-        男,女
+        未知,男,女
     }
 }

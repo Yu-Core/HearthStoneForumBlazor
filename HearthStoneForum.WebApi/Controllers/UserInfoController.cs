@@ -5,6 +5,7 @@ using HearthStoneForum.WebApi.Utility.ApiResult;
 using HearthStoneForum.Model;
 using AutoMapper;
 using HearthStoneForum.Model.DTOView;
+using HearthStoneForum.Model.DTOAdd;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
@@ -44,14 +45,16 @@ namespace HearthStoneForum.WebApi.Controllers
             return ApiResultHelper.Success(data);
         }
         [HttpPost]
-        public async Task<ActionResult<ApiResult>> Create(UserInfo userInfo)
+        public async Task<ActionResult<ApiResult>> Create(UserInfoDTOAdd dto)
         {
             #region 数据验证
-            if (String.IsNullOrWhiteSpace(userInfo.UserName) || String.IsNullOrWhiteSpace(userInfo.Password)) return ApiResultHelper.Error("用户名和密码不能为空");
+            if (String.IsNullOrWhiteSpace(dto.UserName) || String.IsNullOrWhiteSpace(dto.Password)) return ApiResultHelper.Error("用户名和密码不能为空");
             #endregion
             #region 检测用户名是否存在
-            var data = await _iUserInfoService.QueryAsync(it => it.UserName == userInfo.UserName);
+            var data = await _iUserInfoService.QueryAsync(it => it.UserName == dto.UserName);
             if (data.Count > 0) return ApiResultHelper.Error("该用户名已存在");
+
+            UserInfo userInfo = _iMapper.Map<UserInfoDTOAdd,UserInfo>(dto);
 
             #endregion
             bool b = await _iUserInfoService.CreateAsync(userInfo);
