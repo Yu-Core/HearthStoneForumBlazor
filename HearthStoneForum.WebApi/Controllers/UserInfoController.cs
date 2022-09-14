@@ -53,10 +53,9 @@ namespace HearthStoneForum.WebApi.Controllers
             #region 检测用户名是否存在
             var data = await _iUserInfoService.QueryAsync(it => it.UserName == dto.UserName);
             if (data.Count > 0) return ApiResultHelper.Error("该用户名已存在");
+            #endregion
 
             UserInfo userInfo = _iMapper.Map<UserInfoDTOAdd,UserInfo>(dto);
-
-            #endregion
             bool b = await _iUserInfoService.CreateAsync(userInfo);
             if (!b) return ApiResultHelper.Error("用户添加失败，服务器发生错误");
 

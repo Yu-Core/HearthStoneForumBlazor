@@ -11,6 +11,7 @@ using HearthStoneForum.JWT.Utility.ApiResult;
 using HearthStoneForum.Model.DTORest;
 using HearthStoneForum.JWT.Utility;
 using HearthStoneForum.Model.DTOView;
+using Newtonsoft.Json.Linq;
 
 namespace HearthStoneForum.JWT.Controllers
 {
@@ -35,7 +36,8 @@ namespace HearthStoneForum.JWT.Controllers
             var userInfo = await _UserInfoService.FindAsync(it=>it.UserName==dto.UserName&&it.Password == pwd);
             if (userInfo == null)
             {
-                return ApiResultHelper.Error("账号或密码错误");
+                //return ApiResultHelper.Error("账号或密码错误");
+                return ApiResultHelper.Success(userInfo);
             }
             else
             {

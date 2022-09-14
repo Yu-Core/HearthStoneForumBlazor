@@ -13,19 +13,18 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
             CreateMap<UserInfo, UserInfoDTOView>();
             CreateMap<AreaDTOAdd, Area>().ForMember(des => des.CreatedTime, source => source.MapFrom(src => DateTime.Now))
                 .ForMember(des => des.Sort, source => source.MapFrom(src => DateTimeUtil.DateTimeToLongTimeStamp(DateTime.Now)));
-            CreateMap<UserInfoDTOAdd, UserInfo>().ConstructUsing(dto => new UserInfo
-            {
-                UserName = dto.UserName,
-                Password = MD5Helper.MD5Encrytp32(dto.Password ?? "PassWord"),
-                Email = dto.Email,
-                Sex = Sex.未知,
-                CreatedTime = DateTime.Now,
-                LastLogin = DateTime.Now,
-                Name = "用户" + dto.UserName,
-                HeadId = 0,
-                Phone = String.Empty
-            });
-
+            CreateMap<UserInfoDTOAdd, UserInfo>().ForMember(des=>des.Password,source=>source.Ignore())
+                .ConstructUsing(dto => new UserInfo
+                {
+                    Password = MD5Helper.MD5Encrytp32(dto.Password ?? "PassWord"),
+                    Email = dto.Email,
+                    Sex = Sex.未知,
+                    CreatedTime = DateTime.Now,
+                    LastLogin = DateTime.Now,
+                    Name = "用户" + dto.UserName,
+                    HeadId = 0,
+                    Phone = String.Empty
+                });
 
             //CreateMap<PreachDTOCreate, Preach>().ConstructUsing(dto => new Preach
             //{

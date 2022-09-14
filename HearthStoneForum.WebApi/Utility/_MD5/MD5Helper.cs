@@ -7,14 +7,16 @@ namespace HearthStoneForum.WebApi.Utility._MD5
     {
         public static string MD5Encrytp32(string password)
         {
-            string pwd = "";
-            MD5 md5 = MD5.Create();
-            byte[] s = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
-            for(int i = 0; i < s.Length; i++)
+            using (MD5 md5 = MD5.Create())
             {
-                pwd += s[i].ToString("X");
+                byte[] newBuffer = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < newBuffer.Length; i++)
+                {
+                    sb.Append(newBuffer[i].ToString("X2"));
+                }
+                return sb.ToString();
             }
-            return pwd;
         }
     }
 }
