@@ -1,0 +1,102 @@
+﻿.main {
+    width: 100%;
+    padding: 0 16px;
+}
+
+.race-year {
+    margin-bottom: 64px;
+}
+
+.race-year-head {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+    .race-year-head h1, .race-year-head h2, .race-year-head h3, .race-year-head h4, .race-year-head h5, .race-year-head h6 {
+        font-weight: bold;
+    }
+
+.race-year-subtitle{
+    padding-left:16px;
+}
+
+.race-year-img {
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+}
+
+.list-expansion {
+    display: flex;
+    flex-direction:column;
+    flex-wrap: wrap;
+}
+.expansion-wrap {
+    flex-grow: 1;
+    padding:4px;
+    height:20vw;
+    min-height:200px;
+}
+.expansion {
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    background-position: center center;
+    background-size: cover;
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+}
+
+.expansion:hover{
+    transform:scale(1.05);
+    transition:all 0.3s ease;
+}
+
+    .expansion h1, .expansion h2, .expansion h3, .expansion h4, .expansion h5, .expansion h6 {
+        margin: 0;
+        font-weight: bold;
+    }
+
+.expansion-logo {
+    position: absolute;
+    top:0;
+    display: flex;
+    justify-content: center;
+    height: 75%;
+}
+
+    .expansion-logo img {
+        object-fit: cover;
+    }
+
+.expansion-content {
+    width:100%;
+    text-align: center;
+    padding-bottom: 16px;
+    color: #fff;
+    background-image: linear-gradient(transparent,rgba(0,0,0,.9));
+}
+
+@media only screen and (min-width: 600px) {
+    .list-expansion{
+        flex-direction:row;
+    }
+    .expansion-wrap {
+        max-width: 50%;
+        min-width: 48%;
+        padding:8px;
+    }
+}
+@media only screen and (min-width: 960px) {
+    .main {
+        padding: 0 64px;
+    }
+    .expansion-wrap {
+        max-width: 33%;
+        min-width: 30%;
+        padding: 12px;
+    }
+}

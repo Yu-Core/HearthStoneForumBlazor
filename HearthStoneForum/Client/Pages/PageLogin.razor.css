@@ -64,8 +64,8 @@
 
 .drag-content {
     width: 100%;
-    height: 38px;
-    line-height: 38px;
+    height: 40px;
+    line-height: 40px;
     background-color: #e8e8e8;
     position: relative;
     margin: 0 auto;
@@ -92,7 +92,7 @@
 
 .drag-btn {
     width: 40px;
-    height: 38px;
+    height: 40px;
     position: absolute;
     border: 1px solid #ccc;
     cursor: move;

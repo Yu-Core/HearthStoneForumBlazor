@@ -1,5 +1,6 @@
 using HearthStoneForum.WebApi.Extend;
 using HearthStoneForum.WebApi.Utility.AutoMapper;
+using Microsoft.OpenApi.Models;
 using SqlSugar.IOC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,36 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "HearthStoneForum.WebApi", Version = "v1" });
+
+    #region Swagger使用鉴权组件
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Description = "直接在下框中输入Bearer {token}（注意两者之间是一个空格）",
+        Name = "Authorization",
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+          {
+            new OpenApiSecurityScheme
+            {
+              Reference=new OpenApiReference
+              {
+                Type=ReferenceType.SecurityScheme,
+                Id="Bearer"
+              }
+            },
+            new string[] {}
+          }
+        });
+    #endregion
+});
 
 
 #region SqlSugar
@@ -56,6 +86,9 @@ app.UseCors(options =>
 });
 
 app.UseHttpsRedirection();
+
+//添加到管道中 鉴权
+app.UseAuthentication();
 
 app.UseAuthorization();
 

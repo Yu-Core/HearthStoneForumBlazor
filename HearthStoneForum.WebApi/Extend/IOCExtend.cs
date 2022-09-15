@@ -30,6 +30,10 @@ namespace HearthStoneForum.WebApi.Extend
             services.AddScoped<IRankService, RankService>();
             services.AddScoped<IDownloadRepository, DownloadRepository>();
             services.AddScoped<IDownloadService, DownloadService>();
+            services.AddScoped<IRaceYearRepository, RaceYearRepository>();
+            services.AddScoped<IRaceYearService, RaceYearService>();
+            services.AddScoped<IExpansionRepository, ExpansionRepository>();
+            services.AddScoped<IExpansionService, ExpansionService>();
             return services;
         }
     }

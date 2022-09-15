@@ -1,6 +1,8 @@
 ﻿@page "/login"
 @layout BlankLayout
 @inject IJSRuntime JS
+@inject ILocalStorageService localStorageService
+@inject NavigationManager navigation
 @using System.Text.RegularExpressions;
 @using System.ComponentModel.DataAnnotations
 @using FluentValidation;
@@ -48,7 +50,7 @@
                 <MCheckbox @bind-Value="_model.CAPTCHA" Dense Height="40" Class="mt-0 pt-0 ps-3 mb-2"></MCheckbox>
             </div>
             <div class="login-btn">
-                <MButton Color="info" Height="38" Block Type="submit">登录</MButton>
+                <MButton Color="info" Height="38" Block Type="submit" >登录</MButton>
             </div>
             <div class="login-other">
                 <a>
@@ -70,6 +72,9 @@
     private Model _model = new();
     private bool password_show = false;
 
+    [Parameter]
+    public UserInfo userInfo { get; set; } = new();
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -83,6 +88,18 @@
             await module.InvokeVoidAsync("DragStart");
         }
     }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    bool isExit = await localStorageService.ContainKeyAsync("UsesInfo");
+    //    if (isExit)
+    //    {
+    //        userInfo = await localStorageService.GetItemAsync<UserInfo>("UsesInfo");
+
+    //        await LoginAsync();
+    //    }
+    //    await base.OnInitializedAsync();
+    //}
 
     private class Model
     {
@@ -98,10 +115,16 @@
         public bool CAPTCHA { get; set; } = false;
     }
 
+    //被JS调用的方法，用于改变滑块验证绑定的值
     [JSInvokable]
     public void CAPTCHASuccess()
     {
         _model.CAPTCHA = true;
         _form.ValidateAsync();
     }
+
+    //private Task LoginAsync(){
+    //    UserInfoDTOLogin dto = new();
+
+    //}
 }

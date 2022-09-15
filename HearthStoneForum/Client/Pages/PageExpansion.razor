@@ -1,0 +1,54 @@
+﻿@page "/expansions"
+@inject HttpClient Http
+
+<div class="main">
+    <div class="content">
+        @foreach (var raceYear in raceYears)
+        {
+            <div class="race-year">
+                <div class="race-year-head">
+                    <div class="race-year-img" style="background-image:url(@(raceYear.ImagePath))">
+                    </div>
+                    <div class="race-year-content">
+                        <div class="race-year-title">
+                            <h3>@(raceYear.Name)(@(raceYear.Year))</h3>
+                        </div>
+                        <div class="race-year-subtitle">
+                            <h5>@(raceYear.Mode)</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-expansion">
+                    @foreach (var expansion in raceYear.Expansions)
+                    {
+                        <div class="expansion-wrap">
+                            <a href="@(expansion.Href)">
+                                <div class="expansion" style="background-image:url(@(expansion.ImagePath))">
+                                    <div class="expansion-logo">
+                                        <img src="@(expansion.LogoPath)">
+                                    </div>
+                                    <div class="expansion-content">
+                                        <h5>@(expansion.DateTime.ToString("Y"))</h5>
+                                        <h6>@(expansion.Mode)</h6>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    }
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@code {
+    public List<RaceYear> raceYears { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var data = await Http.GetFromJsonAsync<ApiResult<List<RaceYear>>>("raceYears");
+        if (data.Data != null) raceYears = data.Data;
+    }
+}

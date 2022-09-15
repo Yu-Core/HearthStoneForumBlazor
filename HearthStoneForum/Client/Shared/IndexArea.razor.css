@@ -91,9 +91,10 @@
     .area-content .area-title {
         display: flex;
         justify-content: center;
-        font-size: 1.1rem !important;
+        font-size: 1.2rem !important;
         font-weight: 700;
         transition: all 1s;
+        white-space:nowrap;
     }
 
     .area-content .area-subtitle {

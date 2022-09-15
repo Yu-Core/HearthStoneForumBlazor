@@ -4,7 +4,7 @@
 .list-content {
     display: flex;
     flex-grow: 1;
-    flex-direction: column;
+    flex-direction: row;
     padding-left: 20px;
     overflow: hidden;
 }
@@ -12,14 +12,27 @@
     .list-content .list-title {
         display: flex;
         flex-grow: 1;
-        align-items: end;
-        font-size: 1.3rem;
+        align-items: center;
+        font-size: 1.2rem;
+        white-space: nowrap;
     }
 
     .list-content .list-subtitle {
         display: flex;
         flex-grow: 1;
-        align-items: center;
+        align-items: end;
         font-size: 0.75rem;
         white-space: nowrap;
     }
+
+@media only screen and (min-width: 600px) {
+    .list-content{
+        flex-direction:column;
+    }
+        .list-content .list-title {
+            align-items: end;
+        }
+        .list-content .list-subtitle {
+            align-items: center;
+        }
+}
