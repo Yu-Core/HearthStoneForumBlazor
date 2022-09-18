@@ -1,8 +1,11 @@
 ﻿using HearthStoneForum.IService;
 using HearthStoneForum.Model;
+using HearthStoneForum.Model.DTOView;
+using HearthStoneForum.Service;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SqlSugar;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
@@ -20,6 +23,14 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> GetComment()
         {
             var data = await _iCommentService.QueryAsync();
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data);
+        }
+        [HttpGet("page")]
+        public async Task<ActionResult<ApiResult>> GetComment(int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iCommentService.QueryDTOAsync<CommentDTOView>(page,size,total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }

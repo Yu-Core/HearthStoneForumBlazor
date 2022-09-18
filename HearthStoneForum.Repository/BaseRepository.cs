@@ -58,12 +58,12 @@ namespace HearthStoneForum.Repository
             return base.GetListAsync(func);
         }
 
-        public Task<List<T>> QueryAsync(int page, int size, RefAsync<int> total)
+        public virtual Task<List<T>> QueryAsync(int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<T>().ToPageListAsync(page, size, total);
         }
 
-        public Task<List<T>> QueryAsync(Expression<Func<T, bool>> func, int page, int size, RefAsync<int> total)
+        public virtual Task<List<T>> QueryAsync(Expression<Func<T, bool>> func, int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<T>().Where(func).ToPageListAsync(page, size, total);
         }

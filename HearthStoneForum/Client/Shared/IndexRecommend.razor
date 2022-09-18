@@ -1,4 +1,6 @@
-﻿<MTabs Class="w-100 rounded-lg" BackgroundColor="white">
+﻿@inject NavigationManager navigation
+
+<MTabs Class="w-100 rounded-lg" BackgroundColor="white">
     <MTab>热门推荐</MTab>
     <MTab>最新发布</MTab>
     <MTabItem>
@@ -6,11 +8,9 @@
             @foreach (var item in RecommendInvitations)
             {
                 <div class="invitation-list-item">
-                    <a>
-                        <div class="invitation-title">
-                            @item.Title
-                        </div>
-                    </a>
+                    <MButton OnClick="()=>NavigationToInvitation(item.Id)" Class="w-100 p-0 p-sm-4 d-flex justify-content-start" Color="white">
+                        @item.Title
+                    </MButton>
                 </div>
             }
         </div>
@@ -20,11 +20,11 @@
             @foreach (var item in NewInvitations)
             {
                 <div class="invitation-list-item">
-                    <a>
-                        <div class="invitation-title">
+                    <div class="invitation-list-item">
+                        <MButton Class="w-100">
                             @item.Title
-                        </div>
-                    </a>
+                        </MButton>
+                    </div>
                 </div>
             }
         </div>
@@ -36,4 +36,8 @@
     public List<InvitationDTOViewRecommend> RecommendInvitations { get; set; }
     [Parameter]
     public List<InvitationDTOViewRecommend> NewInvitations { get; set; }
+
+    private void NavigationToInvitation(int id){
+        navigation.NavigateTo("invitation/" + id);
+    }
 }

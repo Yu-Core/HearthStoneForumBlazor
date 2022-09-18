@@ -15,8 +15,6 @@ namespace HearthStoneForum.Model
         public string? Content { get; set; }
         public int UserId { get; set; }
         public int AreaId { get; set; }
-        [SugarColumn(ColumnDataType = "nvarchar(4000)",IsJson = true)]
-        public string[]? ImagePaths { get; set; }
         public int Views { get; set; }
         public DateTime CreatedTime { get; set; }
 

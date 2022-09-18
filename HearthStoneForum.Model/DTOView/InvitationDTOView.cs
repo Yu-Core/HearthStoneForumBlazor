@@ -14,7 +14,6 @@ namespace HearthStoneForum.Model.DTOView
         public string? UserName { get; set; }
         public int AreaId { get; set; }
         public string? AreaName { get; set; }
-        public string[]? ImagePaths { get; set; }
         public int Views { get; set; }
         public DateTime CreatedTime { get; set; }
 

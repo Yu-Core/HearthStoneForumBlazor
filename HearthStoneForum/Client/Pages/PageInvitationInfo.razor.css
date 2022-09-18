@@ -1,0 +1,91 @@
+﻿.main {
+    display: flex;
+    justify-content: center;
+}
+
+.invitation-wrap {
+    width: 100%;
+    max-width: 1024px;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+}
+
+    .breadcrumbs a {
+        font-size: 0.9rem;
+    }
+
+.invitation-head {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.invitation-content {
+    display: flex;
+    margin-bottom: 32px;
+}
+
+.content-left {
+    
+}
+
+.user-headimg{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background-color:antiquewhite;
+}
+
+.user-name{
+    margin:16px 0;
+    text-align:center;
+}
+
+.content-right {
+    flex-grow: 1;
+    padding: 16px;
+}
+
+.content-text{
+    min-height:100px;
+    word-break:break-word;
+}
+
+.content-bottom{
+    display:flex;
+    justify-content:space-between;
+}
+
+.invitation-toolbar{
+    display:flex;
+    font-size:0.9rem;
+}
+.invitation-toolbar div{
+    display:flex;
+    align-items:center;
+}
+.count {
+    /*padding-bottom: 4px;*/
+}
+
+.comment-item {
+    display: flex;
+    margin-bottom: 32px;
+}
+.comment-right {
+    flex-grow: 1;
+    padding: 16px;
+    border-bottom: 1px solid #BDBDBD;
+}
+.comment-text {
+    min-height: 100px;
+}
+.comment-bottom {
+    display: flex;
+    justify-content: space-between;
+}
+.comment-time{
+    font-size:0.9rem;
+}
