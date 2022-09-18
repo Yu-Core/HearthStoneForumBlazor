@@ -9,7 +9,7 @@ using SqlSugar;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
-    [Route("api/comment")]
+    [Route("api/comments")]
     [ApiController]
     public class CommentController : ControllerBase
     {
@@ -30,7 +30,15 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> GetComment(int page, int size)
         {
             RefAsync<int> total = 0;
-            var data = await _iCommentService.QueryDTOAsync<CommentDTOView>(page,size,total);
+            var data = await _iCommentService.QueryDTOAsync<CommentDTOView>(page, size, total);
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data);
+        }
+        [HttpGet("invitation")]
+        public async Task<ActionResult<ApiResult>> GetComment(int id, int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iCommentService.QueryDTOAsync<CommentDTOView>(it => it.InvitationId == id, page, size, total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }

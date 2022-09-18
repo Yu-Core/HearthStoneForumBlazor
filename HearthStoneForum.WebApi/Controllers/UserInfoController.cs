@@ -9,7 +9,7 @@ using HearthStoneForum.Model.DTOAdd;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
-    [Route("api/UserInfos")]
+    [Route("api/userInfos")]
     [ApiController]
     public class UserInfoController : ControllerBase
     {

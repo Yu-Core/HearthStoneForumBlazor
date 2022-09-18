@@ -34,7 +34,7 @@
             }
         </div>
         <div class="page">
-            <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(total/size)"></MPagination>
+            <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
         </div>
     </div>
 </div>
@@ -56,6 +56,7 @@
 
     private int size = 2;
     private int total = 0;
+    private int pageLength = 0;
 
 
     protected override async Task OnInitializedAsync()
@@ -68,6 +69,7 @@
             Invitations = resultInvitations.Data;
         }
         total = resultInvitations.Total;
+        pageLength = total / size + ((total % size == 0) ? 0 : 1);
     }
 
     private async void ChangeInvitations()

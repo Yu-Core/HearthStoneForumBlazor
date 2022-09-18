@@ -1,5 +1,7 @@
 ﻿@page "/register"
 @layout BlankLayout
+@inject IAuthService AuthService
+@inject NavigationManager navigation
 @using System.Text.RegularExpressions;
 @using System.ComponentModel.DataAnnotations
 @using FluentValidation;
@@ -67,6 +69,7 @@
                             <MSnackbar @bind-Value="_agree_show"
                                        Class="text-center"
                                        Timeout="2000"
+                                       Rounded="@("pill")"
                                        Centered>
                                 您需要同意相关条款才能注册
                             </MSnackbar>
@@ -89,7 +92,7 @@
                             <div class="verification">
                                 <MTextField Solo
                                             TValue="string"
-                                            @bind-Value="_verification_code"
+                                            @bind-Value="_model.VerificationCode"
                                             Placeholder="请输入验证码">
                                 </MTextField>
                                 <MButton Large
@@ -112,7 +115,8 @@
                         <div class="step-card">
                             <div class="mb-5">
                                 <p>@_model.UserName</p>
-                                <h4>注册成功</h4>
+                                <h4>@registerResult</h4>
+                                <h6>@ErrorMsg</h6>
                             </div>
                             <MButton Color="primary"
                                      Large
@@ -137,7 +141,8 @@
     private int _step = 1;
     private bool _check_agreement = false;
     private bool _agree_show = false;
-    private string? _verification_code;
+    private string? registerResult = string.Empty;
+    private string? ErrorMsg = string.Empty;
 
     private class Model
     {
@@ -157,6 +162,8 @@
         [Required(ErrorMessage = "邮箱不能为空")]
         [EmailAddress(ErrorMessage = "邮箱地址无效")]
         public string? EmailAddress { get; set; } = "XXXX@xxx.com";
+        [Required(ErrorMessage = "验证码不能为空")]
+        public string? VerificationCode { get; set; } = "000000";
     }
 
     private void Next_step1()
@@ -172,26 +179,50 @@
             {
                 _step = 2;
                 _model.EmailAddress = string.Empty;
+                _model.VerificationCode = string.Empty;
             }
 
         }
     }
-    private void Next_step2()
+    private async void Next_step2()
     {
-        _form.ValidateAsync();
+        await _form.ValidateAsync();
         if (_valid)
         {
             _step = 3;
+
+            UserInfoDTOAdd userInfo = new()
+            {
+                UserName = _model.UserName,
+                Password = _model.Password,
+                Email = _model.EmailAddress
+            };
+            var result = await AuthService.Register(userInfo);
+
+            if (result.Successful)
+            {
+                UserInfoDTOLogin userInfoLogin = new()
+                    {
+                        UserName = _model.UserName,
+                        Password = _model.Password
+                    };
+                var resultLogin = await AuthService.Login(userInfoLogin);
+                registerResult = "注册成功";
+            }
+            else{
+                registerResult = "注册失败";
+                ErrorMsg = result.Msg;
+            }
+            
         }
     }
     private void GetVerificationCode()
     {
-        _form.ValidateAsync();
-        if (_valid)
+        if (!string.IsNullOrWhiteSpace(_model.EmailAddress))
         {
             Random random = new Random();
-            _verification_code = random.Next(111111, 1000000).ToString();
+            _model.VerificationCode = random.Next(111111, 1000000).ToString();
         }
-
     }
+    
 }

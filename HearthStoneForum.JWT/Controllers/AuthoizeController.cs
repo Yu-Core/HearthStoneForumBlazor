@@ -36,8 +36,7 @@ namespace HearthStoneForum.JWT.Controllers
             var userInfo = await _UserInfoService.FindAsync(it=>it.UserName==dto.UserName&&it.Password == pwd);
             if (userInfo == null)
             {
-                //return ApiResultHelper.Error("账号或密码错误");
-                return ApiResultHelper.Success(userInfo);
+                return ApiResultHelper.Error("账号或密码错误");
             }
             else
             {

@@ -18,16 +18,24 @@
         <MTextField Class="navigation-search" Dense TValue="string" HideDetails="@("false")" Solo Placeholder="搜索" AppendIcon="mdi-magnify"></MTextField>
         <MSpacer Class="d-flex d-md-none"></MSpacer>
 
-        <div class="d-none">
-            <MButton Icon>
-                <MIcon Large>mdi-account-circle</MIcon>
-            </MButton>
-        </div>
-        <div class="ms-2">
-            <MButton Href="login" Text>
-                登录
-            </MButton>
-        </div>
+        <AuthorizeView>
+            <Authorized>
+                <div>
+                    <MButton Icon>
+                        <MIcon Large>mdi-account-circle</MIcon>
+                    </MButton>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="ms-2">
+                    <MButton Href="login" Text>
+                        登录
+                    </MButton>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+        
+        
     </MAppBar>
 
     <MNavigationDrawer App @bind-Value="drawer" Temporary>

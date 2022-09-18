@@ -9,7 +9,7 @@ namespace HearthStoneForum.WebApi.Utility.ApiResult
         {
             return new ApiResult
             {
-                Code = 200,
+                Successful = true,
                 Msg = "操作成功",
                 Data = data,
                 Total = 0
@@ -19,7 +19,7 @@ namespace HearthStoneForum.WebApi.Utility.ApiResult
         {
             return new ApiResult
             {
-                Code = 200,
+                Successful = true,
                 Msg = "操作成功",
                 Data = data,
                 Total = total
@@ -29,7 +29,7 @@ namespace HearthStoneForum.WebApi.Utility.ApiResult
         {
             return new ApiResult
             {
-                Code = 500,
+                Successful = false,
                 Msg = msg,
                 Data = null,
                 Total = 0

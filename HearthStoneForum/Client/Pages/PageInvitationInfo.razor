@@ -78,7 +78,9 @@
                 </div>
 
             }
-
+            <div class="text-center">
+                <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+            </div>
         </div>
 
     </div>
@@ -91,10 +93,29 @@
     private List<CommentDTOView> Comments { get; set; } = new();
     private bool _like { get; set; } = false;
     private bool _collect { get; set; } = false;
+    private int _page = 1;
+    private int page
+    {
+        get => _page;
+        set
+        {
+            _page = value;
+            ChangeComments();
+        }
+    }
+    private int size = 20;
+    private int total = 0;
+    private int pageLength = 0;
+
+
     protected async override Task OnInitializedAsync()
     {
         //var result = await Http.GetFromJsonAsync<ApiResult<InvitationDTOView>>("invitations/" + id);
-        //Invitation = result.Data;
+        //Invitation = result.Data??new();
+        //var resultComments = await Http.GetFromJsonAsync<ApiResult<List<CommentDTOView>>>("comments/invitation?id=" + id + "&page=" + page + "&size=" + size);
+        //Comments = resultListComment.Data ?? new();
+        //total = resultComments.Total;
+        //pageLength = total / size + ((total % size == 0) ? 0 : 1);
         Invitation = new()
             {
                 Title = "测试用的标题",
@@ -114,6 +135,12 @@
             new CommentDTOView(){UserName="测试用户4",Content="你好",CreatedTime=Convert.ToDateTime("2022-9-18 13:00:11")}
 
         };
+    }
+    private async void ChangeComments()
+    {
+        var resultListComment = await Http.GetFromJsonAsync<ApiResult<List<CommentDTOView>>>("comments/invitation?id=" + id + "&page=" + page + "&size=" + size);
+        Comments = resultListComment.Data ?? new();
+        StateHasChanged();
     }
     private void ClickLike(){
         _like = !_like;

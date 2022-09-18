@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -35,6 +35,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options =>
+{
+    options.SetIsOriginAllowed(_ => true);//允许所有ip跨域，不安全
+    //options.WithOrigins("https://localhost:7221"); // 允许特定ip跨域
+    //options.WithOrigins("https://localhost:44373"); // 允许特定ip跨域
+    //options.AllowAnyOrigin();//这种写法会报错
+
+    options.AllowAnyHeader()
+           .AllowAnyMethod()
+           .AllowCredentials();
+});
 
 app.UseHttpsRedirection();
 

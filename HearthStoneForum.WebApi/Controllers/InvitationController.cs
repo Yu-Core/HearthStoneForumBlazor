@@ -61,7 +61,7 @@ namespace HearthStoneForum.WebApi.Controllers
             RefAsync<int> total = 0;
             var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.AreaId == id,page,size,total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
-            return ApiResultHelper.Success(data);
+            return ApiResultHelper.Success(data,total);
         }
         [HttpPost]
         public async Task<ActionResult<ApiResult>> Create(Invitation invitation)

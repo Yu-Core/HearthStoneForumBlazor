@@ -46,5 +46,6 @@ namespace HearthStoneForum.Repository
                 .Where(func)
                 .ToPageListAsync(page, size, total);
         }
+
     }
 }
