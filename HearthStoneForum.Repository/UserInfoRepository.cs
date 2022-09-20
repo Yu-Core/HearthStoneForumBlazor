@@ -26,7 +26,7 @@ namespace HearthStoneForum.Repository
                     Name = u.Name,
                     CreatedTime = u.CreatedTime,
                     Email = u.Email,
-                    HeadId = u.HeadId,
+                    Portrait = u.Portrait,
                     LastLogin = u.LastLogin,
                     Phone = u.Phone,
                     Sex = u.Sex
@@ -44,7 +44,7 @@ namespace HearthStoneForum.Repository
                     Name = u.Name,
                     CreatedTime = u.CreatedTime,
                     Email = u.Email,
-                    HeadId = u.HeadId,
+                    Portrait = u.Portrait,
                     LastLogin = u.LastLogin,
                     Phone = u.Phone,
                     Sex = u.Sex

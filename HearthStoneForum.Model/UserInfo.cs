@@ -16,7 +16,8 @@ namespace HearthStoneForum.Model
         public string? Password { get; set; }
         [SugarColumn(ColumnDataType = "nvarchar(64)")]
         public string? Name { get; set; }
-        public int HeadId { get; set; }
+        [SugarColumn(ColumnDataType = "nvarchar(2083)")]
+        public string? Portrait { get; set; }
         public Sex Sex { get; set; }
         [SugarColumn(ColumnDataType = "nvarchar(255)")]
         public string? Email { get; set; }

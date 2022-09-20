@@ -22,7 +22,7 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
                     CreatedTime = DateTime.Now,
                     LastLogin = DateTime.Now,
                     Name = "用户" + dto.UserName,
-                    HeadId = 0,
+                    Portrait = string.Empty,
                     Phone = String.Empty
                 });
 

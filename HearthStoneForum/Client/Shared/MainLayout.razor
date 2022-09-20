@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject IAuthService AuthService
+@inject HttpClient Http
 <MApp AlertParameters="param => { param.Centered = true; param.Rounded = true;}"
       >
     <MAppBar App ElevateOnScroll ScrollTarget="#scrolling">
@@ -65,8 +66,14 @@
         <Authorized>
             <MNavigationDrawer App @bind-Value="drawerRight" Right Temporary>
                 <MListItem>
-                    <MListItemAvatar Size="100">
-                        <MImage Src="https://randomuser.me/api/portraits/men/78.jpg"></MImage>
+                    <MListItemAvatar Color="primary" Size="100">
+                        @if (PortraitUrl == string.Empty)
+                        {
+                            <h2 class="white--text m-0">@context.User.Identity.Name.Substring(0,1).ToUpper()</h2>
+                        }
+                        else{
+                            <MImage Src="@(PortraitUrl)"></MImage>
+                        }                       
                     </MListItemAvatar>
 
                     <MListItemContent>
@@ -137,6 +144,7 @@
 @code {
     private bool drawer;
     private bool drawerRight;
+    private string? PortraitUrl { get; set; } = string.Empty;
     StringNumber selectItem = 0;
     private class NavigationButton
     {
@@ -161,6 +169,17 @@
     {
         await AuthService.Logout();
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var IsAuthenticated = await AuthService.IsAuthenticated();
+        if(IsAuthenticated){
+            var user = await AuthService.GetUser();
+            var id = user.FindFirst("userId").Value;
+            PortraitUrl = (await Http.GetFromJsonAsync<ApiResult<string>>("userInfos/portrait?userId=" + id)).Data ?? string.Empty;
+        }
+    }
+
     
 }
 

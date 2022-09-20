@@ -34,6 +34,8 @@ namespace HearthStoneForum.WebApi.Extend
             services.AddScoped<IRaceYearService, RaceYearService>();
             services.AddScoped<IExpansionRepository, ExpansionRepository>();
             services.AddScoped<IExpansionService, ExpansionService>();
+            services.AddScoped<IPortraitRepository, PortraitRepository>();
+            services.AddScoped<IPortraitService, PortraitService>();
             return services;
         }
     }

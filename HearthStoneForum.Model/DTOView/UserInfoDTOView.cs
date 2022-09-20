@@ -11,7 +11,7 @@ namespace HearthStoneForum.Model.DTOView
     {
         public string? UserName { get; set; }
         public string? Name { get; set; }
-        public int HeadId { get; set; }
+        public string? Portrait { get; set; }
         [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
         public Sex Sex { get; set; }
         public string? Email { get; set; }

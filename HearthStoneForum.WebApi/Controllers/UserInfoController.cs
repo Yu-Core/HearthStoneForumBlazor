@@ -79,5 +79,12 @@ namespace HearthStoneForum.WebApi.Controllers
             if (!b) return ApiResultHelper.Error("修改失败");
             return ApiResultHelper.Success(userInfo);
         }
+        [HttpGet("portrait")]
+        public async Task<ActionResult<ApiResult>> GetUserPortrait(int userId)
+        {
+            var data = await _iUserInfoService.FindAsync(it=>it.Id == userId);
+            if (data == null) return ApiResultHelper.Error("没有找到该用户");
+            return ApiResultHelper.Success(data.Portrait);
+        }
     }
 }
