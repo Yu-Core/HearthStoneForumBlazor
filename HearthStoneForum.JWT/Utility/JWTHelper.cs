@@ -17,7 +17,8 @@ namespace HearthStoneForum.JWT.Utility
             var claims = new[]
             {
                 new Claim("UserId", userInfo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userInfo.UserName??"用户")
+                new Claim("Name", userInfo.Name??"无效用户"),
+                new Claim(ClaimTypes.Name, userInfo.UserName??"InvalidUser")
             };
 
             // 2. 从 appsettings.json 中读取SecretKey

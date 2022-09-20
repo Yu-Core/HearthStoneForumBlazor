@@ -30,7 +30,7 @@
                     <MButton Class="d-none d-sm-block text-capitalize ms-3 light-blue--text text--darken-3"
                              Text
                              @onclick="() => drawerRight = true">
-                        @(context.User.Identity.Name)
+                        @(context.User.FindFirst("Name").Value.StringCutOutByLength(10))
                     </MButton>
                 </div>
             </Authorized>
@@ -69,7 +69,7 @@
                     <MListItemAvatar Color="primary" Size="100">
                         @if (PortraitUrl == string.Empty)
                         {
-                            <h2 class="white--text m-0">@context.User.Identity.Name.Substring(0,1).ToUpper()</h2>
+                            <h2 class="white--text m-0">@(context.User.FindFirst("Name").Value.Substring(0,1).ToUpper())</h2>
                         }
                         else{
                             <MImage Src="@(PortraitUrl)"></MImage>
@@ -78,7 +78,7 @@
 
                     <MListItemContent>
                         <MListItemTitle>
-                            <h5>@(context.User.Identity.Name)</h5>
+                            <h6>@(context.User.FindFirst("Name").Value)</h6>
                         </MListItemTitle>
                     </MListItemContent>
                 </MListItem>

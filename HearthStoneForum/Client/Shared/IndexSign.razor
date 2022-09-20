@@ -57,7 +57,11 @@
         try
         {
             TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/todayCount")).Data;
-            IsSign = (await Http.GetFromJsonAsync<ApiResult<bool>>("signs/today")).Successful;
+            var IsAuthenticated = await AuthService.IsAuthenticated();
+            if (IsAuthenticated){
+                IsSign = (await Http.GetFromJsonAsync<ApiResult<Sign>>("signs/today")).Successful;
+            }
+            
         }
         catch (Exception)
         {

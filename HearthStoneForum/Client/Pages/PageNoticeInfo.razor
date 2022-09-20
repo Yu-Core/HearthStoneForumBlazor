@@ -1,7 +1,8 @@
 ﻿@page "/noticeInfo/{id:int}"
 @inject HttpClient Http
+@inject NavigationManager navigation
 
-<div class="main">
+<div class="main @(Display?"":"d-none")">
     <div class="notice-wrap">
         <div class="breadcrumbs">
             你所在的位置：<MBreadcrumbs>
@@ -22,12 +23,23 @@
 </div>
 
 @code {
-    private Notice Notice = new();
     [Parameter]
     public int id { get; set; }
+    private Notice Notice = new();
+    private bool Display { get; set; } = false;
+
     protected async override Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<ApiResult<Notice>>("notices/" + id);
-        Notice = result.Data;
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<Notice>>("notices/" + id);
+            Notice = result.Data;
+        }
+        catch (Exception)
+        {
+            navigation.NavigateTo("404");
+        }
+        
+        Display = true;
     }
 }

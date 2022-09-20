@@ -46,7 +46,7 @@ namespace HearthStoneForum.WebApi.Controllers
             int id = Convert.ToInt32(this.User.FindFirst("UserId").Value);
 
             var data = await _iSignService.FindAsync(it=>it.UserId == id && it.CreatedTime.ToString("d") == DateTime.Now.ToString("d"));
-            if(data != null) return ApiResultHelper.Success(true);
+            if(data != null) return ApiResultHelper.Success(data);
             return ApiResultHelper.Error("今日尚未签到");
         }
         [Authorize]
