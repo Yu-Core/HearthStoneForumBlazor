@@ -60,6 +60,9 @@ builder.Services.AddSqlSugar(new IocConfig()
 #region IOCÒÀÀµ×¢Èë
 builder.Services.AddCustomIOC();
 #endregion
+#region JWT¼øÈ¨
+builder.Services.AddCustomJWT();
+#endregion
 #region AutoMapperÓ³Éä
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 #endregion

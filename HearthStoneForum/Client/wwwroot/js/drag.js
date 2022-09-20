@@ -145,3 +145,17 @@ export function DragHelp(dotNetHelper) {
         dotNetHelper.invokeMethodAsync('CAPTCHASuccess');
     }
 };
+export function DragReset() {
+    var box = $(".drag-content")[0],//容器
+        bg = $(".drag-bg")[0],//背景
+        text = $(".drag-text")[0],//文字
+        btn = $(".drag-btn")[0];//滑块
+
+    btn.style.left = 0;
+    btn.innerHTML = "&gt;&gt;";
+    btn.style.color = "#666";
+    bg.style.width = 0;
+    bg.style.backgroundColor = "#75CDF9";
+    text.innerHTML = "请拖动滑块解锁";
+    text.style.color = "inherit";
+}

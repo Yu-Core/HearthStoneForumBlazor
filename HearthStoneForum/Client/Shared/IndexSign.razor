@@ -1,24 +1,43 @@
-﻿@foreach (var item in topRightList)
+﻿@inject NavigationManager navigation
+@inject HttpClient Http
+@inject IPopupService PopupService
+@inject IAuthService AuthService
+
+<MHover>
+    <MCard Disabled="@(IsSign)" OnClick="()=>Sign()" @attributes="context.Attrs" Elevation="@(context.Hover ? 12 : 2)" Class="@($"{context.Class} .top-right-list d-flex w-100 h-100 bg-transparent rounded-lg px-5 py-2 py-md-0")">
+        <MIcon XLarge>mdi-calendar-month</MIcon>
+        <div class="list-content">
+            <div class="list-title">
+                @(IsSign ? "已签到" : "签到")
+            </div>
+            <div class="list-subtitle">
+                今日已签到@(TodaySignCount)人
+            </div>
+        </div>
+    </MCard>
+</MHover>
+@foreach (var item in topRightList)
 {
     <MHover>
         <MCard @attributes="context.Attrs" Elevation="@(context.Hover ? 12 : 2)" Class="@($"{context.Class} .top-right-list d-flex w-100 h-100 bg-transparent rounded-lg px-5 py-2 py-md-0")" Href="@(item.Href)">
             <MIcon XLarge>@(item.Icon)</MIcon>
-            <div class="list-content">
-                <div class="list-title">
-                    @item.Title
+                <div class="list-content">
+                    <div class="list-title">
+                        @item.Title
+                    </div>
+                    <div class="list-subtitle">
+                        @item.SubTitle
+                    </div>
                 </div>
-                <div class="list-subtitle">
-                    @item.SubTitle
-                </div>
-            </div>
-        </MCard>
-    </MHover>
+            </MCard>
+        </MHover>
 }
 @code {
-    [Parameter]
-    public int TodaySignCount { set; get; }
+    private int TodaySignCount { set; get; } = 0;
 
     private List<TopRightListItem> topRightList = new List<TopRightListItem>();
+
+    private bool IsSign { get; set; } = false;
 
     private class TopRightListItem
     {
@@ -28,13 +47,47 @@
         public string? Href { set; get; }
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         topRightList = new List<TopRightListItem>()
         {
-            new TopRightListItem(){Icon="mdi-calendar-month",Title="签到",SubTitle="今日已签到"+TodaySignCount+"人",Href=""},
-            new TopRightListItem(){Icon="mdi-book-open-variant",Title="炉石历史",SubTitle="了解更多炉石传说历史版本",Href="expansions"},
-            new TopRightListItem(){Icon="mdi-clock-outline",Title=DateTime.Now.ToString("d"),SubTitle=LunarCalendar.GetChineseDate(DateTime.Now),Href="https://www.rili.com.cn/"}
-        };
+        new TopRightListItem(){Icon="mdi-book-open-variant",Title="炉石历史",SubTitle="了解更多炉石传说历史版本",Href="expansions"},
+        new TopRightListItem(){Icon="mdi-clock-outline",Title=DateTime.Now.ToString("d"),SubTitle=LunarCalendar.GetChineseDate(DateTime.Now),Href="https://www.rili.com.cn/"}
+        }; 
+        try
+        {
+            TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/todayCount")).Data;
+            IsSign = (await Http.GetFromJsonAsync<ApiResult<bool>>("signs/today")).Successful;
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+        
+    }
+
+    private async Task Sign()
+    {
+        var IsAuthenticated = await AuthService.IsAuthenticated();
+        if (!IsAuthenticated)
+        {
+            var confirm = await PopupService.ConfirmAsync("提示", "检测到您尚未登录,是否登录？");
+            if (confirm) navigation.NavigateTo("login");
+        }
+        else
+        {
+            var user = await AuthService.GetUser();
+            int id = Convert.ToInt32(user.FindFirst("UserId").Value);
+            var result = await Http.PostAsJsonAsync("signs", string.Empty);
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Sign>>().Result;
+            if (data.Successful)
+            {
+                IsSign = true;
+                await PopupService.AlertAsync("签到成功", AlertTypes.Success);
+            }
+            else await PopupService.AlertAsync("签到失败", AlertTypes.Error);
+        }
+
     }
 }

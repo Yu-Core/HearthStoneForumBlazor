@@ -8,6 +8,8 @@ using System.Text.Json;
 using System.Text;
 using HearthStoneForum.Model.DTORest;
 using HearthStoneForum.Model.DTOAdd;
+using Masa.Blazor;
+using System.Security.Claims;
 
 namespace HearthStoneForum.Client.Service
 {
@@ -36,19 +38,27 @@ namespace HearthStoneForum.Client.Service
 
         public async Task<ApiResult<string>> Login(UserInfoDTOLogin loginModel)
         {
-            var result = await _httpClient.PostAsJsonAsync("https://localhost:7243/api/Authoize/login", loginModel);
-            var loginResult = result.Content.ReadFromJsonAsync<ApiResult<string>>().Result;
-
-            if (! loginResult.Successful)
+            try
             {
+                var result = await _httpClient.PostAsJsonAsync("https://localhost:7243/api/Authoize/login", loginModel);
+                var loginResult = result.Content.ReadFromJsonAsync<ApiResult<string>>().Result;
+
+                if (!loginResult.Successful)
+                {
+                    return loginResult;
+                }
+
+                await _localStorage.SetItemAsync("authToken", loginResult.Data);
+                ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginResult.Data);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Data);
+
                 return loginResult;
             }
-
-            await _localStorage.SetItemAsync("authToken", loginResult.Data);
-            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginResult.Data);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Data);
-
-            return loginResult;
+            catch (Exception e)
+            {
+                return ApiResultHelper.Error<string>("登录出错("+e.Message+")");
+            }
+            
         }
 
         public async Task<ApiResult<string>> Register(UserInfoDTOAdd registerModel)
@@ -56,6 +66,19 @@ namespace HearthStoneForum.Client.Service
             var result = await _httpClient.PostAsJsonAsync("userInfos", registerModel);
 
             return result.Content.ReadFromJsonAsync<ApiResult<string>>().Result;
+        }
+
+        public async Task<bool> IsAuthenticated()
+        {
+            var user = await GetUser();
+            return user.Identity.IsAuthenticated;
+        }
+
+        public async Task<ClaimsPrincipal> GetUser()
+        {
+            var authState = await((ApiAuthenticationStateProvider)_authenticationStateProvider).GetAuthenticationStateAsync();
+            var user = authState.User;
+            return user;
         }
     }
 

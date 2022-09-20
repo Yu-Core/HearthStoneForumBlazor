@@ -1,8 +1,9 @@
 ﻿@page "/"
 @inject HttpClient Http
+@inject NavigationManager navigation
 
 <PageTitle>炉石传说游戏论坛</PageTitle>
-<div class="main-warp">
+<div class="main-warp @(Display?"":"d-none")">
     <div class="main-top flex-column flex-md-row">
         <div class="main-top-left flex-column flex-md-row">
             <IndexCarousel Data="@Carousels"></IndexCarousel>
@@ -24,21 +25,30 @@
 @code {
     private List<Carousel> Carousels = new List<Carousel>();
     private List<Notice> Notices = new();
-    private int TodaySignCount = 0;
     private List<AreaDTOView> Areas = new();
     private List<InvitationDTOViewRecommend> RecommendInvitations = new();
     private List<InvitationDTOViewRecommend> NewInvitations = new();
+    private bool Display = false;
 
     protected override async Task OnInitializedAsync()
     {
-        Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data;
-        Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data;
-        TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/today_count")).Data;
-        Areas = (await Http.GetFromJsonAsync<ApiResult<List<AreaDTOView>>>("areas")).Data;
-        RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/recommend")).Data;
-        NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/new")).Data;
+        try
+        {
+            Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data ?? new();
+            Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data ?? new();
+            Areas = (await Http.GetFromJsonAsync<ApiResult<List<AreaDTOView>>>("areas")).Data ?? new();
+            RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/recommend")).Data ?? new();
+            NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/new")).Data ?? new();
+        }
+        catch (Exception)
+        {
+
+            navigation.NavigateTo("/404");
+        }
+
+        Display = true;
     }
 
-    
-    
+
+
 }

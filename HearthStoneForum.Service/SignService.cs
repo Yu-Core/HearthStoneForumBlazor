@@ -21,5 +21,20 @@ namespace HearthStoneForum.Service
         {
             return _iSignRepository.GetTodaySignCount();
         }
+
+        public async Task<bool> SignAsync(int id)
+        {
+            
+            var data = await _iSignRepository.FindAsync(it => it.UserId == id && it.CreatedTime.ToString("d") == DateTime.Now.ToString("d"));
+            if (data != null) return false;
+            
+            Sign sign = new()
+            {
+                UserId = id,
+                CreatedTime = DateTime.Now
+            };
+            return await base.CreateAsync(sign);
+           
+        }
     }
 }

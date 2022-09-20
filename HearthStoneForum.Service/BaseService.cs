@@ -13,7 +13,7 @@ namespace HearthStoneForum.Service
     public class BaseService<T> : IBaseService<T> where T : class, new()
     {
         protected IBaseRepository<T> _iBaseRepository;
-        public Task<bool> CreateAsync(T entity)
+        public virtual Task<bool> CreateAsync(T entity)
         {
             return _iBaseRepository.CreateAsync(entity);
         }

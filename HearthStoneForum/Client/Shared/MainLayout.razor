@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
-<MApp>
+@inject IAuthService AuthService
+<MApp AlertParameters="param => { param.Centered = true; param.Rounded = true;}"
+      >
     <MAppBar App ElevateOnScroll ScrollTarget="#scrolling">
         <div class="d-flex d-md-none">
             <MAppBarNavIcon @onclick="() => drawer = true"></MAppBarNavIcon>
@@ -21,8 +23,13 @@
         <AuthorizeView>
             <Authorized>
                 <div>
-                    <MButton Icon>
+                    <MButton Class="d-sm-none" Icon @onclick="() => drawerRight = true">
                         <MIcon Large>mdi-account-circle</MIcon>
+                    </MButton>
+                    <MButton Class="d-none d-sm-block text-capitalize ms-3 light-blue--text text--darken-3"
+                             Text
+                             @onclick="() => drawerRight = true">
+                        @(context.User.Identity.Name)
                     </MButton>
                 </div>
             </Authorized>
@@ -34,8 +41,8 @@
                 </div>
             </NotAuthorized>
         </AuthorizeView>
-        
-        
+
+
     </MAppBar>
 
     <MNavigationDrawer App @bind-Value="drawer" Temporary>
@@ -53,6 +60,49 @@
             </MListItemGroup>
         </MList>
     </MNavigationDrawer>
+
+    <AuthorizeView>
+        <Authorized>
+            <MNavigationDrawer App @bind-Value="drawerRight" Right Temporary>
+                <MListItem>
+                    <MListItemAvatar Size="100">
+                        <MImage Src="https://randomuser.me/api/portraits/men/78.jpg"></MImage>
+                    </MListItemAvatar>
+
+                    <MListItemContent>
+                        <MListItemTitle>
+                            <h5>@(context.User.Identity.Name)</h5>
+                        </MListItemTitle>
+                    </MListItemContent>
+                </MListItem>
+                <MList Dense>
+                    @foreach (var item in userButtons)
+                    {
+                        <MListItem Link>
+                            <MListItemIcon>
+                                <MIcon>@(item.Icon)</MIcon>
+                                </MListItemIcon>
+
+                                <MListItemContent>
+                                    <MListItemTitle>@(item.Title)</MListItemTitle>
+                                </MListItemContent>
+                            </MListItem>
+                    }
+
+                    <MListItem Link OnClick="()=>Logout()">
+                        <MListItemIcon>
+                            <MIcon>mdi-logout-variant</MIcon>
+                        </MListItemIcon>
+
+                        <MListItemContent>
+                            <MListItemTitle>退出登录</MListItemTitle>
+                        </MListItemContent>
+                    </MListItem>
+                </MList>
+            </MNavigationDrawer>
+        </Authorized>
+    </AuthorizeView>
+
 
     <!-- 根据应用组件来调整你的内容 -->
     <MMain Id="scrolling" Class="overflow-y-auto" Style="background-color:#F7F8F9;color:#282828;">
@@ -86,6 +136,7 @@
 
 @code {
     private bool drawer;
+    private bool drawerRight;
     StringNumber selectItem = 0;
     private class NavigationButton
     {
@@ -93,7 +144,7 @@
         public string? Icon { set; get; }
         public string? Href { set; get; }
     }
-    private List<NavigationButton> navigationButtons = new List<NavigationButton>
+    private List<NavigationButton> navigationButtons = new List<NavigationButton>()
     {
         new NavigationButton(){Title="首页",Icon="mdi-home",Href=""},
         new NavigationButton(){Title="公告",Icon="mdi-bulletin-board",Href="notices"},
@@ -101,5 +152,15 @@
         new NavigationButton(){Title="下载",Icon="mdi-download",Href="download"},
         new NavigationButton(){Title="指南",Icon="mdi-new-box",Href="guide"}
     };
+    private List<NavigationButton> userButtons = new List<NavigationButton>()
+    {
+        new NavigationButton(){Title="个人中心",Icon="mdi-home",Href=""},
+        new NavigationButton(){Title="每日抽奖",Icon="mdi-gift",Href=""}
+    };
+    private async Task Logout()
+    {
+        await AuthService.Logout();
+    }
+    
 }
 

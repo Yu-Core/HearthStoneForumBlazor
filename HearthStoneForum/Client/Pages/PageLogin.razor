@@ -4,6 +4,7 @@
 @inject ILocalStorageService localStorageService
 @inject NavigationManager navigation
 @inject IAuthService AuthService
+@inject IPopupService PopupService
 @using System.Text.RegularExpressions;
 @using System.ComponentModel.DataAnnotations
 @using FluentValidation;
@@ -64,6 +65,10 @@
         </MForm>
 
     </div>
+    <MOverlay Value="overlay">
+        <MProgressCircular indeterminate
+                           Size="64"></MProgressCircular>
+    </MOverlay>
 </div>
 @code {
     private IJSObjectReference? module;
@@ -72,8 +77,8 @@
     private MForm? _form;
     private Model _model = new();
     private bool password_show = false;
+    private bool overlay = false;
 
-    
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -83,7 +88,6 @@
                 "./js/drag.js");
             objRef = DotNetObjectReference.Create(this);
             await module.InvokeVoidAsync("DragHelp", objRef);
-
             await module.InvokeVoidAsync("DragStart");
         }
     }
@@ -113,17 +117,32 @@
 
     private async void HandleOnValidSubmit()
     {
-        UserInfoDTOLogin userInfo = new()
-            {
-                UserName = _model.UserName,
-                Password = _model.Password
-            };
-        var result = await AuthService.Login(userInfo);
+        overlay = true;
 
-        if (result.Successful)
+        await Task.Run(async () =>
         {
-            navigation.NavigateTo("/");
-        }
+
+            UserInfoDTOLogin userInfo = new()
+                {
+                    UserName = _model.UserName,
+                    Password = _model.Password
+                };
+            var result = await AuthService.Login(userInfo);
+
+            if (result.Successful)
+            {
+                navigation.NavigateTo("/");
+            }
+            else
+            {
+                await PopupService.AlertAsync(result.Msg, AlertTypes.Error);
+            }
+            overlay = false;
+            await InvokeAsync(StateHasChanged);
+        });
+
+        
+        
     }
 
     

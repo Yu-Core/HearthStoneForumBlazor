@@ -1,6 +1,7 @@
 ﻿using HearthStoneForum.IService;
 using HearthStoneForum.Model;
 using HearthStoneForum.WebApi.Utility.ApiResult;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
@@ -24,7 +25,7 @@ namespace HearthStoneForum.WebApi.Controllers
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }
-        [HttpGet("today_count")]
+        [HttpGet("todayCount")]
         public ActionResult<ApiResult> GetTodaySignCount()
         {
             var count = _iSignService.GetTodaySignCount();
@@ -38,13 +39,26 @@ namespace HearthStoneForum.WebApi.Controllers
 
             return ApiResultHelper.Success(sign);
         }
-        [HttpPost]
-        public async Task<ActionResult<ApiResult>> Create(Sign sign)
+        [Authorize]
+        [HttpGet("today")]
+        public async Task<ActionResult<ApiResult>> GetTodaySign()
         {
-            bool b = await _iSignService.CreateAsync(sign);
-            if (!b) return ApiResultHelper.Error("添加失败");
+            int id = Convert.ToInt32(this.User.FindFirst("UserId").Value);
 
-            return ApiResultHelper.Success(sign);
+            var data = await _iSignService.FindAsync(it=>it.UserId == id && it.CreatedTime.ToString("d") == DateTime.Now.ToString("d"));
+            if(data != null) return ApiResultHelper.Success(true);
+            return ApiResultHelper.Error("今日尚未签到");
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<ApiResult>> Create()
+        {
+            int id = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+            bool b = await _iSignService.SignAsync(id);
+            if (!b) return ApiResultHelper.Error("签到失败");
+
+            return ApiResultHelper.Success(null);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResult>> Delete(int id)
@@ -53,15 +67,6 @@ namespace HearthStoneForum.WebApi.Controllers
             if (!b) return ApiResultHelper.Error("删除失败");
             return ApiResultHelper.Success(b);
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResult>> Edit(int id, Sign sign)
-        {
-            var oldSign = await _iSignService.FindAsync(id);
-            if (oldSign == null) return ApiResultHelper.Error("没有找到该记录");
-
-            bool b = await _iSignService.EditAsync(sign);
-            if (!b) return ApiResultHelper.Error("修改失败");
-            return ApiResultHelper.Success(sign);
-        }
+        
     }
 }

@@ -20,11 +20,9 @@
             @foreach (var item in NewInvitations)
             {
                 <div class="invitation-list-item">
-                    <div class="invitation-list-item">
-                        <MButton Class="w-100">
-                            @item.Title
-                        </MButton>
-                    </div>
+                    <MButton OnClick="()=>NavigationToInvitation(item.Id)" Class="w-100 p-0 p-sm-4 d-flex justify-content-start" Color="white">
+                        @item.Title
+                    </MButton>
                 </div>
             }
         </div>
@@ -33,11 +31,12 @@
 
 @code {
     [Parameter]
-    public List<InvitationDTOViewRecommend> RecommendInvitations { get; set; }
+    public List<InvitationDTOViewRecommend> RecommendInvitations { get; set; } = new();
     [Parameter]
-    public List<InvitationDTOViewRecommend> NewInvitations { get; set; }
+    public List<InvitationDTOViewRecommend> NewInvitations { get; set; } = new();
 
-    private void NavigationToInvitation(int id){
+    private void NavigationToInvitation(int id)
+    {
         navigation.NavigateTo("invitation/" + id);
     }
 }

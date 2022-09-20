@@ -5,9 +5,9 @@
     <div class="notice-list">
         @foreach (var item in Data)
         {
-            <div class="notice-list-item py-1 py-md-0">
+            <div class="notice-list-item">
                 <div class="notice-list-item-left">
-                    <MButton Text Href="@("noticeInfo/"+item.Id)">
+                    <MButton Class="py-1 py-md-0" Text Href="@("noticeInfo/"+item.Id)">
                         @item.Title
                     </MButton>
                 </div>
