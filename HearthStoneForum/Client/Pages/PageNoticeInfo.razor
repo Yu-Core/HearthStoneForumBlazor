@@ -32,7 +32,7 @@
     {
         try
         {
-            var result = await Http.GetFromJsonAsync<ApiResult<Notice>>("notices/" + id);
+            var result = await Http.GetFromJsonAsync<ApiResult<Notice>>($"notices/{id}");
             Notice = result.Data;
         }
         catch (Exception)

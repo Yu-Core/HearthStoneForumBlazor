@@ -70,7 +70,7 @@ namespace HearthStoneForum.Client.Service
 
         public async Task<bool> IsAuthenticated()
         {
-            var user = await GetUser();
+            var user = await GetUser();         
             return user.Identity.IsAuthenticated;
         }
 

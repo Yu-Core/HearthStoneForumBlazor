@@ -61,14 +61,14 @@
             if (IsAuthenticated){
                 IsSign = (await Http.GetFromJsonAsync<ApiResult<Sign>>("signs/today")).Successful;
             }
-            
+
         }
         catch (Exception)
         {
-            
+
             throw;
         }
-        
+
     }
 
     private async Task Sign()
@@ -88,7 +88,8 @@
             if (data.Successful)
             {
                 IsSign = true;
-                await PopupService.AlertAsync("签到成功", AlertTypes.Success);
+                TodaySignCount += 1;
+                await PopupService.AlertAsync("签到成功");
             }
             else await PopupService.AlertAsync("签到失败", AlertTypes.Error);
         }

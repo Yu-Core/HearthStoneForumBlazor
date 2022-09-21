@@ -1,0 +1,36 @@
+﻿.main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.territory-wrap {
+    width: 100%;
+    max-width: 1024px;
+}
+
+.invitation-content {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .invitation-content button:nth-child(2n) {
+        background-color: #EEEEEE;
+    }
+
+    .invitation-content button:nth-child(2n+1) {
+        background-color: transparent;
+    }
+
+    .invitation-content button:hover .invitation-row {
+        background-color: rgba(0,0,0,0.2);
+        transition: all 0.5s ease;
+    }
+
+.invitation-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+}

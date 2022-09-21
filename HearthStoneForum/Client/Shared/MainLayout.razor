@@ -1,8 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject IAuthService AuthService
 @inject HttpClient Http
-<MApp AlertParameters="param => { param.Centered = true; param.Rounded = true;}"
-      >
+<MApp AlertParameters='param => { param.Centered = true; param.ContentClass="rounded-pill";}'>
     <MAppBar App ElevateOnScroll ScrollTarget="#scrolling">
         <div class="d-flex d-md-none">
             <MAppBarNavIcon @onclick="() => drawer = true"></MAppBarNavIcon>
@@ -85,7 +84,7 @@
                 <MList Dense>
                     @foreach (var item in userButtons)
                     {
-                        <MListItem Link>
+                        <MListItem Link Href="@(item.Href)">
                             <MListItemIcon>
                                 <MIcon>@(item.Icon)</MIcon>
                                 </MListItemIcon>
@@ -162,7 +161,7 @@
     };
     private List<NavigationButton> userButtons = new List<NavigationButton>()
     {
-        new NavigationButton(){Title="个人中心",Icon="mdi-home",Href=""},
+        new NavigationButton(){Title="个人中心",Icon="mdi-home",Href="myTerritory"},
         new NavigationButton(){Title="每日抽奖",Icon="mdi-gift",Href=""}
     };
     private async Task Logout()

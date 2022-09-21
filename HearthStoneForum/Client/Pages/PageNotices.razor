@@ -16,16 +16,16 @@
             @for (var i = 0; i < Notices.Count; i++)
             {
                 
-                    <a href="@("noticeInfo/"+Notices[i].Id)">
-                        <div class="notice-row">
-                            <div class="notice-title">
-                                @Notices[i].Title
-                            </div>
-                            <div class="notice-time">
-                                @Notices[i].CreatedTime.ToString("d")
-                            </div>
+                <a href="@("noticeInfo/"+Notices[i].Id)" class="rounded-lg">
+                    <div class="notice-row rounded-lg">
+                        <div class="notice-title">
+                            @Notices[i].Title
                         </div>
-                    </a>
+                        <div class="notice-time">
+                            @Notices[i].CreatedTime.ToString("d")
+                        </div>
+                    </div>
+                </a>
             }
         </div>
         <div class="text-center">
@@ -49,13 +49,13 @@
     private int pageLength = 0;
     protected override async Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/page?page=" + page + "&size=" + size);
+        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/page?page={page}&size={size}");
         Notices = result.Data;
         total = result.Total;
         pageLength = total / size + ((total % size == 0) ? 0 : 1);
     }
     private async void ChangeNotices(){
-        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/page?page=" + page + "&size=" + size);
+        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/page?page={page}&size={size}");
         Notices = result.Data;
         StateHasChanged();
     }

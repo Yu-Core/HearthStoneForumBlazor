@@ -21,11 +21,23 @@ namespace HearthStoneForum.Client.Utility
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+            var anonymousState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
             if (string.IsNullOrWhiteSpace(savedToken))
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
+
+            var claims = ParseClaimsFromJwt(savedToken);
+            // Checks the exp field of the token
+            var expiry = claims.Where(claim => claim.Type.Equals("exp")).FirstOrDefault();
+            if (expiry == null)
+                return anonymousState;
+
+            // The exp field is in Unix time
+            var datetime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiry.Value));
+            if (datetime.UtcDateTime <= DateTime.UtcNow)
+                return anonymousState;
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 

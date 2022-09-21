@@ -1,0 +1,205 @@
+﻿@page "/myTerritory"
+@inject IPopupService PopupService
+@inject NavigationManager navigation
+@inject HttpClient Http
+
+<div class="main">
+    <div class="territory-wrap">
+        <div class="territory-top">
+            <div>
+                <MImage></MImage>
+            </div>
+            <div>
+                <div></div>
+                <div></div>
+            </div>
+            <div></div>
+        </div>
+        <div class="territory-middle">
+            <MTabs @bind-Value="tabs"
+                   BackgroundColor="#f7f8f9">
+                <MTab>帖子</MTab>
+                <MTab>喜欢</MTab>
+                <MTab>收藏</MTab>
+                <MTab>浏览历史</MTab>
+            </MTabs>
+        </div>
+        <div class="territory-bottom">
+            <MTabsItems Value="tabs">
+                <MTabItem>
+                    <div class="invitation-content">
+                        @foreach (var item in MyInvitations)
+                        {
+                            <button @onclick="()=>NavigateToInvitation(item.Id)" class="rounded-lg">
+                                <div class="invitation-row rounded-lg">
+                                    <div class="invitation-title">
+                                        @item.Title
+                                    </div>
+                                    <div class="invitation-tool">
+                                        <MButton Icon StopPropagation OnClick="()=>DeleteInvitation(item.Id,MyInvitations)">
+                                            <MIcon>mdi-delete</MIcon>
+                                        </MButton>
+                                    </div>
+                                </div>
+                            </button>
+                        }
+                    </div>
+                    <div class="text-center">
+                        <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+                    </div>
+                </MTabItem>
+                <MTabItem>
+                    <div class="invitation-content">
+                        @foreach (var item in Likes)
+                        {
+                            <button @onclick="()=>NavigateToInvitation(item.Id)" class="rounded-lg">
+                                <div class="invitation-row rounded-lg">
+                                    <div class="invitation-title">
+                                        @item.Title
+                                    </div>
+                                    <div class="invitation-tool">
+                                        <MButton Icon StopPropagation OnClick="()=>DeleteInvitation(item.Id,Likes)">
+                                            <MIcon>mdi-delete</MIcon>
+                                        </MButton>
+                                    </div>
+                                </div>
+                            </button>
+                        }
+                    </div>
+                    <div class="text-center">
+                        <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+                    </div>
+                </MTabItem>
+                <MTabItem>
+                    <div class="invitation-content">
+                        @foreach (var item in Collections)
+                        {
+                            <button @onclick="()=>NavigateToInvitation(item.Id)" class="rounded-lg">
+                                <div class="invitation-row rounded-lg">
+                                    <div class="invitation-title">
+                                        @item.Title
+                                    </div>
+                                    <div class="invitation-tool">
+                                        <MButton Icon StopPropagation OnClick="()=>DeleteInvitation(item.Id,Collections)">
+                                            <MIcon>mdi-delete</MIcon>
+                                        </MButton>
+                                    </div>
+                                </div>
+                            </button>
+                        }
+                    </div>
+                    <div class="text-center">
+                        <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+                    </div>
+                </MTabItem>
+                <MTabItem>
+                    <div class="invitation-content">
+                        @foreach (var item in Records)
+                        {
+                            <button @onclick="()=>NavigateToInvitation(item.Id)" class="rounded-lg">
+                                <div class="invitation-row rounded-lg">
+                                    <div class="invitation-title">
+                                        @item.Title
+                                    </div>
+                                    <div class="invitation-tool">
+                                        <MButton Icon StopPropagation OnClick="()=>DeleteInvitation(item.Id,Records)">
+                                            <MIcon>mdi-delete</MIcon>
+                                        </MButton>
+                                    </div>
+                                </div>
+                            </button>
+                        }
+                    </div>
+                    <div class="text-center">
+                        <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+                    </div>
+                </MTabItem>
+            </MTabsItems>
+
+        </div>
+    </div>
+</div>
+
+
+@code {
+    StringNumber tabs;
+    private int _page = 1;
+    private int page
+    {
+        get => _page;
+        set
+        {
+            _page = value;
+        }
+    }
+    private int size = 10;
+    private int total = 0;
+    private int pageLength = 0; 
+    private int _page2 = 1;
+    private int page2
+    {
+        get => _page2;
+        set
+        {
+            _page2 = value;
+        }
+    }
+    private int size2 = 10;
+    private int total2 = 0;
+    private int pageLength2 = 0;
+    private int _page3 = 1;
+    private int page3
+    {
+        get => _page3;
+        set
+        {
+            _page3 = value;
+        }
+    }
+    private int size3 = 10;
+    private int total3 = 0;
+    private int pageLength3 = 0;
+    private int _page4 = 1;
+    private int page4
+    {
+        get => _page4;
+        set
+        {
+            _page4 = value;
+        }
+    }
+    private int size4 = 10;
+    private int total4 = 0;
+    private int pageLength4 = 0;
+    private List<Invitation> MyInvitations { get; set; } = new();
+    private List<Invitation> Likes { get; set; } = new();
+    private List<Invitation> Collections { get; set; } = new();
+    private List<Invitation> Records { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        MyInvitations = new(){
+            new(){Title="wqeqqe"},
+            new(){Title="wqeqqe"},
+            new(){Title="wqeqqe"},
+            new(){Title="wqeqqe"},
+        };
+    }
+
+    private async void DeleteInvitation(int id, List<Invitation> invitations)
+    {
+        var confirm = await PopupService.ConfirmAsync("提示", "是否确定删除？");
+        if (confirm){
+            await Http.DeleteAsync($"invitations/{id}");
+            var removeObj = invitations.FirstOrDefault(it => it.Id == id);
+            invitations.Remove(removeObj);
+            StateHasChanged();
+        }
+    }
+    
+   
+    private void NavigateToInvitation(int id)
+    {
+        navigation.NavigateTo($"invitation/{id}");
+    }
+}
