@@ -9,28 +9,83 @@
     max-width: 1024px;
 }
 
-.invitation-content {
-    margin-top: 16px;
-    margin-bottom: 16px;
+.territory-top{
+    display:flex;
+    padding:64px 0 32px;
+}
+
+.user-portrait{
+    width:120px;
+    height:120px;
+    position:relative;
+}
+
+    .user-portrait:hover::before {
+        content: '修改头像';
+        background-color: rgba(0,0,0,0.6);
+        transition: all ease 0.5s;
+    }
+
+    .user-portrait::before {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        font-size:inherit;
+        border-radius: 50%;
+        pointer-events: none;
+        background-color: transparent;
+        z-index: 1;
+        transition: all ease 0.5s;
+    }
+
+.user-info {
     display: flex;
     flex-direction: column;
-}
-
-    .invitation-content button:nth-child(2n) {
-        background-color: #EEEEEE;
-    }
-
-    .invitation-content button:nth-child(2n+1) {
-        background-color: transparent;
-    }
-
-    .invitation-content button:hover .invitation-row {
-        background-color: rgba(0,0,0,0.2);
-        transition: all 0.5s ease;
-    }
-
-.invitation-row {
-    display: flex;
     justify-content: space-between;
-    padding: 16px;
+    margin-left: 24px;
 }
+.user-name{
+    flex-grow:1;
+    display:flex;
+    align-items:center;
+}
+
+
+.select-portrait-list {
+    /*display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;*/
+    /*
+        repeat()接受两个参数，第一个参数是重复的次数，第二个参数是要重复的值。
+        无法确定列数时，重复次数使用关键字：auto-fill 或 auto-fit
+    */
+    display: grid;
+    justify-content: space-evenly;
+    grid-template-columns: repeat(auto-fill, 50px);
+    grid-gap: 32px;
+}
+
+.select-portrait-item-wrap {
+   /* margin: 16px;*/
+}
+.select-portrait-item{
+    width:50px;
+    height:50px;
+}
+
+@media only screen and (min-width: 600px) {
+    .select-portrait-item {
+        width: 100px;
+        height: 100px;
+    }
+
+    .select-portrait-list {
+        grid-template-columns: repeat(auto-fill, 100px);
+    }
+}
+

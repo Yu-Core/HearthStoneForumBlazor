@@ -1,5 +1,6 @@
 ﻿@page "/notices"
 @inject HttpClient Http
+@inject NavigationManager navigation
 
 <div class="main">
     <div class="notice-wrap">
@@ -29,7 +30,7 @@
             }
         </div>
         <div class="text-center">
-            <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+            <MPagination Class="@(pageLength>1?"":"d-none")" @bind-Value="page" Length="@(pageLength)"></MPagination>
         </div>
     </div>
 </div>
@@ -47,17 +48,29 @@
     private int size = 20;
     private int total = 0;
     private int pageLength = 0;
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/page?page={page}&size={size}");
-        Notices = result.Data;
-        total = result.Total;
-        pageLength = total / size + ((total % size == 0) ? 0 : 1);
+        ChangeNotices();
+        return base.OnInitializedAsync();
     }
-    private async void ChangeNotices(){
-        var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/page?page={page}&size={size}");
-        Notices = result.Data;
-        StateHasChanged();
+    private async void ChangeNotices()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/page?page={page}&size={size}");
+            Notices = result.Data ?? new();
+            total = result.Total;
+            pageLength = total / size;
+            if (total % size > 0)
+            {
+                pageLength++;
+            }
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            navigation.NavigateTo("404");
+        }
     }
     
 }

@@ -6,6 +6,8 @@ using HearthStoneForum.Model;
 using AutoMapper;
 using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.Model.DTOAdd;
+using Microsoft.AspNetCore.Authorization;
+using HearthStoneForum.Model.DTOEdit;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
@@ -57,7 +59,7 @@ namespace HearthStoneForum.WebApi.Controllers
 
             UserInfo userInfo = _iMapper.Map<UserInfoDTOAdd,UserInfo>(dto);
             bool b = await _iUserInfoService.CreateAsync(userInfo);
-            if (!b) return ApiResultHelper.Error("用户添加失败，服务器发生错误");
+            if (!b) return ApiResultHelper.Error("用户添加失败");
 
             var UserInfoDTOView = _iMapper.Map<UserInfoDTOView>(userInfo);
             return ApiResultHelper.Success(UserInfoDTOView);
@@ -69,15 +71,22 @@ namespace HearthStoneForum.WebApi.Controllers
             if (!b) return ApiResultHelper.Error("删除失败");
             return ApiResultHelper.Success(b);
         }
+        [Authorize]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResult>> Edit(int id ,UserInfo userInfo)
+        public async Task<ActionResult<ApiResult>> Edit(UserInfoDTOEdit dto)
         {
-            var oldUserInfo = await _iUserInfoService.FindAsync(id);
-            if (oldUserInfo == null) return ApiResultHelper.Error("没有找到该用户");
+            int id = Convert.ToInt32(User.FindFirst("UserId").Value);
+
+            if(id != dto.Id) return ApiResultHelper.Error("修改失败，身份认证失败");
+
+            var userInfo = await _iUserInfoService.FindAsync(id);
+            if (userInfo == null) return ApiResultHelper.Error("没有找到该用户");
+
+            userInfo = _iMapper.Map<UserInfoDTOEdit,UserInfo>(dto, userInfo);
 
             bool b = await _iUserInfoService.EditAsync(userInfo);
             if (!b) return ApiResultHelper.Error("修改失败");
-            return ApiResultHelper.Success(userInfo);
+            return ApiResultHelper.Success(dto);
         }
         [HttpGet("portrait")]
         public async Task<ActionResult<ApiResult>> GetUserPortrait(int userId)

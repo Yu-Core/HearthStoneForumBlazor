@@ -1,5 +1,6 @@
 ﻿@page "/invitations/{id:int}"
 @inject HttpClient Http
+@inject NavigationManager navigation
 
 <div class="main">
     <div class="invitation-wrap">
@@ -34,7 +35,7 @@
             }
         </div>
         <div class="page">
-            <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+            <MPagination Class="@(pageLength>1?"":"d-none")" @bind-Value="page" Length="@(pageLength)"></MPagination>
         </div>
     </div>
 </div>
@@ -61,21 +62,41 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<ApiResult<AreaDTOView>>($"areas/{id}");
-        Area = result.Data;
-        var resultInvitations = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOView>>>($"invitations/area?id={id}&page={page}&size={size}");
-        if (resultInvitations.Data != null)
+        await SetArea();
+
+        ChangeInvitations();
+    }
+
+    private async Task SetArea(){
+        try
         {
-            Invitations = resultInvitations.Data;
+            var result = await Http.GetFromJsonAsync<ApiResult<AreaDTOView>>($"areas/{id}");
+            Area = result.Data ?? new();
         }
-        total = resultInvitations.Total;
-        pageLength = total / size + ((total % size == 0) ? 0 : 1);
+        catch (Exception)
+        {
+
+            navigation.NavigateTo("404");
+        }
     }
 
     private async void ChangeInvitations()
     {
-        var resultInvitations = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOView>>>($"invitations/area?id={id}&page={page}&size={size}");
-        Invitations = resultInvitations.Data;
-        StateHasChanged();
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOView>>>($"invitations/area?id={id}&page={page}&size={size}");
+            Invitations = result.Data ?? new();
+            total = result.Total;
+            pageLength = total / size;
+            if (total % size > 0)
+            {
+                pageLength++;
+            }
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            navigation.NavigateTo("404");
+        }
     }
 }

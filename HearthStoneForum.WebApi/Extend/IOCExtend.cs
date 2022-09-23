@@ -2,6 +2,7 @@
 using HearthStoneForum.Repository;
 using HearthStoneForum.IRepository;
 using HearthStoneForum.IService;
+using HearthStoneForum.Model;
 
 namespace HearthStoneForum.WebApi.Extend
 {
@@ -36,6 +37,8 @@ namespace HearthStoneForum.WebApi.Extend
             services.AddScoped<IExpansionService, ExpansionService>();
             services.AddScoped<IPortraitRepository, PortraitRepository>();
             services.AddScoped<IPortraitService, PortraitService>();
+            services.AddScoped<IViewRecordRepository, ViewRecordRepository>();
+            services.AddScoped<IViewRecordService, ViewRecordService>();
             return services;
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HearthStoneForum.Model
 {
-    public class History : Likes
+    public class ViewRecord : Likes
     {
     }
 }

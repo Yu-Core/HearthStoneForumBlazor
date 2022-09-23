@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HearthStoneForum.Model;
 using HearthStoneForum.Model.DTOAdd;
+using HearthStoneForum.Model.DTOEdit;
 using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.WebApi.Utility._MD5;
 
@@ -25,7 +26,7 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
                     Portrait = string.Empty,
                     Phone = String.Empty
                 });
-
+            CreateMap<UserInfoDTOEdit, UserInfo>();
             //CreateMap<PreachDTOCreate, Preach>().ConstructUsing(dto => new Preach
             //{
             //    IsCancel = false,

@@ -4,7 +4,10 @@ using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SqlSugar;
+using System.Drawing;
+using System.Security.Policy;
 using System.Xml.Linq;
 
 namespace HearthStoneForum.WebApi.Controllers
@@ -34,35 +37,7 @@ namespace HearthStoneForum.WebApi.Controllers
 
             return ApiResultHelper.Success(invitation);
         }
-        [HttpGet("search")]
-        public async Task<ActionResult<ApiResult>> GetInvitationByName(string name)
-        {
-            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.Title.ToLower().Contains(name.ToLower()));
-            if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");
-            return ApiResultHelper.Success(data);
-        }
-        [HttpGet("new")]
-        public async Task<ActionResult<ApiResult>> GetNewInvitation()
-        {
-            var data = await _iInvitationService.GetNewInvitations();
-            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
-            return ApiResultHelper.Success(data);
-        }
-        [HttpGet("recommend")]
-        public async Task<ActionResult<ApiResult>> GetRecommendInvitation()
-        {
-            var data = await _iInvitationService.GetRecommendInvitations();
-            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
-            return ApiResultHelper.Success(data);
-        }
-        [HttpGet("area")]
-        public async Task<ActionResult<ApiResult>> GetInvitationByAreaId(int id, int page, int size)
-        {
-            RefAsync<int> total = 0;
-            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.AreaId == id,page,size,total);
-            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
-            return ApiResultHelper.Success(data,total);
-        }
+
         [HttpPost]
         public async Task<ActionResult<ApiResult>> Create(Invitation invitation)
         {
@@ -76,7 +51,7 @@ namespace HearthStoneForum.WebApi.Controllers
         {
             bool b = await _iInvitationService.DeleteAsync(id);
             if (!b) return ApiResultHelper.Error("删除失败");
-            return ApiResultHelper.Success(b);
+            return ApiResultHelper.Success(null);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<ApiResult>> Edit(int id, Invitation invitation)
@@ -87,6 +62,75 @@ namespace HearthStoneForum.WebApi.Controllers
             bool b = await _iInvitationService.EditAsync(invitation);
             if (!b) return ApiResultHelper.Error("修改失败");
             return ApiResultHelper.Success(invitation);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<ApiResult>> GetInvitationByName(string name)
+        {
+            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.Title.ToLower().Contains(name.ToLower()));
+            if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");
+            return ApiResultHelper.Success(data);
+        }
+
+        [HttpGet("new")]
+        public async Task<ActionResult<ApiResult>> GetNewInvitation()
+        {
+            var data = await _iInvitationService.GetNewInvitations();
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data);
+        }
+
+        [HttpGet("recommend")]
+        public async Task<ActionResult<ApiResult>> GetRecommendInvitation()
+        {
+            var data = await _iInvitationService.GetRecommendInvitations();
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data);
+        }
+
+        [HttpGet("like")]
+        public async Task<ActionResult<ApiResult>> GetLikeInvitation(int id, int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iInvitationService.GetLikeInvitations(it => it.UserId == id, page, size, total);
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data, total);
+        }
+
+        [HttpGet("collection")]
+        public async Task<ActionResult<ApiResult>> GetCollectionInvitation(int id, int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iInvitationService.GetCollectionInvitations(it => it.UserId == id, page, size, total);
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data, total);
+        }
+
+        [HttpGet("viewRecord")]
+        public async Task<ActionResult<ApiResult>> GetViewRecordInvitation(int id, int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iInvitationService.GetViewRecordInvitations(it => it.UserId == id, page, size, total);
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data, total);
+        }
+
+        [HttpGet("area")]
+        public async Task<ActionResult<ApiResult>> GetInvitationByAreaId(int id, int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.AreaId == id, page, size, total);
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data, total);
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<ApiResult>> GetInvitationByUserId(int id, int page, int size)
+        {
+            RefAsync<int> total = 0;
+            var data = await _iInvitationService.QueryAsync(it => it.UserId == id, page, size, total);
+            if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
+            return ApiResultHelper.Success(data, total);
         }
     }
 }

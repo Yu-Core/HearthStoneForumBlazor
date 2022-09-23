@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using HearthStoneForum.IRepository;
+using HearthStoneForum.Model;
 using SqlSugar;
 using SqlSugar.IOC;
 
@@ -17,10 +18,26 @@ namespace HearthStoneForum.Repository
 
             base.Context=DbScoped.SugarScope;
 
-            base.Context.DbMaintenance.CreateDatabase();
+            //创建数据库及表，第一次运行后注释掉，不然会影响性能
+            //base.Context.DbMaintenance.CreateDatabase();
 
-            Type[] types = new Type[] { typeof(T) };
-            base.Context.CodeFirst.InitTables(types);
+            //Type[] types = new Type[] { 
+            //    typeof(Area),
+            //    typeof(Carousel),
+            //    typeof(Collection),
+            //    typeof(Comment),
+            //    typeof(Download),
+            //    typeof(Expansion),
+            //    typeof(Invitation),
+            //    typeof(Likes),
+            //    typeof(Notice),
+            //    typeof(Portrait),
+            //    typeof(RaceYear),
+            //    typeof(Sign),
+            //    typeof(UserInfo),
+            //    typeof(ViewRecord)
+            //};
+            //base.Context.CodeFirst.InitTables(types);
         }
 
         public Task<bool> CreateAsync(T entity)

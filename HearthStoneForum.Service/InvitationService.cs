@@ -2,9 +2,11 @@
 using HearthStoneForum.IService;
 using HearthStoneForum.Model;
 using HearthStoneForum.Model.DTOView;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +21,16 @@ namespace HearthStoneForum.Service
             _iInvitationRepository = iInvitationRepository;
         }
 
+        public async Task<List<Invitation>> GetCollectionInvitations(Expression<Func<Collection, bool>> func, int page, int size, RefAsync<int> total)
+        {
+            return await _iInvitationRepository.GetCollectionInvitations(func, page, size, total);
+        }
+
+        public async Task<List<Invitation>> GetLikeInvitations(Expression<Func<Likes, bool>> func, int page, int size, RefAsync<int> total)
+        {
+            return await _iInvitationRepository.GetLikeInvitations(func,page,size,total);
+        }
+
         public async Task<List<InvitationDTOViewRecommend>> GetNewInvitations()
         {
             return await _iInvitationRepository.GetNewInvitations();
@@ -27,6 +39,11 @@ namespace HearthStoneForum.Service
         public async Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations()
         {
             return await _iInvitationRepository.GetRecommendInvitations();
+        }
+
+        public async Task<List<Invitation>> GetViewRecordInvitations(Expression<Func<ViewRecord, bool>> func, int page, int size, RefAsync<int> total)
+        {
+            return await _iInvitationRepository.GetViewRecordInvitations(func,page,size,total);
         }
     }
 

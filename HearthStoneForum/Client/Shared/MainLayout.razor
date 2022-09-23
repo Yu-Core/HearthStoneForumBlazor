@@ -66,9 +66,9 @@
             <MNavigationDrawer App @bind-Value="drawerRight" Right Temporary>
                 <MListItem>
                     <MListItemAvatar Color="primary" Size="100">
-                        @if (PortraitUrl == string.Empty)
+                        @if (string.IsNullOrWhiteSpace(PortraitUrl))
                         {
-                            <h2 class="white--text m-0">@(context.User.FindFirst("Name").Value.Substring(0,1).ToUpper())</h2>
+                            <h2 class="white--text m-0">@(context.User.FindFirst("Name").Value.GetStringInitial(1))</h2>
                         }
                         else{
                             <MImage Src="@(PortraitUrl)"></MImage>
