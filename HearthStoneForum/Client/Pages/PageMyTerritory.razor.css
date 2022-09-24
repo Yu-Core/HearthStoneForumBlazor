@@ -57,9 +57,6 @@
 
 
 .select-portrait-list {
-    /*display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;*/
     /*
         repeat()接受两个参数，第一个参数是重复的次数，第二个参数是要重复的值。
         无法确定列数时，重复次数使用关键字：auto-fill 或 auto-fit
