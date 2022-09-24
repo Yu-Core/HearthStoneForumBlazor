@@ -55,10 +55,91 @@
                     <h4><strong>@(UserInfo.Name ?? "")</strong></h4>
                 </div>
                 <div class="user-editor">
-                    <MButton Rounded Outlined Color="indigo">
+                    <MButton Rounded
+                             Outlined
+                             Color="indigo"
+                             OnClick="()=> _showUserInfoEdit = true">
                         <MIcon>mdi-square-edit-outline</MIcon>
                         编辑资料
                     </MButton>
+                    <MDialog @bind-Value="_showUserInfoEdit"
+                             Fullscreen
+                             Transition="dialog-right-transition">
+                        <MCard>
+                            <MForm EnableValidation Model="UserInfoDTOEdit" OnValidSubmit="HandleOnValidSubmit">
+
+                                <MToolbar Dark
+                                          Color="primary">
+                                    <MButton Icon
+                                             Dark
+                                             OnClick="() => _showUserInfoEdit = false">
+                                        <MIcon>mdi-close</MIcon>
+                                    </MButton>
+                                    <MToolbarTitle>修改资料</MToolbarTitle>
+                                    <MSpacer></MSpacer>
+                                    <MToolbarItems>
+                                        <MButton Dark
+                                                 Text
+                                                 Type="submit">
+                                            保存
+                                        </MButton>
+                                    </MToolbarItems>
+                                </MToolbar>
+                                <div class="d-flex justify-content-center">
+                                    <div class="w-100" style="max-width:800px;">
+                                        <MList ThreeLine
+                                               Subheader>
+                                            <MSubheader>用户信息</MSubheader>
+                                            <MListItem>
+                                                <span class="me-3">名字</span>
+                                                <MTextField @bind-Value="UserInfoDTOEdit.Name"
+                                                            Placeholder="请输入你的名字"
+                                                            Dense
+                                                            Outlined
+                                                            HideDetails="@("auto")" />
+                                            </MListItem>
+                                            <MListItem>
+                                                <span class="me-3">性别</span>
+                                                <MRadioGroup @bind-Value="UserInfoDTOEdit.Sex"
+                                                             Dense
+                                                             Class="mt-0"
+                                                             Row
+                                                             HideDetails="@("auto")">
+                                                    <MRadio Label="@(Sex.未知.ToString())" Value="@(Sex.未知)"></MRadio>
+                                                    <MRadio Label="@(Sex.男.ToString())" Value="@(Sex.男)"></MRadio>
+                                                    <MRadio Label="@(Sex.女.ToString())" Value="@(Sex.女)"></MRadio>
+                                                </MRadioGroup>
+                                            </MListItem>
+                                        </MList>
+
+                                        <MDivider></MDivider>
+
+                                        <MList ThreeLine
+                                               Subheader>
+                                            <MSubheader>联系方式</MSubheader>
+                                            <MListItem>
+                                                <span class="me-3">邮箱</span>
+                                                <MTextField @bind-Value="UserInfoDTOEdit.Email"
+                                                            Placeholder="请输入你的电子邮箱"
+                                                            Dense
+                                                            Outlined
+                                                            HideDetails="@("auto")" />
+                                            </MListItem>
+                                            <MListItem>
+                                                <span class="me-3">手机</span>
+
+                                                <MTextField @bind-Value="UserInfoDTOEdit.Phone"
+                                                            Placeholder="请输入你的手机号码"
+                                                            Dense
+                                                            Outlined
+                                                            HideDetails="@("auto")" />
+                                            </MListItem>
+                                        </MList>
+                                    </div>
+                                </div>
+                            </MForm>
+                        </MCard>
+                    </MDialog>
                 </div>
             </div>
 
@@ -99,6 +180,8 @@
     StringNumber tabs;
 
     private bool _showPortraitSelect { get; set; }
+
+    private bool _showUserInfoEdit { get; set; }
 
     private string? SelectPortraitUrl { get; set; } = string.Empty;
 
@@ -144,7 +227,6 @@
         await SetPortraits();
 
         SetUserInfoDTOEdit();
-
     }
     private async Task SetUserInfo()
     {
@@ -207,7 +289,7 @@
             }
             else
             {
-                await PopupService.AlertAsync("修改失败", AlertTypes.Error);
+                await PopupService.AlertAsync($"修改失败({data.Msg})", AlertTypes.Error);
             }
         }
         catch (Exception e)
@@ -227,5 +309,35 @@
     {
         SelectPortraitUrl = string.Empty;
         _showPortraitSelect = false;
+    }
+
+    private async void HandleOnValidSubmit()
+    {
+        try
+        {
+            var result = await Http.PutAsJsonAsync($"userInfos/{UserInfoDTOEdit.Id}", UserInfoDTOEdit);
+            var data = await result.Content.ReadFromJsonAsync<ApiResult<UserInfoDTOEdit>>();
+            if (data.Successful)
+            {
+                UserInfo.Name = UserInfoDTOEdit.Name;
+                await PopupService.AlertAsync("修改成功");
+            }
+            else
+            {
+                await PopupService.AlertAsync($"修改失败({data.Msg})", AlertTypes.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            await PopupService.AlertAsync($"修改失败({e.Message})", AlertTypes.Error);
+
+            throw;
+        }
+        finally
+        {
+            _showUserInfoEdit = false;
+            StateHasChanged();
+        }
+        
     }
 }

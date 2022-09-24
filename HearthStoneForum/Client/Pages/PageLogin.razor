@@ -93,16 +93,8 @@
     }
 
 
-    private class Model
+    private class Model : UserInfoDTOLogin
     {
-        [Required(ErrorMessage = "用户名不能为空")]
-        [MaxLength(16, ErrorMessage = "账号长度必须在3到20之间")]
-        [MinLength(4, ErrorMessage = "账号长度必须在3到20之间")]
-        public string? UserName { get; set; }
-        [Required(ErrorMessage = "密码不能为空")]
-        [MaxLength(16, ErrorMessage = "密码长度必须在5到20之间")]
-        [MinLength(4, ErrorMessage = "密码长度必须在5到20之间")]
-        public string? Password { get; set; }
         [RegularExpression("True", ErrorMessage = "请通过滑块验证")]
         public bool CAPTCHA { get; set; } = false;
     }
@@ -122,11 +114,7 @@
         await Task.Run(async () =>
         {
 
-            UserInfoDTOLogin userInfo = new()
-                {
-                    UserName = _model.UserName,
-                    Password = _model.Password
-                };
+            UserInfoDTOLogin userInfo = _model;
             var result = await AuthService.Login(userInfo);
 
             if (result.Successful)

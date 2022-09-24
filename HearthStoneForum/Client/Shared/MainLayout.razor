@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject IAuthService AuthService
 @inject HttpClient Http
-<MApp AlertParameters='param => { param.Centered = true; param.ContentClass="rounded-pill";}'>
+<MApp AlertParameters='param => { param.Centered = true;}'>
     <MAppBar App ElevateOnScroll ScrollTarget="#scrolling">
         <div class="d-flex d-md-none">
             <MAppBarNavIcon @onclick="() => drawer = true"></MAppBarNavIcon>
@@ -29,7 +29,7 @@
                     <MButton Class="d-none d-sm-block text-capitalize ms-3 light-blue--text text--darken-3"
                              Text
                              @onclick="() => drawerRight = true">
-                        @(context.User.FindFirst("Name").Value.StringCutOutByLength(10))
+                        @(context.User.FindFirst("name").Value.StringCutOutByLength(10))
                     </MButton>
                 </div>
             </Authorized>
@@ -68,7 +68,7 @@
                     <MListItemAvatar Color="primary" Size="100">
                         @if (string.IsNullOrWhiteSpace(PortraitUrl))
                         {
-                            <h2 class="white--text m-0">@(context.User.FindFirst("Name").Value.GetStringInitial(1))</h2>
+                            <h2 class="white--text m-0">@(context.User.FindFirst("name").Value.GetStringInitial(1))</h2>
                         }
                         else{
                             <MImage Src="@(PortraitUrl)"></MImage>
@@ -77,7 +77,7 @@
 
                     <MListItemContent>
                         <MListItemTitle>
-                            <h6>@(context.User.FindFirst("Name").Value)</h6>
+                            <h6>@(context.User.FindFirst("name").Value)</h6>
                         </MListItemTitle>
                     </MListItemContent>
                 </MListItem>
@@ -179,6 +179,7 @@
         }
     }
 
+    
     
 }
 
