@@ -4,7 +4,7 @@
 
 English | [简体中文](./README.en.md)
 
-Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum).It is separately from front-end and backend(using Blazor and ASP.NET Core WebApi)，with responsive display。
+Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum).It is separately from front-end and back-end(using Blazor and ASP.NET Core WebApi)，with responsive display。
 
 <br/>
 
@@ -14,13 +14,13 @@ Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum)
 
 </div>
 
-#### front-end
+#### Front End
 
 - Main Language：C#
 - Main Technology：Blazor + Masa Blazor + Blazored.LocalStorage
 - .NET Version：.NET6
 
-#### backend
+#### Back End
 
 - Main Language：C#
 - Main Technology：ASP.NET Core WebApi + SqlSugar + JWT + AutoMapper
