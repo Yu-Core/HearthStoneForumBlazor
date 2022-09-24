@@ -4,7 +4,7 @@
 
 [English](./README.en.md) | 简体中文
 
-炉石传说论坛的Blazor重制版，使用Blazor和ASP.NET Core WebApi前后端分离构建,具有响应式显示。
+炉石传说论坛的Blazor重制版，使用Blazor和ASP.NET Core WebApi前后端分离构建，具有响应式显示。
 
 <br/>
 
