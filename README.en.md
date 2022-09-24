@@ -1,0 +1,28 @@
+<h1 align="center">HearthStoneForumBlazor</h1>
+
+<div align="center">
+
+English | [简体中文](./README.en.md)
+
+Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum).It is separately from front-end and backend(using Blazor and ASP.NET Core WebApi)，with responsive display。
+
+<br/>
+
+<br/>
+
+![输入图片说明](Images/%E7%BD%91%E9%A1%B5%E6%8D%95%E8%8E%B7_24-9-2022_101824_localhost.jpeg)
+
+</div>
+
+#### front-end
+
+- Main Language：C#
+- Main Technology：Blazor + Masa Blazor + Blazored.LocalStorage
+- .NET Version：.NET6
+
+#### backend
+
+- Main Language：C#
+- Main Technology：ASP.NET Core WebApi + SqlSugar + JWT + AutoMapper
+- Database：SQL Server
+- .NET Version：.NET6
