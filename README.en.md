@@ -29,9 +29,9 @@ Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum)
 
 #### Usage Method
 
-1.Configure a file to store connection strings[appsettings.json](./HearthStoneForum.WebApi/appsettings.json)
+1.Configure a file to store connection strings [appsettings.json](./HearthStoneForum.WebApi/appsettings.json)
 
-2.Because using Code First，need edit[BaseRepository.cs](./HearthStoneForum.Repository/BaseRepository.cs).Uncomment the following section
+2.Because using Code First，need edit [BaseRepository.cs](./HearthStoneForum.Repository/BaseRepository.cs).Uncomment the following section
 
 ```C#
 //创建数据库及表，第一次运行后注释掉，不然会影响性能
