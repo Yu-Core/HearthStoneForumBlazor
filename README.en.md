@@ -26,3 +26,22 @@ Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum)
 - Main Technology：ASP.NET Core WebApi + SqlSugar + JWT + AutoMapper
 - Database：SQL Server
 - .NET Version：.NET6
+
+#### Usage Method
+
+1.Configure a file to store connection strings[appsettings.json](./HearthStoneForum.WebApi/appsettings.json)
+
+2.Because using Code First，need edit[BaseRepository.cs](./HearthStoneForum.Repository/BaseRepository.cs).Uncomment the following section
+
+```C#
+//创建数据库及表，第一次运行后注释掉，不然会影响性能
+//base.Context.DbMaintenance.CreateDatabase();
+//Type[] types = new Type[] { 
+//    typeof(Area)
+//    ...
+//    ...
+//};
+//base.Context.CodeFirst.InitTables(types);
+```
+
+3.if you need test data，Attach [HearthStoneForumDB.mdf](./TestData/HearthStoneForumDB.mdf) to database. T-Sql scripts(Additional)：[additional.sql](./TestData/additional.sql)（需要修改）
