@@ -2,7 +2,7 @@
 
 <div align="center">
 
-English | [简体中文](./README.en.md)
+English | [简体中文](./README.md)
 
 Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum).It is separately from front-end and back-end(using Blazor and ASP.NET Core WebApi)，with responsive display。
 
