@@ -44,4 +44,4 @@ Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum)
 //base.Context.CodeFirst.InitTables(types);
 ```
 
-3.if you need test data，Attach [HearthStoneForumDB.mdf](./TestData/HearthStoneForumDB.mdf) to database. T-Sql scripts(Additional)：[additional.sql](./TestData/additional.sql)（需要修改）
+3.if you need test data，Attach [HearthStoneForumDB.mdf](./TestData/HearthStoneForumDB.mdf) to database. T-Sql scripts(Additional)：[additional.sql](./TestData/additional.sql)（need edit）
