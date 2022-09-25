@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @inject IPopupService PopupService
 @inject IAuthService AuthService
+@inject ILocalStorageService LocalStorage
 
 <MHover>
     <MCard Disabled="@(IsSign)" OnClick="()=>Sign()" @attributes="context.Attrs" Elevation="@(context.Hover ? 12 : 2)" Class="@($"{context.Class} .top-right-list d-flex w-100 h-100 bg-transparent rounded-lg px-5 py-2 py-md-0")">
@@ -77,7 +78,13 @@
         if (!IsAuthenticated)
         {
             var confirm = await PopupService.ConfirmAsync("提示", "检测到您尚未登录,是否登录？");
-            if (confirm) navigation.NavigateTo("login");
+
+            if (confirm)
+            {
+                await LocalStorage.RemoveItemAsync("oldUrl");
+                await LocalStorage.SetItemAsync("oldUrl", navigation.Uri);
+                navigation.NavigateTo("login");
+            }
         }
         else
         {

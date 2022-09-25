@@ -5,6 +5,7 @@
 @inject IAuthService AuthService
 @inject NavigationManager navigation
 @inject HttpClient Http
+@inject MainLayoutState LayoutState
 
 <div class="main">
     <div class="territory-wrap">
@@ -177,6 +178,7 @@
     [Parameter]
     public int id { get; set; }
 
+
     StringNumber tabs;
 
     private bool _showPortraitSelect { get; set; }
@@ -285,6 +287,7 @@
             if (data.Successful)
             {
                 UserInfo.Portrait = UserInfoDTOEdit.Portrait;
+                LayoutState.UserInfoSimple.PortraitUrl = UserInfoDTOEdit.Portrait;
                 await PopupService.AlertAsync("修改成功");
             }
             else
@@ -320,6 +323,7 @@
             if (data.Successful)
             {
                 UserInfo.Name = UserInfoDTOEdit.Name;
+                LayoutState.UserInfoSimple.Name = UserInfoDTOEdit.Name;
                 await PopupService.AlertAsync("修改成功");
             }
             else

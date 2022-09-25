@@ -119,7 +119,15 @@
 
             if (result.Successful)
             {
-                navigation.NavigateTo("/");
+                var url = await localStorageService.GetItemAsync<string>("oldUrl");
+                if(url == null){
+                    navigation.NavigateTo("/");
+                }
+                else{
+                    navigation.NavigateTo(url);
+                    await localStorageService.RemoveItemAsync("oldUrl");
+                }
+                
             }
             else
             {

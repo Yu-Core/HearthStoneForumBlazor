@@ -95,5 +95,12 @@ namespace HearthStoneForum.WebApi.Controllers
             if (data == null) return ApiResultHelper.Error("没有找到该用户");
             return ApiResultHelper.Success(data.Portrait);
         }
+        [HttpGet("name")]
+        public async Task<ActionResult<ApiResult>> GetName(int userId)
+        {
+            var data = await _iUserInfoService.FindAsync(it => it.Id == userId);
+            if (data == null) return ApiResultHelper.Error("没有找到该用户");
+            return ApiResultHelper.Success(data.Name);
+        }
     }
 }

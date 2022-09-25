@@ -1,6 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @inject IAuthService AuthService
 @inject HttpClient Http
+@implements IDisposable
+@inject MainLayoutState LayoutState
+@inject NavigationManager Navigation
+
 <MApp AlertParameters='param => { param.Centered = true;}'>
     <MAppBar App ElevateOnScroll ScrollTarget="#scrolling">
         <div class="d-flex d-md-none">
@@ -29,7 +33,7 @@
                     <MButton Class="d-none d-sm-block text-capitalize ms-3 light-blue--text text--darken-3"
                              Text
                              @onclick="() => drawerRight = true">
-                        @(context.User.FindFirst("name").Value.StringCutOutByLength(10))
+                        @(UserInfoSimple.Name.StringCutOutByLength(10))
                     </MButton>
                 </div>
             </Authorized>
@@ -66,18 +70,18 @@
             <MNavigationDrawer App @bind-Value="drawerRight" Right Temporary>
                 <MListItem>
                     <MListItemAvatar Color="primary" Size="100">
-                        @if (string.IsNullOrWhiteSpace(PortraitUrl))
+                        @if (string.IsNullOrWhiteSpace(UserInfoSimple.PortraitUrl))
                         {
-                            <h2 class="white--text m-0">@(context.User.FindFirst("name").Value.GetStringInitial(1))</h2>
+                            <h2 class="white--text m-0">@(UserInfoSimple.Name.GetStringInitial(1))</h2>
                         }
                         else{
-                            <MImage Src="@(PortraitUrl)"></MImage>
+                            <MImage Src="@(UserInfoSimple.PortraitUrl)"></MImage>
                         }                       
                     </MListItemAvatar>
 
                     <MListItemContent>
                         <MListItemTitle>
-                            <h6>@(context.User.FindFirst("name").Value)</h6>
+                            <h6>@(UserInfoSimple.Name)</h6>
                         </MListItemTitle>
                     </MListItemContent>
                 </MListItem>
@@ -114,7 +118,7 @@
     <MMain Id="scrolling" Class="overflow-y-auto" Style="background-color:#F7F8F9;color:#282828;">
         <!-- 给应用提供合适的间距 -->
         <MContainer Fluid>
-            @Body
+                @Body
         </MContainer>
     </MMain>
 
@@ -141,10 +145,13 @@
 </MApp>
 
 @code {
+
     private bool drawer;
     private bool drawerRight;
-    private string? PortraitUrl { get; set; } = string.Empty;
     StringNumber selectItem = 0;
+    private UserInfoDTOViewSimple UserInfoSimple{
+        get => LayoutState.UserInfoSimple;
+    }
     private class NavigationButton
     {
         public string? Title { set; get; }
@@ -167,7 +174,11 @@
     private async Task Logout()
     {
         await AuthService.Logout();
+        LayoutState.SetUserInfoSimple(new UserInfoDTOViewSimple() { Name = string.Empty, PortraitUrl = string.Empty });
+        Navigation.NavigateTo("/");
     }
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -175,9 +186,16 @@
         if(IsAuthenticated){
             var user = await AuthService.GetUser();
             var id = user.FindFirst("userId").Value;
-            PortraitUrl = (await Http.GetFromJsonAsync<ApiResult<string>>("userInfos/portrait?userId=" + id)).Data ?? string.Empty;
+            var PortraitUrl = (await Http.GetFromJsonAsync<ApiResult<string>>("userInfos/portrait?userId=" + id)).Data ?? string.Empty;
+            var Name = (await Http.GetFromJsonAsync<ApiResult<string>>("userInfos/name?userId=" + id)).Data ?? string.Empty;
+            
+            LayoutState.OnChange += StateHasChanged;
+
+            LayoutState.SetUserInfoSimple(new() { Name = Name, PortraitUrl = PortraitUrl });
         }
     }
+
+    public void Dispose() => LayoutState.OnChange -= StateHasChanged;
 
     
     

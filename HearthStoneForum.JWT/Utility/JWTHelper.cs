@@ -17,7 +17,6 @@ namespace HearthStoneForum.JWT.Utility
             var claims = new[]
             {
                 new Claim("UserId", userInfo.Id.ToString()),
-                new Claim("Name", userInfo.Name??"无效用户"),
                 new Claim(ClaimTypes.Name, userInfo.UserName??"InvalidUser")
             };
 
