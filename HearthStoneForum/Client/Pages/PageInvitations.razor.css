@@ -63,6 +63,7 @@
 }
 .invitation-user {
     width: 10%;
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
 }

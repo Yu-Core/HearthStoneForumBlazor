@@ -187,6 +187,8 @@
 
     private string? SelectPortraitUrl { get; set; } = string.Empty;
 
+    private string? Sreach { get; set; }
+
     private UserInfoDTOView UserInfo { get; set; } = new();
 
     private UserInfoDTOEdit UserInfoDTOEdit { get; set; } = new();
@@ -342,6 +344,6 @@
             _showUserInfoEdit = false;
             StateHasChanged();
         }
-        
+
     }
 }

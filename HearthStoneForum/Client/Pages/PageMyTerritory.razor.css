@@ -75,6 +75,10 @@
     height:50px;
 }
 
+.territory-middle{
+    display:flex;
+}
+
 @media only screen and (min-width: 600px) {
     .select-portrait-item {
         width: 100px;

@@ -5,6 +5,7 @@
 @inject NavigationManager navigation
 @inject IAuthService AuthService
 @inject IPopupService PopupService
+@inject HttpClient Http
 @using System.Text.RegularExpressions;
 @using System.ComponentModel.DataAnnotations
 @using FluentValidation;
@@ -119,6 +120,8 @@
 
             if (result.Successful)
             {
+                await Http.PutAsJsonAsync("userInfos/lastLogin", string.Empty);
+
                 var url = await localStorageService.GetItemAsync<string>("oldUrl");
                 if(url == null){
                     navigation.NavigateTo("/");

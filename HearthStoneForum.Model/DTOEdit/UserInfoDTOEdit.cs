@@ -19,8 +19,6 @@ namespace HearthStoneForum.Model.DTOEdit
         [Required(ErrorMessage = "邮箱不能为空")]
         [EmailAddress(ErrorMessage = "邮箱地址无效")]
         public string? Email { get; set; }
-        [Required(ErrorMessage = "手机号码不能为空")]
-        [Phone(ErrorMessage = "手机号码无效")]
         public string? Phone { get; set; }
     }
 }

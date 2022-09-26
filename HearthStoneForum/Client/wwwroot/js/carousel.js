@@ -34,6 +34,7 @@
 
     // 定义图片切换函数
     function changePic(curIndex) {
+        if (pic.length == 0 && list.length == 0) return;
         for (var i = 0; i < pic.length; ++i) {
             pic[i].style.display = "none";
             list[i].className = "";

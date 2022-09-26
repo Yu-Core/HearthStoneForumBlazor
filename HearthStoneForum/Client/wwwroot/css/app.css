@@ -77,10 +77,10 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-.navigation-list .navigation-btn {
+/*.navigation-list .navigation-btn {
     border-radius: 32px;
 }
 
     .navigation-list .navigation-btn::before {
         border-radius: 32px;
-    }
+    }*/

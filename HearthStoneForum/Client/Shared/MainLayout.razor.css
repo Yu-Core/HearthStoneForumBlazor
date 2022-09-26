@@ -88,6 +88,14 @@ main {
     font-size:0.9rem;
 }
 
+    .navigation-list ::deep .navigation-btn {
+        border-radius: 32px;
+    }
+
+    .navigation-list ::deep .navigation-btn::before {
+        border-radius: 32px;
+    }
+
 
 .footer-top p {
     margin-bottom: 8px;

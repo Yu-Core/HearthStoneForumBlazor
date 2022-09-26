@@ -88,6 +88,21 @@ namespace HearthStoneForum.WebApi.Controllers
             if (!b) return ApiResultHelper.Error("修改失败");
             return ApiResultHelper.Success(dto);
         }
+        [Authorize]
+        [HttpPut("lastLogin")]
+        public async Task<ActionResult<ApiResult>> UpdataLastLogin()
+        {
+            int id = Convert.ToInt32(User.FindFirst("UserId").Value);
+
+            var userInfo = await _iUserInfoService.FindAsync(id);
+            if (userInfo == null) return ApiResultHelper.Error("没有找到该用户");
+
+            userInfo.LastLogin = DateTime.Now;
+
+            bool b = await _iUserInfoService.EditAsync(userInfo);
+            if (!b) return ApiResultHelper.Error("修改失败");
+            return ApiResultHelper.Success(userInfo.LastLogin);
+        }
         [HttpGet("portrait")]
         public async Task<ActionResult<ApiResult>> GetUserPortrait(int userId)
         {
