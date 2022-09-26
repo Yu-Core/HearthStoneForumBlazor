@@ -15,9 +15,9 @@
             <h2>@Notice.Title</h2>
         </div>
         <div class="notice-content">
-            <span>
-                @Notice.Description
-            </span>
+            <div class="ql-editor">
+                @((MarkupString)(Notice.Description ?? string.Empty))
+            </div>
         </div>
     </div>
 </div>
@@ -39,7 +39,7 @@
         {
             navigation.NavigateTo("404");
         }
-        
+
         Display = true;
     }
 }

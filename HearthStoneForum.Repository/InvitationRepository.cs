@@ -15,6 +15,14 @@ namespace HearthStoneForum.Repository
     {
         public async Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations()
         {
+            var Areas = await base.Context.Queryable<Area>().ToListAsync();
+            var Cols = Areas.Count() / 4;
+            if (Areas.Count() % 4 > 0)
+            {
+                Cols++;
+            }
+            var Count = Cols * 7;
+
             var data = await base.Context.Queryable<Invitation>()
                 .Select(it => new InvitationDTOViewRecommend()
                 {
@@ -25,7 +33,7 @@ namespace HearthStoneForum.Repository
                 .Mapper(it => it.CommentCount = Context.Queryable<Comment>().Where(c1 => c1.InvitationId == it.Id).Count())
                 .Mapper(it => it.CollectionCount = Context.Queryable<Collection>().Where(c2 => c2.InvitationId == it.Id).Count())
                 .Mapper(it => it.Recommend = it.LikesCount + it.CommentCount + it.CollectionCount)
-
+                .Take(Count)
                 .ToListAsync();
             return data.OrderByDescending(it => it.Recommend).ToList();
         }
@@ -33,6 +41,14 @@ namespace HearthStoneForum.Repository
 
         public async Task<List<InvitationDTOViewRecommend>> GetNewInvitations()
         {
+            var Areas = await base.Context.Queryable<Area>().ToListAsync();
+            var Cols = Areas.Count() / 4;
+            if (Areas.Count() % 4 > 0)
+            {
+                Cols++;
+            }
+            var Count = Cols * 7;
+
             return await base.Context.Queryable<Invitation>()
                 .OrderByDescending(it => it.CreatedTime)
                 .Select(it => new InvitationDTOViewRecommend()
@@ -40,7 +56,7 @@ namespace HearthStoneForum.Repository
                     Id = it.Id,
                     Title = it.Title
                 })
-                .Take(50)
+                .Take(Count)
                 .ToListAsync();
         }
         public override Task<List<DTO>> QueryDTOAsync<DTO>()
