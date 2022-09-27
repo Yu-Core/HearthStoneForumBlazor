@@ -2,6 +2,7 @@
 using HearthStoneForum.Model;
 using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.WebApi.Utility.ApiResult;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -131,6 +132,21 @@ namespace HearthStoneForum.WebApi.Controllers
             var data = await _iInvitationService.QueryAsync(it => it.UserId == id, page, size, total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data, total);
+        }
+
+        [Authorize]
+        [HttpPut("view")]
+        public async Task<ActionResult<ApiResult>> AddView(int id)
+        {
+            var invitation = await _iInvitationService.FindAsync(id);
+            if (invitation == null) return ApiResultHelper.Error("没有找到该记录");
+
+            
+            invitation.Views += 1;
+
+            bool b = await _iInvitationService.EditAsync(invitation);
+            if (!b) return ApiResultHelper.Error("修改失败");
+            return ApiResultHelper.Success(null);
         }
     }
 }

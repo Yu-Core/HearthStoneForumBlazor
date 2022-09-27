@@ -1,6 +1,7 @@
 ﻿@page "/invitations/{id:int}"
 @inject HttpClient Http
 @inject NavigationManager navigation
+@inject IPopupService PopupService
 
 <div class="main">
     <div class="invitation-wrap">
@@ -13,29 +14,40 @@
             <div class="invitation-head">
                 <h2>@(Area.Name)</h2>
         </div>
-        <div class="invitation-content">
-            <div class="list-head">
-                <div class="invitation-title">标题</div>
-                <div class="invitation-user">作者</div>
-                <div class="invitation-views">浏览</div>
-                <div class="invitation-comment">回复</div>
-                <div class="invitation-time">发表时间</div>
-            </div>
-            @foreach (var item in Invitations)
-            {
-                <a>
-                    <div class="list-row">
-                        <div class="invitation-title">@(item.Title)</div>
-                        <div class="invitation-user">@item.UserName</div>
-                        <div class="invitation-views">@item.Views</div>
-                        <div class="invitation-comment">@item.CommentCount</div>
-                        <div class="invitation-time">@(item.CreatedTime.ToString("yyyy-MM-dd HH:mm"))</div>
-                    </div>
-                </a>
-            }
+
+        <div class="invitation-list">
+            <MSimpleTable>
+                <thead>
+                    <tr class="d-none d-sm-table-row">
+                        <th class="invitation-title">标题</th>
+                        <th class="invitation-user">作者</th>
+                        <th class="invitation-views">浏览</th>
+                        <th class="invitation-comment">回复</th>
+                        <th class="invitation-time">发表时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Invitations)
+                    {
+                        <tr @onclick="()=>ClickInvitation(item.Id)">
+                            <td class="invitation-title">@(item.Title)</td>
+                            <td class="invitation-user">@(item.UserName)</td>
+                            <td class="invitation-views">@(item.Views)</td>
+                            <td class="invitation-comment">@(item.CommentCount)</td>
+                            <td class="invitation-time">@(item.CreatedTime.ToString("yyyy-MM-dd HH:mm"))</td>
+                        </tr>
+                    }
+                </tbody>
+            </MSimpleTable>
         </div>
+
+
         <div class="page">
-            <MPagination Class="@(pageLength>1?"":"d-none")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+            <MPagination Class="@(pageLength>1?"":"d-none")"
+                         @bind-Value="page"
+                         Length="@(pageLength)"
+                         TotalVisible="7">
+            </MPagination>
         </div>
     </div>
 </div>
@@ -55,7 +67,7 @@
         }
     }
 
-    private int size = 2;
+    private int size = 20;
     private int total = 0;
     private int pageLength = 0;
 
@@ -67,10 +79,15 @@
         ChangeInvitations();
     }
 
-    private async Task SetArea(){
+    private async Task SetArea()
+    {
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<AreaDTOView>>($"areas/{id}");
+            if(result.Successful == false ||result.Data == null){
+                navigation.NavigateTo("404");
+                return;
+            }
             Area = result.Data ?? new();
         }
         catch (Exception)
@@ -85,6 +102,11 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOView>>>($"invitations/area?id={id}&page={page}&size={size}");
+            if (result.Successful == false || result.Data == null)
+            {
+                navigation.NavigateTo("404");
+                return;
+            }
             Invitations = result.Data ?? new();
             total = result.Total;
             pageLength = total / size;
@@ -97,6 +119,24 @@
         catch (Exception)
         {
             navigation.NavigateTo("404");
+        }
+    }
+    private async void ClickInvitation(int id)
+    {
+        try
+        {
+            //浏览量放在这里未必好
+            var result = await Http.PutAsJsonAsync($"invitations/view?id={id}", id);
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+            if(!data.Successful) {
+                await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
+            }
+            navigation.NavigateTo($"invitation/{id}");
+        }
+        catch (Exception)
+        {
+            
+            throw;
         }
     }
 }
