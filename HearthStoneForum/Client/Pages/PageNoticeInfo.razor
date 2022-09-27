@@ -33,6 +33,10 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<Notice>>($"notices/{id}");
+            if(result.Successful == false){
+                navigation.NavigateTo("404");
+                return;
+            }
             Notice = result.Data;
         }
         catch (Exception)

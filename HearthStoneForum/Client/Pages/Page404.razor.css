@@ -1,0 +1,15 @@
+﻿.main{
+    display:flex;
+    justify-content:center;
+    width:100%;
+}
+
+.not-found-img{
+    margin:20px 0;
+    display:flex;
+    justify-content:center;
+}
+
+.not-found img {
+    max-width: 90%;
+}

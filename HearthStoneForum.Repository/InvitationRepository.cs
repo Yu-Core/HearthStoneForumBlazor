@@ -15,6 +15,7 @@ namespace HearthStoneForum.Repository
     {
         public async Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations()
         {
+            //分区的行数*7
             var Areas = await base.Context.Queryable<Area>().ToListAsync();
             var Cols = Areas.Count() / 4;
             if (Areas.Count() % 4 > 0)
