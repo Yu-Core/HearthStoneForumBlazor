@@ -1,5 +1,9 @@
 ﻿@page "/invitation/{id:int}"
 @inject HttpClient Http
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+@inject IPopupService PopupService
+
 
 <div class="main">
     <div class="invitation-wrap">
@@ -79,7 +83,11 @@
 
             }
             <div class="text-center">
-                <MPagination Class="@((total/size)==0?"d-none":"")" @bind-Value="page" Length="@(pageLength)"></MPagination>
+                <MPagination Class="@(pageLength>1?"":"d-none")"
+                             @bind-Value="page"
+                             Length="@(pageLength)"
+                             TotalVisible="7">
+                </MPagination>
             </div>
         </div>
 
@@ -100,6 +108,7 @@
         set
         {
             _page = value;
+            //此处因为set方法无法设置为异步，所以
             ChangeComments();
         }
     }
@@ -110,42 +119,103 @@
 
     protected async override Task OnInitializedAsync()
     {
-        //var result = await Http.GetFromJsonAsync<ApiResult<InvitationDTOView>>("invitations/" + id);
-        //Invitation = result.Data??new();
-        //var resultComments = await Http.GetFromJsonAsync<ApiResult<List<CommentDTOView>>>("comments/invitation?id=" + id + "&page=" + page + "&size=" + size);
-        //Comments = resultListComment.Data ?? new();
-        //total = resultComments.Total;
-        //pageLength = total / size + ((total % size == 0) ? 0 : 1);
-        Invitation = new()
-            {
-                Title = "测试用的标题",
-                AreaName = "测试分区",
-                Content = "<p> Hello MEditor </p><p class='ql-align-center'><span style = 'color: rgb(0, 0, 0);' ># 猪猪猎</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>复活宠物x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>战歌驯兽师x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>拾荒者的智慧x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>追踪术x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>凶猛狂暴x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>选种饲养员x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>奖品商贩x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>寒光智者x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>照明弹x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>女巫森林吹笛人x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>缝合追踪者x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>饥饿的愚人x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>德纳修斯大帝x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>北郡农民x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>艾尔文野猪x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>K9-0型机械狗x2</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>卡塔图防御者x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>石丘防御者x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>随心口袋x1</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>#</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'># 猪猪猎</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>AAEBAR8I16ME8OwDpvACvPAE6dAEoaEDm8ICj+QDC/+6A6mfBL2gBOrpA7bhA/gHgAfTzQLI+QPT+QO/0wQA</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>#</span></p><p class='ql-align-center'><span style='color: rgb(0, 0, 0);'>卡牌不多暂时只能想到这样的了</span></p>",
-                LikeCount = 11,
-                CollectionCount = 10,
-                CommentCount = 6,
-                UserName = "测试名字",
-                CreatedTime = DateTime.Now
-            };
-        Comments = new()
-        {
-            new CommentDTOView(){UserName="测试用户1",Content="你好",CreatedTime=Convert.ToDateTime("2022-9-18 11:30:11")},
-            new CommentDTOView(){UserName="测试用户2",Content="你好",CreatedTime=Convert.ToDateTime("2022-9-18 12:30:11")},
-            new CommentDTOView(){UserName="测试用户3",Content="你好",CreatedTime=Convert.ToDateTime("2022-9-18 12:40:11")},
-            new CommentDTOView(){UserName="测试用户4",Content="你好",CreatedTime=Convert.ToDateTime("2022-9-18 13:00:11")}
+        await SetInvitation();
+        ChangeComments();
 
-        };
+        var IsAuthenticated = await AuthService.IsAuthenticated();
+        if(IsAuthenticated){
+            await AddViews();
+        }
+
     }
+    //获取帖子
+    private async Task SetInvitation()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<InvitationDTOView>>($"invitations/{id}");
+            if (result.Successful == false || result.Data == null)
+            {
+                Navigation.NavigateTo("404");
+                return;
+            }
+
+        }
+        catch (Exception)
+        {
+            Navigation.NavigateTo("404");
+            throw;
+        }
+    }
+    //获取评论
     private async void ChangeComments()
     {
-        var resultListComment = await Http.GetFromJsonAsync<ApiResult<List<CommentDTOView>>>("comments/invitation?id=" + id + "&page=" + page + "&size=" + size);
-        Comments = resultListComment.Data ?? new();
-        StateHasChanged();
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<CommentDTOView>>>("comments/invitation?id=" + id + "&page=" + page + "&size=" + size);
+            Comments = result.Data ?? new();
+            total = result.Total;
+            pageLength = total / size;
+            if (total % size > 0)
+            {
+                pageLength++;
+            }
+            //此处因为是void方法，所以需要手动调用刷新
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await PopupService.AlertAsync(ex);
+            throw;
+        }
+
+
     }
-    private void ClickLike(){
+
+    //点赞
+    private void ClickLike()
+    {
         _like = !_like;
     }
-    private void ClickCollect(){
+    //收藏
+    private void ClickCollect()
+    {
         _collect = !_collect;
     }
+
+    //获取是否点赞
+    private async Task SetIsHasLike()
+    {
+        var user = await AuthService.GetUser();
+        var id = user.FindFirst("userId").Value;
+        var result = await Http.GetFromJsonAsync<ApiResult<Likes>>("likes/");
+    }
+    //获取是否收藏
+    private async Task SetIsHasCollection()
+    {
+        var user = await AuthService.GetUser();
+        var id = user.FindFirst("userId").Value;
+    }
+
+    //增加浏览量
+    private async Task AddViews()
+    {
+        try
+        {
+            var result = await Http.PutAsJsonAsync($"invitations/view?id={id}", id);
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+            if (!data.Successful)
+            {
+                await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            await PopupService.AlertAsync(ex);
+            throw;
+        }
+        
+    }
+    
+
 }

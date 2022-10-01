@@ -107,6 +107,7 @@ namespace HearthStoneForum.Repository
                     CollectionCount = c2.Count
                 })
                 .MergeTable()
+                .OrderByDescending(it => it.CreatedTime)
                 .ToListAsync(it => new DTO());
         }
         public override Task<List<DTO>> QueryDTOAsync<DTO>(Expression<Func<DTO, bool>> func)
@@ -156,6 +157,7 @@ namespace HearthStoneForum.Repository
                     CollectionCount = c2.Count
                 })
                 .MergeTable()
+                .OrderByDescending(it => it.CreatedTime)
                 .Where(func as Expression<Func<InvitationDTOView, bool>>)
                 .ToListAsync(it => new DTO());
         }
@@ -207,6 +209,7 @@ namespace HearthStoneForum.Repository
                     CollectionCount = c2.Count
                 })
                 .MergeTable()
+                .OrderByDescending(it => it.CreatedTime)
                 .ToPageListAsync(page, size, total, it => new DTO());
         }
 
@@ -257,6 +260,7 @@ namespace HearthStoneForum.Repository
                     CollectionCount = c2.Count
                 })
                 .MergeTable()
+                .OrderByDescending(i => i.CreatedTime)
                 .Where(func as Expression<Func<InvitationDTOView, bool>>)
                 .ToPageListAsync(page, size, total, it => new DTO());
         }
@@ -264,6 +268,7 @@ namespace HearthStoneForum.Repository
         public Task<List<Invitation>> GetLikeInvitations(Expression<Func<Likes, bool>> func, int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<Likes>()
+                .OrderByDescending(it => it.CreatedTime)
                 .LeftJoin<Invitation>((it, i) => it.InvitationId == i.Id)
                 .Where(func)
                 .Select((it, i) => i)
@@ -273,6 +278,7 @@ namespace HearthStoneForum.Repository
         public Task<List<Invitation>> GetCollectionInvitations(Expression<Func<Collection, bool>> func, int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<Collection>()
+                .OrderByDescending(it => it.CreatedTime)
                 .LeftJoin<Invitation>((it, i) => it.InvitationId == i.Id)
                 .Where(func)
                 .Select((it, i) => i)
@@ -282,6 +288,7 @@ namespace HearthStoneForum.Repository
         public Task<List<Invitation>> GetViewRecordInvitations(Expression<Func<ViewRecord, bool>> func, int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<ViewRecord>()
+                .OrderByDescending(it=>it.CreatedTime)
                 .LeftJoin<Invitation>((it, i) => it.InvitationId == i.Id)
                 .Where(func)
                 .Select((it, i) => i)

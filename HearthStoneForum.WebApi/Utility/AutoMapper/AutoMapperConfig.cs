@@ -27,6 +27,12 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
                     Phone = String.Empty
                 });
             CreateMap<UserInfoDTOEdit, UserInfo>();
+            CreateMap<InvitationDTOAdd, Invitation>()
+                .ConstructUsing(dto => new()
+                {
+                    Views = 0,
+                    CreatedTime = DateTime.Now
+                });
             //CreateMap<PreachDTOCreate, Preach>().ConstructUsing(dto => new Preach
             //{
             //    IsCancel = false,

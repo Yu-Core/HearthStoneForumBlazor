@@ -1,5 +1,7 @@
-﻿using HearthStoneForum.IService;
+﻿using AutoMapper;
+using HearthStoneForum.IService;
 using HearthStoneForum.Model;
+using HearthStoneForum.Model.DTOAdd;
 using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +20,11 @@ namespace HearthStoneForum.WebApi.Controllers
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationService _iInvitationService;
-        public InvitationController(IInvitationService iInvitationService)
+        private readonly IMapper _iMapper;
+        public InvitationController(IInvitationService iInvitationService,IMapper iMapper)
         {
             _iInvitationService = iInvitationService;
+            _iMapper = iMapper;
         }
 
         [HttpGet]
@@ -39,14 +43,26 @@ namespace HearthStoneForum.WebApi.Controllers
             return ApiResultHelper.Success(invitation);
         }
 
+        [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ApiResult>> Create(Invitation invitation)
+        public async Task<ActionResult<ApiResult>> Create(InvitationDTOAdd dto)
         {
+            if(string.IsNullOrWhiteSpace(dto.Title)||string.IsNullOrWhiteSpace(dto.Content))
+                return ApiResultHelper.Error("添加失败");
+
+            int id = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+            dto.UserId = id;
+
+            var invitation =  _iMapper.Map<InvitationDTOAdd,Invitation>(dto);
+
             bool b = await _iInvitationService.CreateAsync(invitation);
             if (!b) return ApiResultHelper.Error("添加失败");
 
             return ApiResultHelper.Success(invitation);
         }
+
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResult>> Delete(int id)
         {
@@ -89,6 +105,7 @@ namespace HearthStoneForum.WebApi.Controllers
             return ApiResultHelper.Success(data);
         }
 
+        [Authorize]
         [HttpGet("like")]
         public async Task<ActionResult<ApiResult>> GetLikeInvitation(int id, int page, int size)
         {
@@ -98,6 +115,7 @@ namespace HearthStoneForum.WebApi.Controllers
             return ApiResultHelper.Success(data, total);
         }
 
+        [Authorize]
         [HttpGet("collection")]
         public async Task<ActionResult<ApiResult>> GetCollectionInvitation(int id, int page, int size)
         {

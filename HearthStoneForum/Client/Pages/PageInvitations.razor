@@ -6,16 +6,17 @@
 <div class="main">
     <div class="invitation-wrap">
         <div class="breadcrumbs">
-            你所在的位置：<MBreadcrumbs>
-                <MBreadcrumbsItem Style="font-size:0.9rem" Href="">炉石论坛</MBreadcrumbsItem>
-                <MBreadcrumbsItem Style="font-size:0.9rem" Disabled>@(Area.Name)</MBreadcrumbsItem>
-                </MBreadcrumbs>
-            </div>
-            <div class="invitation-head">
-                <h2>@(Area.Name)</h2>
+            你所在的位置：
+            <MBreadcrumbs>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Href="" Text="炉石论坛"></MBreadcrumbsItem>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Disabled Text="@(Area.Name)"></MBreadcrumbsItem>
+            </MBreadcrumbs>
+        </div>
+        <div class="invitation-head">
+            <h2>@(Area.Name)</h2>
         </div>
 
-        <div class="invitation-list">
+        <div class="invitation-content">
             <MSimpleTable>
                 <thead>
                     <tr class="d-none d-sm-table-row">
@@ -49,13 +50,45 @@
                          TotalVisible="7">
             </MPagination>
         </div>
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="invitation-send">
+                    <MForm EnableValidation Model="InvitationAdd"  OnValidSubmit="HandleOnValidSubmit">
+                        <ChildContent Context="mformContext">
+                            <h5>发布新贴</h5>
+                            <MTextField @bind-Value="@(InvitationAdd.Title)"
+                                        Class="mt-5"
+                                        Outlined
+                                        Dense
+                                        Placeholder="请输入标题">
+                            </MTextField>
+                            <MEditor @bind-Value="@(InvitationAdd.Content)"
+                                     ContentStyle="height:200px;"
+                                     Placeholder="请输入内容">
+
+                            </MEditor>
+                            <div class="d-flex justify-content-between mt-4">
+                                <MButton Color="primary" Type="submit">发布</MButton>
+                                <MButton OnClick="()=>OnClickClearContent()">清空</MButton>
+                            </div>
+                        </ChildContent>
+                    </MForm>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+
+
     </div>
 </div>
 @code {
-    private AreaDTOView Area = new AreaDTOView();
-    private List<InvitationDTOView> Invitations = new();
     [Parameter]
     public int id { get; set; }
+
+    private AreaDTOView Area { get; set; } = new AreaDTOView();
+    private List<InvitationDTOView> Invitations { get; set; } = new();
+    private InvitationDTOAdd InvitationAdd { get; set; } = new();
+
     private int _page = 1;
     private int page
     {
@@ -84,7 +117,8 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<AreaDTOView>>($"areas/{id}");
-            if(result.Successful == false ||result.Data == null){
+            if (result.Successful == false || result.Data == null)
+            {
                 navigation.NavigateTo("404");
                 return;
             }
@@ -102,11 +136,6 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOView>>>($"invitations/area?id={id}&page={page}&size={size}");
-            if (result.Successful == false || result.Data == null)
-            {
-                navigation.NavigateTo("404");
-                return;
-            }
             Invitations = result.Data ?? new();
             total = result.Total;
             pageLength = total / size;
@@ -121,22 +150,39 @@
             navigation.NavigateTo("404");
         }
     }
-    private async void ClickInvitation(int id)
+    private void ClickInvitation(int id)
     {
+        navigation.NavigateTo($"invitation/{id}");
+    }
+    //发送帖子
+    private async Task HandleOnValidSubmit()
+    {
+        InvitationAdd.AreaId = id;
+
         try
         {
-            //浏览量放在这里未必好
-            var result = await Http.PutAsJsonAsync($"invitations/view?id={id}", id);
+            var result = await Http.PostAsJsonAsync<InvitationDTOAdd>("invitations", InvitationAdd);
             var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
-            if(!data.Successful) {
+            if (data.Successful)
+            {
+                InvitationAdd = new();
+                StateHasChanged();
+                await PopupService.AlertAsync("发布成功");
+            }
+            else
+            {
                 await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
             }
-            navigation.NavigateTo($"invitation/{id}");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            
-            throw;
+            await PopupService.AlertAsync(ex);
         }
+
+    }
+    //清除发帖内容
+    private void OnClickClearContent()
+    {
+        InvitationAdd = new();
     }
 }

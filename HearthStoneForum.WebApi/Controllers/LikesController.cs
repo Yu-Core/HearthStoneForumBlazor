@@ -1,6 +1,7 @@
 ﻿using HearthStoneForum.IService;
 using HearthStoneForum.Model;
 using HearthStoneForum.WebApi.Utility.ApiResult;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,7 @@ namespace HearthStoneForum.WebApi.Controllers
 
             return ApiResultHelper.Success(like);
         }
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ApiResult>> Create(Likes like)
         {
