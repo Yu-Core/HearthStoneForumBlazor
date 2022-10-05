@@ -16,5 +16,16 @@ namespace HearthStoneForum.Service
             base._iBaseRepository = iCollectionRepository;
             _iCollectionRepository = iCollectionRepository;
         }
+
+        public async Task<bool> CreateAsync(int invitationId, int userId)
+        {
+            var collection = new Collection()
+            {
+                InvitationId = invitationId,
+                UserId = userId,
+                CreatedTime = DateTime.Now
+            };
+            return await base.CreateAsync(collection);
+        }
     }
 }

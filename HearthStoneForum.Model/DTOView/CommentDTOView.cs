@@ -10,6 +10,7 @@ namespace HearthStoneForum.Model.DTOView
     {
         public int UserId { get; set; }
         public string? UserName { get; set; }
+        public string? UserPortrait { get; set; }
         public int InvitationId { get; set; }
         public DateTime CreatedTime { get; set; }
         public string? Content { get; set; }

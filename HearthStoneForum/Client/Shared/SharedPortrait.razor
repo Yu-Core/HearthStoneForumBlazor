@@ -1,0 +1,15 @@
+﻿@if (string.IsNullOrWhiteSpace(Src))
+{
+    <h2 class="white--text m-0">@(Text.GetStringInitial(1))</h2>
+}
+else
+{
+    <MImage Src="@(Src ?? "")"></MImage>
+}
+
+@code {
+    [Parameter]
+    public string? Text{ get; set; }
+    [Parameter]
+    public string? Src { get; set; }
+}

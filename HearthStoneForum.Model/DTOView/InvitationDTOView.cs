@@ -12,6 +12,7 @@ namespace HearthStoneForum.Model.DTOView
         public string? Content { get; set; }
         public int UserId { get; set; }
         public string? UserName { get; set; }
+        public string? UserPortrait { get; set; }
         public int AreaId { get; set; }
         public string? AreaName { get; set; }
         public int Views { get; set; }

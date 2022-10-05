@@ -68,7 +68,7 @@
         }
     }
 
-    private async void DeleteInvitation(int id, List<Invitation> invitations)
+    private async Task DeleteInvitation(int id, List<Invitation> invitations)
     {
 
         var confirm = await PopupService.ConfirmAsync("提示", "是否确定删除？");

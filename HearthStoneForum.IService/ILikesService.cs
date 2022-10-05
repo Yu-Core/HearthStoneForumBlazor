@@ -9,5 +9,6 @@ namespace HearthStoneForum.IService
 {
     public interface ILikesService : IBaseService<Likes>
     {
+        Task<bool> CreateAsync(int invitationId, int userId);
     }
 }

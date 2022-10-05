@@ -10,6 +10,6 @@ namespace HearthStoneForum.IService
     public interface ISignService : IBaseService<Sign>
     {
         public int GetTodaySignCount();
-        Task<bool> SignAsync(int id);
+        Task<bool> CreateAsync(int id);
     }
 }

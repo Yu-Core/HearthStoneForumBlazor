@@ -2,7 +2,7 @@
 {
     public static class StringExtend
     {
-        public static string StringCutOutByLength(this string str, int length)
+        public static string GetCutOutByLength(this string str, int length)
         {
             if (string.IsNullOrWhiteSpace(str)) return string.Empty;
             if (str.Length <= length) return str;

@@ -13,14 +13,9 @@
             <div class="user-portrait">
                 <MButton Class="w-100 h-100" Icon OnClick="() => _showPortraitSelect = true">
                     <MAvatar Color="primary" Class="w-100 h-100">
-                        @if (string.IsNullOrWhiteSpace(UserInfo.Portrait))
-                        {
-                            <h2 class="white--text m-0">@(UserInfo.Name.GetStringInitial(1))</h2>
-                        }
-                        else
-                        {
-                            <MImage Src="@(UserInfo.Portrait ?? "")"></MImage>
-                        }
+                        <SharedPortrait Src="@(UserInfo.Portrait)"
+                                        Text="@(UserInfo.Name)">
+                        </SharedPortrait>
                     </MAvatar>
                 </MButton>
                 <PModal @bind-Value="_showPortraitSelect"
@@ -53,7 +48,7 @@
             </div>
             <div class="user-info">
                 <div class="user-name">
-                    <h4><strong>@(UserInfo.Name ?? "")</strong></h4>
+                    <h4><strong>@(UserInfo.Name.GetCutOutByLength(10))</strong></h4>
                 </div>
                 <div class="user-editor">
                     <MButton Rounded

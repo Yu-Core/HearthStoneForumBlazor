@@ -100,6 +100,7 @@ namespace HearthStoneForum.Repository
                     Content = i.Content,
                     UserId = i.UserId,
                     UserName = u.Name,
+                    UserPortrait = u.Portrait,
                     Views = i.Views,
                     CreatedTime = i.CreatedTime,
                     LikeCount = l.Count,
@@ -150,6 +151,7 @@ namespace HearthStoneForum.Repository
                     Content = i.Content,
                     UserId = i.UserId,
                     UserName = u.Name,
+                    UserPortrait = u.Portrait,
                     Views = i.Views,
                     CreatedTime = i.CreatedTime,
                     LikeCount = l.Count,
@@ -202,6 +204,7 @@ namespace HearthStoneForum.Repository
                     Content = i.Content,
                     UserId = i.UserId,
                     UserName = u.Name,
+                    UserPortrait = u.Portrait,
                     Views = i.Views,
                     CreatedTime = i.CreatedTime,
                     LikeCount = l.Count,
@@ -253,6 +256,7 @@ namespace HearthStoneForum.Repository
                     Content = i.Content,
                     UserId = i.UserId,
                     UserName = u.Name,
+                    UserPortrait = u.Portrait,
                     Views = i.Views,
                     CreatedTime = i.CreatedTime,
                     LikeCount = l.Count,
@@ -268,30 +272,30 @@ namespace HearthStoneForum.Repository
         public Task<List<Invitation>> GetLikeInvitations(Expression<Func<Likes, bool>> func, int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<Likes>()
-                .OrderByDescending(it => it.CreatedTime)
                 .LeftJoin<Invitation>((it, i) => it.InvitationId == i.Id)
                 .Where(func)
                 .Select((it, i) => i)
+                .OrderByDescending(it => it.CreatedTime)
                 .ToPageListAsync(page, size, total);
         }
 
         public Task<List<Invitation>> GetCollectionInvitations(Expression<Func<Collection, bool>> func, int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<Collection>()
-                .OrderByDescending(it => it.CreatedTime)
                 .LeftJoin<Invitation>((it, i) => it.InvitationId == i.Id)
                 .Where(func)
                 .Select((it, i) => i)
+                .OrderByDescending(it => it.CreatedTime)
                 .ToPageListAsync(page, size, total);
         }
 
         public Task<List<Invitation>> GetViewRecordInvitations(Expression<Func<ViewRecord, bool>> func, int page, int size, RefAsync<int> total)
         {
             return base.Context.Queryable<ViewRecord>()
-                .OrderByDescending(it=>it.CreatedTime)
                 .LeftJoin<Invitation>((it, i) => it.InvitationId == i.Id)
                 .Where(func)
                 .Select((it, i) => i)
+                .OrderByDescending(it => it.CreatedTime)
                 .ToPageListAsync(page, size, total);
         }
     }

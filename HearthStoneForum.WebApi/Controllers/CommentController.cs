@@ -1,8 +1,11 @@
-﻿using HearthStoneForum.IService;
+﻿using AutoMapper;
+using HearthStoneForum.IService;
 using HearthStoneForum.Model;
+using HearthStoneForum.Model.DTOAdd;
 using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.Service;
 using HearthStoneForum.WebApi.Utility.ApiResult;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
@@ -14,9 +17,11 @@ namespace HearthStoneForum.WebApi.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _iCommentService;
-        public CommentController(ICommentService iCommentService)
+        private readonly IMapper _iMapper;
+        public CommentController(ICommentService iCommentService,IMapper iMapper)
         {
             _iCommentService = iCommentService;
+            _iMapper = iMapper;
         }
 
         [HttpGet]
@@ -57,30 +62,35 @@ namespace HearthStoneForum.WebApi.Controllers
             if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");
             return ApiResultHelper.Success(data);
         }
+        [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ApiResult>> Create(Comment comment)
+        public async Task<ActionResult<ApiResult>> Create(CommentDTOAdd dto)
         {
-            bool b = await _iCommentService.CreateAsync(comment);
+            if (string.IsNullOrWhiteSpace(dto.Content))
+                return ApiResultHelper.Error("添加失败");
+
+            int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+            dto.UserId = userId;
+
+            var invitation = _iMapper.Map<CommentDTOAdd, Comment>(dto);
+
+            bool b = await _iCommentService.CreateAsync(invitation);
             if (!b) return ApiResultHelper.Error("添加失败");
 
-            return ApiResultHelper.Success(comment);
+            return ApiResultHelper.Success(invitation);
         }
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResult>> Delete(int id)
         {
+            int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var data = await _iCommentService.FindAsync(it => it.Id == id && it.UserId == userId);
+            if (data == null) return ApiResultHelper.Error("没有找到该记录");
+
             bool b = await _iCommentService.DeleteAsync(id);
             if (!b) return ApiResultHelper.Error("删除失败");
-            return ApiResultHelper.Success(b);
-        }
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResult>> Edit(int id, Comment comment)
-        {
-            var oldComment = await _iCommentService.FindAsync(id);
-            if (oldComment == null) return ApiResultHelper.Error("没有找到该记录");
-
-            bool b = await _iCommentService.EditAsync(comment);
-            if (!b) return ApiResultHelper.Error("修改失败");
-            return ApiResultHelper.Success(comment);
+            return ApiResultHelper.Success(null);
         }
     }
 }

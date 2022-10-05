@@ -5,7 +5,7 @@ namespace HearthStoneForum.WebApi.Utility.ApiResult
     public static class ApiResultHelper
     {
         //成功后返回数据
-        public static ApiResult Success(dynamic data)
+        public static ApiResult Success(dynamic? data)
         {
             return new ApiResult
             {

@@ -54,7 +54,7 @@
         <AuthorizeView>
             <Authorized>
                 <div class="invitation-send">
-                    <MForm EnableValidation Model="InvitationAdd"  OnValidSubmit="HandleOnValidSubmit">
+                    <MForm EnableValidation Model="InvitationAdd" OnValidSubmit="HandleOnValidSubmit">
                         <ChildContent Context="mformContext">
                             <h5>发布新贴</h5>
                             <MTextField @bind-Value="@(InvitationAdd.Title)"
@@ -63,13 +63,17 @@
                                         Dense
                                         Placeholder="请输入标题">
                             </MTextField>
-                            <MEditor @bind-Value="@(InvitationAdd.Content)"
+                            <MEditor @ref="@_editor"
+                                     @bind-Value="@(InvitationAdd.Content)"
                                      ContentStyle="height:200px;"
                                      Placeholder="请输入内容">
 
                             </MEditor>
                             <div class="d-flex justify-content-between mt-4">
-                                <MButton Color="primary" Type="submit">发布</MButton>
+                                <MButton Color="primary"
+                                         Type="submit">
+                                    发布
+                                </MButton>
                                 <MButton OnClick="()=>OnClickClearContent()">清空</MButton>
                             </div>
                         </ChildContent>
@@ -88,6 +92,7 @@
     private AreaDTOView Area { get; set; } = new AreaDTOView();
     private List<InvitationDTOView> Invitations { get; set; } = new();
     private InvitationDTOAdd InvitationAdd { get; set; } = new();
+    private MEditor? _editor;
 
     private int _page = 1;
     private int page
@@ -157,6 +162,9 @@
     //发送帖子
     private async Task HandleOnValidSubmit()
     {
+        var text = await _editor.GetTextAsync();
+        if (string.IsNullOrWhiteSpace(text)) return;
+
         InvitationAdd.AreaId = id;
 
         try
@@ -165,9 +173,11 @@
             var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
             if (data.Successful)
             {
+                page = 1;
                 InvitationAdd = new();
                 StateHasChanged();
                 await PopupService.AlertAsync("发布成功");
+                navigation.NavigateTo(navigation.Uri);
             }
             else
             {

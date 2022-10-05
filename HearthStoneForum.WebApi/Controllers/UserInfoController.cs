@@ -75,11 +75,11 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ApiResult>> Edit(UserInfoDTOEdit dto)
         {
-            int id = Convert.ToInt32(User.FindFirst("UserId").Value);
+            int userId = Convert.ToInt32(User.FindFirst("UserId").Value);
 
-            if(id != dto.Id) return ApiResultHelper.Error("修改失败，身份认证失败");
+            if(userId != dto.Id) return ApiResultHelper.Error("修改失败，身份认证失败");
 
-            var userInfo = await _iUserInfoService.FindAsync(id);
+            var userInfo = await _iUserInfoService.FindAsync(userId);
             if (userInfo == null) return ApiResultHelper.Error("没有找到该用户");
 
             userInfo = _iMapper.Map<UserInfoDTOEdit,UserInfo>(dto, userInfo);

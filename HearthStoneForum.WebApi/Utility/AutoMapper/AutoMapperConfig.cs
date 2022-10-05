@@ -33,6 +33,11 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
                     Views = 0,
                     CreatedTime = DateTime.Now
                 });
+            CreateMap<CommentDTOAdd, Comment>()
+                .ConstructUsing(dto => new()
+                {
+                    CreatedTime = DateTime.Now
+                });
             //CreateMap<PreachDTOCreate, Preach>().ConstructUsing(dto => new Preach
             //{
             //    IsCancel = false,

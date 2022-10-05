@@ -50,9 +50,9 @@ namespace HearthStoneForum.WebApi.Controllers
             if(string.IsNullOrWhiteSpace(dto.Title)||string.IsNullOrWhiteSpace(dto.Content))
                 return ApiResultHelper.Error("添加失败");
 
-            int id = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
 
-            dto.UserId = id;
+            dto.UserId = userId;
 
             var invitation =  _iMapper.Map<InvitationDTOAdd,Invitation>(dto);
 
@@ -66,6 +66,10 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResult>> Delete(int id)
         {
+            int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var data = await _iInvitationService.FindAsync(it => it.Id == id && it.UserId == userId);
+            if (data == null) return ApiResultHelper.Error("没有找到该记录");
+
             bool b = await _iInvitationService.DeleteAsync(id);
             if (!b) return ApiResultHelper.Error("删除失败");
             return ApiResultHelper.Success(null);

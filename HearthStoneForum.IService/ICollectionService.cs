@@ -9,5 +9,6 @@ namespace HearthStoneForum.IService
 {
     public interface ICollectionService :IBaseService<Collection>
     {
+        Task<bool> CreateAsync(int invitationId, int userId);
     }
 }

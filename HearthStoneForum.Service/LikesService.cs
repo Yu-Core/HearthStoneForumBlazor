@@ -17,5 +17,16 @@ namespace HearthStoneForum.Service
             base._iBaseRepository = iLikesRepository;
             _iLikesRepository = iLikesRepository;
         }
+
+        public async Task<bool> CreateAsync(int invitationId, int userId)
+        {
+            var likes = new Likes()
+            {
+                InvitationId = invitationId,
+                UserId = userId,
+                CreatedTime = DateTime.Now
+            };
+            return await base.CreateAsync(likes);
+        }
     }
 }

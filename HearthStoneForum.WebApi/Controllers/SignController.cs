@@ -53,9 +53,12 @@ namespace HearthStoneForum.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResult>> Create()
         {
-            int id = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
 
-            bool b = await _iSignService.SignAsync(id);
+            var data = await _iSignService.FindAsync(it => it.UserId == userId && it.CreatedTime.ToString("d") == DateTime.Now.ToString("d"));
+            if (data != null) return ApiResultHelper.Error("签到失败"); 
+
+            bool b = await _iSignService.CreateAsync(userId);
             if (!b) return ApiResultHelper.Error("签到失败");
 
             return ApiResultHelper.Success(null);

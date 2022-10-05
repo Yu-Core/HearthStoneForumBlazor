@@ -33,7 +33,7 @@
                     <MButton Class="d-none d-sm-block text-capitalize ms-3 light-blue--text text--darken-3"
                              Text
                              @onclick="() => drawerRight = true">
-                        @(UserInfoSimple.Name.StringCutOutByLength(10))
+                        @(UserInfoSimple.Name.GetCutOutByLength(10))
                     </MButton>
                 </div>
             </Authorized>
@@ -70,13 +70,9 @@
             <MNavigationDrawer App @bind-Value="drawerRight" Right Temporary>
                 <MListItem>
                     <MListItemAvatar Color="primary" Size="100">
-                        @if (string.IsNullOrWhiteSpace(UserInfoSimple.PortraitUrl))
-                        {
-                            <h2 class="white--text m-0">@(UserInfoSimple.Name.GetStringInitial(1))</h2>
-                        }
-                        else{
-                            <MImage Src="@(UserInfoSimple.PortraitUrl)"></MImage>
-                        }                       
+                        <SharedPortrait Src="@(UserInfoSimple.PortraitUrl)"
+                                        Text="@(UserInfoSimple.Name)">
+                        </SharedPortrait>                  
                     </MListItemAvatar>
 
                     <MListItemContent>
