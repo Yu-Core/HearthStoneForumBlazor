@@ -1,5 +1,4 @@
 ﻿using HearthStoneForum.IService;
-using HearthStoneForum.Model;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,28 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
-    [Route("api/likes")]
+    [Route("api/viewRecords")]
     [ApiController]
-    public class LikesController : ControllerBase
+    public class ViewRecordController : ControllerBase
     {
-        private readonly ILikesService _iLikesService;
-        public LikesController(ILikesService iLikesService)
+        private readonly IViewRecordService _iViewRecordService;
+        public ViewRecordController(IViewRecordService iViewRecordService)
         {
-            _iLikesService = iLikesService;
+            _iViewRecordService = iViewRecordService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResult>> GetLikes()
+        public async Task<ActionResult<ApiResult>> GetViewRecord()
         {
-            var data = await _iLikesService.QueryAsync();
+            var data = await _iViewRecordService.QueryAsync();
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResult>> GetLikes(int id)
+        public async Task<ActionResult<ApiResult>> GetViewRecord(int id)
         {
-            var like = await _iLikesService.FindAsync(id);
+            var like = await _iViewRecordService.FindAsync(id);
             if (like == null) return ApiResultHelper.Error("没有更多的值");
 
             return ApiResultHelper.Success(like);
@@ -40,13 +39,13 @@ namespace HearthStoneForum.WebApi.Controllers
         {
             int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
             //此处为何用FindAsync而不用QueryAsync，因为FindAsync只会返回第一个，QueryAsync会查询所有，浪费时间和性能
-            var data = await _iLikesService.FindAsync(it=>it.UserId == userId && it.InvitationId == invitationId);
-            if(data != null) return ApiResultHelper.Error("添加失败");
+            var data = await _iViewRecordService.FindAsync(it => it.UserId == userId && it.InvitationId == invitationId);
+            if (data != null) return ApiResultHelper.Error("添加失败");
 
-            bool b = await _iLikesService.CreateAsync(invitationId, userId);
+            bool b = await _iViewRecordService.CreateAsync(invitationId, userId);
             if (!b) return ApiResultHelper.Error("添加失败");
 
-            var like = await _iLikesService.FindAsync(it => it.UserId == userId && it.InvitationId == invitationId);
+            var like = await _iViewRecordService.FindAsync(it => it.UserId == userId && it.InvitationId == invitationId);
 
             return ApiResultHelper.Success(like);
         }
@@ -56,20 +55,20 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> Delete(int invitationId)
         {
             int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
-            var data = await _iLikesService.FindAsync(it=>it.InvitationId == invitationId && it.UserId == userId);
+            var data = await _iViewRecordService.FindAsync(it => it.InvitationId == invitationId && it.UserId == userId);
             if (data == null) return ApiResultHelper.Error("没有找到该记录");
 
-            bool b = await _iLikesService.DeleteAsync(data.Id);
+            bool b = await _iViewRecordService.DeleteAsync(data.Id);
             if (!b) return ApiResultHelper.Error("删除失败");
             return ApiResultHelper.Success(null);
         }
 
         [Authorize]
         [HttpGet("search")]
-        public async Task<ActionResult<ApiResult>> GetLikesByInvitationId(int invitationId)
+        public async Task<ActionResult<ApiResult>> GetViewRecordByInvitationId(int invitationId)
         {
             int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
-            var data = await _iLikesService.FindAsync(it => it.UserId == userId && it.InvitationId == invitationId);
+            var data = await _iViewRecordService.FindAsync(it => it.UserId == userId && it.InvitationId == invitationId);
             if (data == null) return ApiResultHelper.Error("没有找到该记录");
 
             return ApiResultHelper.Success(data);

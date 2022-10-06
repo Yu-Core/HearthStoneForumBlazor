@@ -52,14 +52,14 @@ namespace HearthStoneForum.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ApiResult>> Delete(int id)
+        [HttpDelete("{invitationId}")]
+        public async Task<ActionResult<ApiResult>> Delete(int invitationId)
         {
             int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
-            var data = await _iCollectionService.FindAsync(it=>it.Id == id && it.UserId == userId);
+            var data = await _iCollectionService.FindAsync(it=>it.InvitationId == invitationId && it.UserId == userId);
             if (data == null) return ApiResultHelper.Error("没有找到该记录");
 
-            bool b = await _iCollectionService.DeleteAsync(id);
+            bool b = await _iCollectionService.DeleteAsync(data.Id);
             if (!b) return ApiResultHelper.Error("删除失败");
             return ApiResultHelper.Success(null);
         }

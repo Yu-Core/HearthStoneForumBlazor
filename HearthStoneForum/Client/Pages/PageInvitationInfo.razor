@@ -12,7 +12,7 @@
             你所在的位置：<MBreadcrumbs>
                 <MBreadcrumbsItem Style="font-size:0.9rem" Href="">炉石论坛</MBreadcrumbsItem>
                 <MBreadcrumbsItem Style="font-size:0.9rem" Href="@("invitations/" + Invitation.AreaId.ToString())">@Invitation.AreaName</MBreadcrumbsItem>
-                <MBreadcrumbsItem Style="font-size:0.9rem" Disabled>@(Invitation.Title)</MBreadcrumbsItem>
+                <MBreadcrumbsItem Class="d-none d-md-block" Style="font-size:0.9rem" Disabled>@(Invitation.Title)</MBreadcrumbsItem>
                 </MBreadcrumbs>
             </div>
             <div class="invitation-head">
@@ -160,8 +160,8 @@
     private CommentDTOAdd CommentAdd { get; set; } = new();
     private MEditor? _editor;
 
-    private Likes Like { get; set; } = new();
-    private Collection Collection { get; set; } = new();
+    //private Likes Like { get; set; } = new();
+    //private Collection Collection { get; set; } = new();
     private bool _like = false;
     private bool _collect = false;
     private int _page = 1;
@@ -250,7 +250,6 @@
             if (result.Successful)
             {
                 _like = true;
-                Like = result.Data;
             }
         }
         catch (Exception ex)
@@ -269,7 +268,6 @@
             if (result.Successful)
             {
                 _collect = true;
-                Collection = result.Data;
             }
         }
         catch (Exception ex)
@@ -288,11 +286,10 @@
 
             if (_like)
             {
-                var resultDelete = await Http.DeleteAsync($"likes/{Like.Id}");
+                var resultDelete = await Http.DeleteAsync($"likes/{id}");
                 var data = resultDelete.Content.ReadFromJsonAsync<ApiResult<Likes>>().Result;
                 if (data.Successful)
                 {
-                    Like = new();
                     Invitation.LikeCount--;
                     await PopupService.AlertAsync("已取消点赞");
                 }
@@ -307,7 +304,6 @@
                 var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Likes>>().Result;
                 if (data.Successful)
                 {
-                    Like = data.Data;
                     Invitation.LikeCount++;
                     await PopupService.AlertAsync("点赞成功");
                 }
@@ -337,11 +333,10 @@
 
             if (_collect)
             {
-                var resultDelete = await Http.DeleteAsync($"collections/{Collection.Id}");
+                var resultDelete = await Http.DeleteAsync($"collections/{id}");
                 var data = resultDelete.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
                 if (data.Successful)
                 {
-                    Collection = new();
                     Invitation.CollectionCount--;
                     await PopupService.AlertAsync("已取消收藏");
                 }
@@ -356,7 +351,6 @@
                 var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
                 if (data.Successful)
                 {
-                    Collection = data.Data;
                     Invitation.CollectionCount++;
                     await PopupService.AlertAsync("收藏成功");
                 }
@@ -414,6 +408,7 @@
             {
                 page = 1;
                 CommentAdd = new();
+                Invitation.CommentCount++;
                 StateHasChanged();
                 await PopupService.AlertAsync("发布成功");
                 Navigation.NavigateTo(Navigation.Uri);
@@ -458,6 +453,7 @@
                 {
                     page -= 1;
                 }
+                Invitation.CommentCount--;
                 ChangeComments();
                 await PopupService.AlertAsync("删除成功");
             }

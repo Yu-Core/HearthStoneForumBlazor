@@ -111,29 +111,29 @@ namespace HearthStoneForum.WebApi.Controllers
 
         [Authorize]
         [HttpGet("like")]
-        public async Task<ActionResult<ApiResult>> GetLikeInvitation(int id, int page, int size)
+        public async Task<ActionResult<ApiResult>> GetLikeInvitation(int userId, int page, int size)
         {
             RefAsync<int> total = 0;
-            var data = await _iInvitationService.GetLikeInvitations(it => it.UserId == id, page, size, total);
+            var data = await _iInvitationService.GetLikeInvitations(it => it.UserId == userId, page, size, total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data, total);
         }
 
         [Authorize]
         [HttpGet("collection")]
-        public async Task<ActionResult<ApiResult>> GetCollectionInvitation(int id, int page, int size)
+        public async Task<ActionResult<ApiResult>> GetCollectionInvitation(int userId, int page, int size)
         {
             RefAsync<int> total = 0;
-            var data = await _iInvitationService.GetCollectionInvitations(it => it.UserId == id, page, size, total);
+            var data = await _iInvitationService.GetCollectionInvitations(it => it.UserId == userId, page, size, total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data, total);
         }
 
         [HttpGet("viewRecord")]
-        public async Task<ActionResult<ApiResult>> GetViewRecordInvitation(int id, int page, int size)
+        public async Task<ActionResult<ApiResult>> GetViewRecordInvitation(int userId, int page, int size)
         {
             RefAsync<int> total = 0;
-            var data = await _iInvitationService.GetViewRecordInvitations(it => it.UserId == id, page, size, total);
+            var data = await _iInvitationService.GetViewRecordInvitations(it => it.UserId == userId, page, size, total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data, total);
         }
@@ -148,10 +148,10 @@ namespace HearthStoneForum.WebApi.Controllers
         }
 
         [HttpGet("user")]
-        public async Task<ActionResult<ApiResult>> GetInvitationByUserId(int id, int page, int size)
+        public async Task<ActionResult<ApiResult>> GetInvitationByUserId(int userId, int page, int size)
         {
             RefAsync<int> total = 0;
-            var data = await _iInvitationService.QueryAsync(it => it.UserId == id, page, size, total);
+            var data = await _iInvitationService.QueryAsync(it => it.UserId == userId, page, size, total);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data, total);
         }

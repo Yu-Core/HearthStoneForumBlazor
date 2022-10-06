@@ -16,5 +16,16 @@ namespace HearthStoneForum.Service
         {
             _iViewRecordRepository = iViewRecordRepository;
         }
+        public async Task<bool> CreateAsync(int invitationId, int userId)
+        {
+            var viewRecord = new ViewRecord()
+            {
+                InvitationId = invitationId,
+                UserId = userId,
+                CreatedTime = DateTime.Now
+            };
+            return await base.CreateAsync(viewRecord);
+        }
     }
+
 }

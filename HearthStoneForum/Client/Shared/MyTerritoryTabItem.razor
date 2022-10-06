@@ -25,7 +25,9 @@
 
 @code {
     [Parameter]
-    public string? GetUrl { get; set; } = string.Empty;
+    public EventCallback<DeleteState> OnDelete { get; set; }
+    [Parameter]
+    public EventCallback<GetInvitationsState> OnSetInvitations { get; set; }
 
     private List<Invitation> Invitations { get; set; } = new();
     private int _page = 1;
@@ -42,6 +44,8 @@
     private int total = 0;
     private int pageLength = 0;
 
+
+
     protected override Task OnInitializedAsync()
     {
         ChangeInvitations();
@@ -50,11 +54,23 @@
 
     private async void ChangeInvitations()
     {
+        if (!OnSetInvitations.HasDelegate) return;
         try
         {
-            var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"{GetUrl}page={page}&size={size}");
-            Invitations = result.Data ?? new();
-            total = result.Total;
+            var arg = new GetInvitationsState()
+                {
+                    Success = false,
+                    page = page,
+                    size = size
+                };
+
+            await OnSetInvitations.InvokeAsync(arg);
+            if(!arg.Success)
+            {
+                return;
+            }
+            Invitations = arg.Data.Data ?? new();
+            total = arg.Data.Total;
             pageLength = total / size;
             if (total % size > 0)
             {
@@ -70,31 +86,48 @@
 
     private async Task DeleteInvitation(int id, List<Invitation> invitations)
     {
+        if (!OnDelete.HasDelegate) return;
 
         var confirm = await PopupService.ConfirmAsync("提示", "是否确定删除？");
         if (confirm)
         {
-
-            var result = await Http.DeleteAsync($"invitations/{id}");
-            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
-            if (!data.Successful)
+            try
             {
-                await PopupService.AlertAsync("删除失败", AlertTypes.Error);
-            }
-            else
-            {
-                var removeObj = invitations.FirstOrDefault(it => it.Id == id);
-                invitations.Remove(removeObj);
+                var arg = new DeleteState()
+                    {
+                        Id = id,
+                        Success = false
+                    };
+                await OnDelete.InvokeAsync(arg);
 
-                //更新总数，判断当前分页是否为空并更换分页
-
-                if (invitations.Count == 0 && page > 1)
-                {
-                    page -= 1;
+                if(!arg.Success){
+                    await PopupService.AlertAsync("删除失败", AlertTypes.Error);
                 }
-                ChangeInvitations();
-                await PopupService.AlertAsync("删除成功");
+                else{
+                    var removeObj = invitations.FirstOrDefault(it => it.Id == id);
+                    if (removeObj != null)
+                    {
+                        invitations.Remove(removeObj);
+                    }
+
+                    //更新总数，判断当前分页是否为空并更换分页
+
+                    if (invitations.Count == 0 && page > 1)
+                    {
+                        page -= 1;
+                    }
+                    ChangeInvitations();
+                    await PopupService.AlertAsync("删除成功");
+                }
+                
+                
             }
+            catch (Exception ex)
+            {
+                await PopupService.AlertAsync(ex);
+                throw;
+            }
+            
 
         }
 

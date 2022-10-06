@@ -9,5 +9,7 @@ namespace HearthStoneForum.IService
 {
     public interface IViewRecordService : IBaseService<ViewRecord>
     {
+        Task<bool> CreateAsync(int invitationId, int userId);
+
     }
 }

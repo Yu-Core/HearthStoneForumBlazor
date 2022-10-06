@@ -152,16 +152,16 @@
         <div class="territory-bottom">
             <MTabsItems Value="tabs">
                 <MTabItem>
-                    <MyTerritoryTabItem GetUrl="@($"invitations/user?id={id}&")"></MyTerritoryTabItem>
+                    <MyTerritoryTabItem OnSetInvitations="GetInvitations" OnDelete="DeleteInvitations"></MyTerritoryTabItem>
                 </MTabItem>
                 <MTabItem>
-                    <MyTerritoryTabItem GetUrl="@($"invitations/like?id={id}&")"></MyTerritoryTabItem>
+                    <MyTerritoryTabItem OnSetInvitations="GetLikeInvitations" OnDelete="DeleteLikes"></MyTerritoryTabItem>
                 </MTabItem>
                 <MTabItem>
-                    <MyTerritoryTabItem GetUrl="@($"invitations/collection?id={id}&")"></MyTerritoryTabItem>
+                    <MyTerritoryTabItem OnSetInvitations="GetCollectionInvitations" OnDelete="DeleteCollections"></MyTerritoryTabItem>
                 </MTabItem>
                 <MTabItem>
-                    <MyTerritoryTabItem GetUrl="@($"invitations/viewRecord?id={id}&")"></MyTerritoryTabItem>
+                    <MyTerritoryTabItem OnSetInvitations="GetViewInvitations" OnDelete="DeleteViews"></MyTerritoryTabItem>
                 </MTabItem>
             </MTabsItems>
         </div>
@@ -227,6 +227,7 @@
 
         SetUserInfoDTOEdit();
     }
+
     private async Task SetUserInfo()
     {
         try
@@ -246,6 +247,7 @@
             throw;
         }
     }
+
     private async Task SetPortraits()
     {
         try
@@ -260,6 +262,7 @@
             throw;
         }
     }
+
     private void SetUserInfoDTOEdit()
     {
         UserInfoDTOEdit = new()
@@ -272,6 +275,8 @@
                 Sex = UserInfo.Sex
             };
     }
+
+    //修改头像
     private async Task SaveEditPortrait()
     {
         try
@@ -305,12 +310,15 @@
             StateHasChanged();
         }
     }
+
+    //取消修改头像
     private void CancelEditPortrait()
     {
         SelectPortraitUrl = string.Empty;
         _showPortraitSelect = false;
     }
 
+    //修改资料
     private async Task HandleOnValidSubmit()
     {
         try
@@ -340,5 +348,131 @@
             StateHasChanged();
         }
 
+    }
+
+    private async Task GetInvitations(GetInvitationsState arg)
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"invitations/user?userId={id}&page={arg.page}&size={arg.size}");
+            arg.Success = result.Successful;
+            arg.Data = result;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        
+    }
+    private async Task GetLikeInvitations(GetInvitationsState arg)
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"invitations/like?userId={id}&page={arg.page}&size={arg.size}");
+            arg.Success = result.Successful;
+            arg.Data = result;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    private async Task GetCollectionInvitations(GetInvitationsState arg)
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"invitations/collection?userId={id}&page={arg.page}&size={arg.size}");
+            arg.Success = result.Successful;
+            arg.Data = result;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    private async Task GetViewInvitations(GetInvitationsState arg)
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"invitations/viewRecord?userId={id}&page={arg.page}&size={arg.size}");
+            arg.Success = result.Successful;
+            arg.Data = result;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    private async Task DeleteInvitations(DeleteState arg)
+    {
+        try
+        {
+            var result = await Http.DeleteAsync($"invitations/{arg.Id}");
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+            if (data != null)
+            {
+                arg.Success = data.Successful;
+            }
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+        
+    }
+    private async Task DeleteLikes(DeleteState arg)
+    {
+        try
+        {
+            var result = await Http.DeleteAsync($"likes/{arg.Id}");
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+            if (data != null)
+            {
+                arg.Success = data.Successful;
+            }
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+        
+    }
+    private async Task DeleteCollections(DeleteState arg)
+    {
+        try
+        {
+            var result = await Http.DeleteAsync($"collections/{arg.Id}");
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+            if (data != null)
+            {
+                arg.Success = data.Successful;
+            }
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+    }
+    private async Task DeleteViews(DeleteState arg)
+    {
+        try
+        {
+            var result = await Http.DeleteAsync($"viewRecords/{arg.Id}");
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+            if (data != null)
+            {
+                arg.Success = data.Successful;
+            }
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+        
     }
 }
