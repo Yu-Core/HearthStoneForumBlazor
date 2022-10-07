@@ -38,6 +38,11 @@ namespace HearthStoneForum.WebApi.Utility.AutoMapper
                 {
                     CreatedTime = DateTime.Now
                 });
+            CreateMap<ReportDTOAdd, Report>()
+                .ConstructUsing(dto => new()
+                {
+                    CreatedTime = DateTime.Now
+                });
             //CreateMap<PreachDTOCreate, Preach>().ConstructUsing(dto => new Preach
             //{
             //    IsCancel = false,

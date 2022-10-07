@@ -21,7 +21,7 @@ namespace HearthStoneForum.Repository
             //创建数据库及表，第一次运行后注释掉，不然会影响性能
             //base.Context.DbMaintenance.CreateDatabase();
 
-            //Type[] types = new Type[] { 
+            //Type[] types = new Type[] {
             //    typeof(Area),
             //    typeof(Carousel),
             //    typeof(Collection),
@@ -35,7 +35,8 @@ namespace HearthStoneForum.Repository
             //    typeof(RaceYear),
             //    typeof(Sign),
             //    typeof(UserInfo),
-            //    typeof(ViewRecord)
+            //    typeof(ViewRecord),
+            //    typeof(Report)
             //};
             //base.Context.CodeFirst.InitTables(types);
         }
