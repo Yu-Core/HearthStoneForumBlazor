@@ -1,0 +1,10 @@
+﻿<div class="ql-container ql-snow" style="font-family:inherit;font-size:inherit;border:none;">
+    <div class="ql-editor">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

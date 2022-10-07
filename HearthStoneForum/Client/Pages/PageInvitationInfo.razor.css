@@ -110,6 +110,18 @@
     font-size: 0.9rem;
 }
 
+.scrolltools {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+}
+
+::deep .scrolltools > * {
+    margin-top: 4px;
+}
+
 @media only screen and (min-width: 600px) {
     .user-headimg {
         width:100px;

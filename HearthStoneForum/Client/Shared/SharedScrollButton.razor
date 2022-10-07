@@ -1,0 +1,30 @@
+﻿@inject IJSRuntime JS
+
+<MButton Class="@(Float?"m-3 m-sm-5":"")"
+         Fixed="@(Float)"
+         Right="@(Float)"
+         Bottom="@(Float)"
+         Fab
+         Outlined
+         Plain
+         Color="indigo"
+         OnClick="OnClick">
+    <MIcon>@(Icon)</MIcon>
+</MButton>
+
+@code {
+    [Parameter]
+    public bool Float { get; set; }
+    [Parameter]
+    public string? ScrollTarget { get; set; }
+    [Parameter]
+    public string? Icon { get; set; }
+
+    private async Task OnClick()
+    {
+        if (!string.IsNullOrEmpty(ScrollTarget))
+        {
+            await JS.InvokeVoidAsync("anchorLink.scrollIntoView", ScrollTarget);
+        }
+    }
+}

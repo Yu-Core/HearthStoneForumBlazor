@@ -53,7 +53,7 @@
 
         <AuthorizeView>
             <Authorized>
-                <div class="invitation-send">
+                <div id="invitation-send" class="invitation-send">
                     <MForm EnableValidation Model="InvitationAdd" OnValidSubmit="HandleOnValidSubmit">
                         <ChildContent Context="mformContext">
                             <h5>发布新贴</h5>
@@ -82,6 +82,11 @@
             </Authorized>
         </AuthorizeView>
 
+        <div class="scrolltools m-3 m-sm-5">
+            <SharedScrollButton ScrollTarget="invitation-send" Icon="mdi-pencil"></SharedScrollButton>
+            <SharedScrollButton ScrollTarget="scrolling" Icon="mdi-arrow-up-thick"></SharedScrollButton>
+        </div>
+        
 
     </div>
 </div>

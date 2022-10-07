@@ -31,9 +31,9 @@
             </div>
             <div class="content-right">
                 <div class="content-text ">
-                    <div class="ql-editor">
+                    <SharedQuillDisplay>
                         @((MarkupString)(Invitation.Content))
-                    </div>
+                    </SharedQuillDisplay>
                 </div>
                 <div class="content-bottom">
                     <div class="invitation-time">@(Invitation.CreatedTime.ToString("yyyy-MM-dd"))</div>
@@ -87,9 +87,9 @@
                     </div>
                     <div class="comment-right">
                         <div class="comment-text">
-                            <div class="ql-editor">
+                            <SharedQuillDisplay>
                                 @((MarkupString)(item.Content))
-                            </div>
+                            </SharedQuillDisplay>
                         </div>
                         <div class="comment-bottom">
                             <div class="comment-time">
@@ -97,7 +97,8 @@
                             </div>
                             <AuthorizeView>
                                 <Authorized>
-                                    @if(item.UserId.ToString() == context.User.FindFirst("UserId").Value){
+                                    @if (item.UserId.ToString() == context.User.FindFirst("UserId").Value)
+                                    {
                                         <div class="comment-delete">
                                             <MButton Text
                                              OnClick="()=>DeleteComment(item.Id)">
@@ -147,8 +148,10 @@
             </AuthorizeView>
         </div>
 
-
-
+        <div class="scrolltools m-3 m-sm-5">
+            <SharedScrollButton ScrollTarget="comment-send" Icon="mdi-pencil"></SharedScrollButton>
+            <SharedScrollButton ScrollTarget="scrolling" Icon="mdi-arrow-up-thick"></SharedScrollButton>
+        </div>
     </div>
 </div>
 

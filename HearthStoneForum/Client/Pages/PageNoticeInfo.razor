@@ -16,11 +16,12 @@
             <h2>@Notice.Title</h2>
         </div>
         <div class="notice-content">
-            <div class="ql-editor">
+            <SharedQuillDisplay>
                 @((MarkupString)(Notice.Description ?? string.Empty))
-            </div>
+            </SharedQuillDisplay>
         </div>
     </div>
+    <SharedScrollButton Float ScrollTarget="scrolling" Icon="mdi-arrow-up-thick"></SharedScrollButton>
 </div>
 
 @code {
