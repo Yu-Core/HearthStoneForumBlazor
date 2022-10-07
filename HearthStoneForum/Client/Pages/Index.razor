@@ -37,8 +37,16 @@
             Carousels = (await Http.GetFromJsonAsync<ApiResult<List<Carousel>>>("carousels")).Data ?? new();
             Notices = (await Http.GetFromJsonAsync<ApiResult<List<Notice>>>("notices/new_notices")).Data ?? new();
             Areas = (await Http.GetFromJsonAsync<ApiResult<List<AreaDTOView>>>("areas")).Data ?? new();
-            RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/recommend")).Data ?? new();
-            NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>("invitations/new")).Data ?? new();
+            //分区的行数*7
+            var Cols = Areas.Count() / 4;
+            if (Areas.Count() % 4 > 0)
+            {
+                Cols++;
+            }
+            var Count = Cols * 7;
+
+            RecommendInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>($"invitations/recommend?count={Count}")).Data ?? new();
+            NewInvitations = (await Http.GetFromJsonAsync<ApiResult<List<InvitationDTOViewRecommend>>>($"invitations/new?count={Count}")).Data ?? new();
         }
         catch (Exception)
         {

@@ -31,14 +31,14 @@ namespace HearthStoneForum.Service
             return await _iInvitationRepository.GetLikeInvitations(func,page,size,total);
         }
 
-        public async Task<List<InvitationDTOViewRecommend>> GetNewInvitations()
+        public async Task<List<InvitationDTOViewRecommend>> GetNewInvitations(int count)
         {
-            return await _iInvitationRepository.GetNewInvitations();
+            return await _iInvitationRepository.GetNewInvitations(count);
         }
 
-        public async Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations()
+        public async Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations(int count)
         {
-            return await _iInvitationRepository.GetRecommendInvitations();
+            return await _iInvitationRepository.GetRecommendInvitations(count);
         }
 
         public async Task<List<Invitation>> GetViewRecordInvitations(Expression<Func<ViewRecord, bool>> func, int page, int size, RefAsync<int> total)

@@ -94,17 +94,17 @@ namespace HearthStoneForum.WebApi.Controllers
         }
 
         [HttpGet("new")]
-        public async Task<ActionResult<ApiResult>> GetNewInvitation()
+        public async Task<ActionResult<ApiResult>> GetNewInvitation(int count)
         {
-            var data = await _iInvitationService.GetNewInvitations();
+            var data = await _iInvitationService.GetNewInvitations(count);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }
 
         [HttpGet("recommend")]
-        public async Task<ActionResult<ApiResult>> GetRecommendInvitation()
+        public async Task<ActionResult<ApiResult>> GetRecommendInvitation(int count)
         {
-            var data = await _iInvitationService.GetRecommendInvitations();
+            var data = await _iInvitationService.GetRecommendInvitations(count);
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }

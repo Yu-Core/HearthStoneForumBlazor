@@ -12,8 +12,8 @@ namespace HearthStoneForum.IService
 {
     public interface IInvitationService : IBaseService<Invitation>
     {
-        Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations();
-        Task<List<InvitationDTOViewRecommend>> GetNewInvitations();
+        Task<List<InvitationDTOViewRecommend>> GetRecommendInvitations(int count);
+        Task<List<InvitationDTOViewRecommend>> GetNewInvitations(int count);
         Task<List<Invitation>> GetLikeInvitations(Expression<Func<Likes, bool>> func, int page, int size, RefAsync<int> total);
         Task<List<Invitation>> GetCollectionInvitations(Expression<Func<Collection, bool>> func, int page, int size, RefAsync<int> total);
         Task<List<Invitation>> GetViewRecordInvitations(Expression<Func<ViewRecord, bool>> func, int page, int size, RefAsync<int> total);
