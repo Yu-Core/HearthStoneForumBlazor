@@ -156,19 +156,6 @@ namespace HearthStoneForum.WebApi.Controllers
             return ApiResultHelper.Success(data, total);
         }
 
-        [Authorize]
-        [HttpPut("view")]
-        public async Task<ActionResult<ApiResult>> AddView(int id)
-        {
-            var invitation = await _iInvitationService.FindAsync(id);
-            if (invitation == null) return ApiResultHelper.Error("没有找到该记录");
-
-            
-            invitation.Views += 1;
-
-            bool b = await _iInvitationService.EditAsync(invitation);
-            if (!b) return ApiResultHelper.Error("修改失败");
-            return ApiResultHelper.Success(null);
-        }
+        
     }
 }
