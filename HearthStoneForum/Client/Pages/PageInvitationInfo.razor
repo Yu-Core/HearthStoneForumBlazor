@@ -207,9 +207,9 @@
         if (IsAuthenticated)
         {
             await AddViews();
-            await SetIsHasLike();
-            await SetIsHasCollection();
-            await SetIsHasReport();
+            await SetHasLike();
+            await SetHasCollection();
+            await SetHasReport();
         }
 
         Loading = false;
@@ -262,7 +262,7 @@
     }
 
     //获取是否点赞
-    private async Task SetIsHasLike()
+    private async Task SetHasLike()
     {
         try
         {
@@ -280,7 +280,7 @@
 
     }
     //获取是否收藏
-    private async Task SetIsHasCollection()
+    private async Task SetHasCollection()
     {
         try
         {
@@ -298,7 +298,7 @@
     }
 
     //获取是否举报
-    private async Task SetIsHasReport()
+    private async Task SetHasReport()
     {
         try
         {
@@ -505,11 +505,11 @@
     {
         try
         {
-            var result = await Http.PutAsJsonAsync($"invitations/view?id={id}", id);
-            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
-            if (!data.Successful)
+            var result = await Http.GetFromJsonAsync<ApiResult<ViewRecord>>($"viewRecords/search?invitationId={id}");
+            if(!result.Successful)
             {
-                await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
+                var resultPost = await Http.PostAsJsonAsync($"viewRecords?invitationId={id}", id);
+                var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
             }
         }
         catch (Exception ex)

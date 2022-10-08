@@ -14,6 +14,7 @@ namespace HearthStoneForum.Service
         private readonly IViewRecordRepository _iViewRecordRepository;
         public ViewRecordService(IViewRecordRepository iViewRecordRepository)
         {
+            base._iBaseRepository = iViewRecordRepository;
             _iViewRecordRepository = iViewRecordRepository;
         }
         public async Task<bool> CreateAsync(int invitationId, int userId)
