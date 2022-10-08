@@ -7,7 +7,7 @@
 @inject HttpClient Http
 @inject MainLayoutState LayoutState
 
-<div class="main">
+<div class="main @(Loading?"d-none":"")">
     <div class="territory-wrap">
         <div class="territory-top">
             <div class="user-portrait">
@@ -168,6 +168,7 @@
     </div>
 </div>
 
+<SharedLoad Value="Loading"></SharedLoad>
 
 @code {
     [Parameter]
@@ -189,6 +190,8 @@
     private UserInfoDTOEdit UserInfoDTOEdit { get; set; } = new();
 
     private List<Portrait> Portraits { get; set; } = new();
+
+    private bool Loading = true;
 
     //设置参数的生命周期位于初始化之前,解决了MyTerritoryTabItem组件的参数在初始化之前就加载的问题
     public override async Task SetParametersAsync(ParameterView parameters)
@@ -226,6 +229,12 @@
         await SetPortraits();
 
         SetUserInfoDTOEdit();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        Loading = false;
+        return base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task SetUserInfo()

@@ -3,7 +3,7 @@
 @inject NavigationManager navigation
 @inject IPopupService PopupService
 
-<div class="main">
+<div class="main @(Loading?"d-none":"")">
     <div class="invitation-wrap">
         <div class="breadcrumbs">
             你所在的位置：
@@ -71,6 +71,8 @@
                             </MEditor>
                             <div class="d-flex justify-content-between mt-4">
                                 <MButton Color="primary"
+                                         Loading="SendLoading"
+                                         Disabled="SendLoading"
                                          Type="submit">
                                     发布
                                 </MButton>
@@ -90,6 +92,9 @@
 
     </div>
 </div>
+
+<SharedLoad Value="Loading"></SharedLoad>
+
 @code {
     [Parameter]
     public int id { get; set; }
@@ -98,6 +103,8 @@
     private List<InvitationDTOView> Invitations { get; set; } = new();
     private InvitationDTOAdd InvitationAdd { get; set; } = new();
     private MEditor? _editor;
+    private bool Loading = true;
+    private bool SendLoading = false;
 
     private int _page = 1;
     private int page
@@ -120,6 +127,8 @@
         await SetArea();
 
         ChangeInvitations();
+
+        Loading = false;
     }
 
     private async Task SetArea()
@@ -167,32 +176,36 @@
     //发送帖子
     private async Task HandleOnValidSubmit()
     {
+        SendLoading = true;
         var text = await _editor.GetTextAsync();
-        if (string.IsNullOrWhiteSpace(text)) return;
-
-        InvitationAdd.AreaId = id;
-
-        try
+        if (!string.IsNullOrWhiteSpace(text))
         {
-            var result = await Http.PostAsJsonAsync<InvitationDTOAdd>("invitations", InvitationAdd);
-            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
-            if (data.Successful)
+            InvitationAdd.AreaId = id;
+
+            try
             {
-                page = 1;
-                InvitationAdd = new();
-                StateHasChanged();
-                await PopupService.AlertAsync("发布成功");
-                navigation.NavigateTo(navigation.Uri);
+                var result = await Http.PostAsJsonAsync<InvitationDTOAdd>("invitations", InvitationAdd);
+                var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+                if (data.Successful)
+                {
+                    page = 1;
+                    InvitationAdd = new();
+                    StateHasChanged();
+                    await PopupService.AlertAsync("发布成功");
+                    navigation.NavigateTo(navigation.Uri);
+                }
+                else
+                {
+                    await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
+                await PopupService.AlertAsync(ex);
             }
         }
-        catch (Exception ex)
-        {
-            await PopupService.AlertAsync(ex);
-        }
+
+        SendLoading = false;
 
     }
     //清除发帖内容

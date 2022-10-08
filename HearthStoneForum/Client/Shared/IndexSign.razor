@@ -54,12 +54,13 @@
         {
         new TopRightListItem(){Icon="mdi-book-open-variant",Title="炉石历史",SubTitle="了解更多炉石传说历史版本",Href="expansions"},
         new TopRightListItem(){Icon="mdi-clock-outline",Title=DateTime.Now.ToString("d"),SubTitle=LunarCalendar.GetChineseDate(DateTime.Now),Href="https://www.rili.com.cn/"}
-        }; 
+        };
         try
         {
             TodaySignCount = (await Http.GetFromJsonAsync<ApiResult<int>>("signs/todayCount")).Data;
             var IsAuthenticated = await AuthService.IsAuthenticated();
-            if (IsAuthenticated){
+            if (IsAuthenticated)
+            {
                 IsSign = (await Http.GetFromJsonAsync<ApiResult<Sign>>("signs/today")).Successful;
             }
 

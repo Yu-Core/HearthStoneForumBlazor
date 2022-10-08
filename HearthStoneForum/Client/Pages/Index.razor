@@ -3,7 +3,7 @@
 @inject NavigationManager navigation
 
 <PageTitle>炉石传说游戏论坛</PageTitle>
-<div class="main-warp @(Display?"":"d-none")">
+<div class="main-warp @(Loading?"d-none":"")">
     <div class="main-top flex-column flex-md-row">
         <div class="main-top-left flex-column flex-md-row">
             <IndexCarousel Data="@Carousels"></IndexCarousel>
@@ -22,13 +22,16 @@
         </div>
     </div>
 </div>
+
+<SharedLoad Value="Loading"></SharedLoad>
+
 @code {
     private List<Carousel> Carousels = new List<Carousel>();
     private List<Notice> Notices = new();
     private List<AreaDTOView> Areas = new();
     private List<InvitationDTOViewRecommend> RecommendInvitations = new();
     private List<InvitationDTOViewRecommend> NewInvitations = new();
-    private bool Display = false;
+    private bool Loading = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,7 +57,7 @@
             navigation.NavigateTo("/404");
         }
 
-        Display = true;
+        Loading = false;
     }
 
 

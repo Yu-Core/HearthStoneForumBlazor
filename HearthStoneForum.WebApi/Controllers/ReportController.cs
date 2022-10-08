@@ -44,7 +44,7 @@ namespace HearthStoneForum.WebApi.Controllers
         {
             int userId = Convert.ToInt32(this.User.FindFirst("UserId").Value);
             var data = await _iReportService.FindAsync(it => it.UserId == userId && it.InvitationId == dto.InvitationId);
-            if (data != null) return ApiResultHelper.Error("添加失败");
+            if (data != null) return ApiResultHelper.Error("添加失败，重复举报");
 
             dto.UserId = userId;
             var report = _iMapper.Map<ReportDTOAdd,Report>(dto);

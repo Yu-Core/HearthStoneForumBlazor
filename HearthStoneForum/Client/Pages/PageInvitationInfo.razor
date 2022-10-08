@@ -3,10 +3,11 @@
 @inject IAuthService AuthService
 @inject NavigationManager Navigation
 @inject IPopupService PopupService
+@inject ILocalStorageService LocalStorage
 @inject IJSRuntime JS
 
 
-<div class="main">
+<div class="main @(Loading?"d-none":"")">
     <div class="invitation-wrap">
         <div class="breadcrumbs">
             你所在的位置：
@@ -142,6 +143,8 @@
                                 </MEditor>
                                 <div class="d-flex justify-content-between mt-4">
                                     <MButton Color="primary"
+                                             Loading="SendLoading"
+                                             Disabled="SendLoading"
                                              Type="submit">
                                         发布
                                     </MButton>
@@ -161,6 +164,8 @@
     </div>
 </div>
 
+<SharedLoad Value="Loading"></SharedLoad>
+
 @code {
     [Parameter]
     public int id { get; set; }
@@ -168,12 +173,15 @@
     private List<CommentDTOView> Comments { get; set; } = new();
     private CommentDTOAdd CommentAdd { get; set; } = new();
     private MEditor? _editor;
+    private bool Loading = true;
+    private bool SendLoading = false;
 
     //private Likes Like { get; set; } = new();
     //private Collection Collection { get; set; } = new();
     private bool _like = false;
     private bool _collect = false;
     private bool _report = false;
+
     private int _page = 1;
     private int page
     {
@@ -204,6 +212,7 @@
             await SetIsHasReport();
         }
 
+        Loading = false;
     }
     //获取帖子
     private async Task SetInvitation()
@@ -294,7 +303,7 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<Report>>($"reports/search?invitationId={id}");
-            _collect = result.Successful;
+            _report = result.Successful;
         }
         catch (Exception ex)
         {
@@ -307,138 +316,188 @@
     //点赞或取消点赞
     private async Task OnClickLike()
     {
-        try
+        var IsAuthenticated = await AuthService.IsAuthenticated();
+        if (!IsAuthenticated)
         {
+            var confirm = await PopupService.ConfirmAsync("提示", "检测到您尚未登录,是否登录？");
 
-            if (_like)
+            if (confirm)
             {
-                var resultDelete = await Http.DeleteAsync($"likes/{id}");
-                var data = resultDelete.Content.ReadFromJsonAsync<ApiResult<Likes>>().Result;
-                if (data.Successful)
+                await LocalStorage.RemoveItemAsync("oldUrl");
+                await LocalStorage.SetItemAsync("oldUrl", Navigation.Uri);
+                Navigation.NavigateTo("login");
+            }
+        }
+        else
+        {
+            try
+            {
+
+                if (_like)
                 {
-                    Invitation.LikeCount--;
-                    await PopupService.AlertAsync("已取消点赞");
+                    var resultDelete = await Http.DeleteAsync($"likes/{id}");
+                    var data = resultDelete.Content.ReadFromJsonAsync<ApiResult<Likes>>().Result;
+                    if (data.Successful)
+                    {
+                        Invitation.LikeCount--;
+                        await PopupService.AlertAsync("已取消点赞");
+                    }
+                    else
+                    {
+                        await PopupService.AlertAsync("取消点赞失败", AlertTypes.Error);
+                    }
                 }
                 else
                 {
-                    await PopupService.AlertAsync("取消点赞失败", AlertTypes.Error);
+                    var resultPost = await Http.PostAsJsonAsync($"likes?invitationId={id}", id);
+                    var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Likes>>().Result;
+                    if (data.Successful)
+                    {
+                        Invitation.LikeCount++;
+                        await PopupService.AlertAsync("点赞成功");
+                    }
+                    else
+                    {
+                        await PopupService.AlertAsync("点赞失败", AlertTypes.Error);
+                    }
                 }
+
             }
-            else
+            catch (Exception)
             {
-                var resultPost = await Http.PostAsJsonAsync($"likes?invitationId={id}", id);
-                var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Likes>>().Result;
-                if (data.Successful)
-                {
-                    Invitation.LikeCount++;
-                    await PopupService.AlertAsync("点赞成功");
-                }
-                else
-                {
-                    await PopupService.AlertAsync("点赞失败", AlertTypes.Error);
-                }
+
+                throw;
             }
+            finally
+            {
+                _like = !_like;
+            }
+        }
 
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
-        finally
-        {
-            _like = !_like;
-        }
 
     }
     //收藏或取消收藏
     private async Task OnClickCollect()
     {
-        try
+        var IsAuthenticated = await AuthService.IsAuthenticated();
+        if (!IsAuthenticated)
         {
+            var confirm = await PopupService.ConfirmAsync("提示", "检测到您尚未登录,是否登录？");
 
-            if (_collect)
+            if (confirm)
             {
-                var resultDelete = await Http.DeleteAsync($"collections/{id}");
-                var data = resultDelete.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
-                if (data.Successful)
-                {
-                    Invitation.CollectionCount--;
-                    await PopupService.AlertAsync("已取消收藏");
-                }
-                else
-                {
-                    await PopupService.AlertAsync("取消收藏失败", AlertTypes.Error);
-                }
+                await LocalStorage.RemoveItemAsync("oldUrl");
+                await LocalStorage.SetItemAsync("oldUrl", Navigation.Uri);
+                Navigation.NavigateTo("login");
             }
-            else
-            {
-                var resultPost = await Http.PostAsJsonAsync($"collections?invitationId={id}", id);
-                var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
-                if (data.Successful)
-                {
-                    Invitation.CollectionCount++;
-                    await PopupService.AlertAsync("收藏成功");
-                }
-                else
-                {
-                    await PopupService.AlertAsync("收藏失败", AlertTypes.Error);
-                }
-            }
-
         }
-        catch (Exception)
+        else
         {
-
-            throw;
-        }
-        finally
-        {
-            _collect = !_collect;
-        }
-    }
-
-    private async Task OnClickReport()
-    {
-        try
-        {
-            if (_report)
+            try
             {
-                await PopupService.AlertAsync("已经举报过了");
-            }
-            else
-            {
-                var input = await PopupService.PromptAsync(param =>
-                {
-                    param.Title = "举报";
-                    param.Content = "请详细输入举报理由";
-                });
 
-                if(!string.IsNullOrWhiteSpace(input))
+                if (_collect)
                 {
-                    var report = new ReportDTOAdd(){
-                        InvitationId = id,
-                        Content = input
-                    };
-                    var resultPost = await Http.PostAsJsonAsync("reports", report);
-                    var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Report>>().Result;
+                    var resultDelete = await Http.DeleteAsync($"collections/{id}");
+                    var data = resultDelete.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
                     if (data.Successful)
                     {
-                        _report = true;
-                        await PopupService.AlertAsync("举报成功");
+                        Invitation.CollectionCount--;
+                        await PopupService.AlertAsync("已取消收藏");
                     }
                     else
                     {
-                        await PopupService.AlertAsync("举报失败", AlertTypes.Error);
+                        await PopupService.AlertAsync("取消收藏失败", AlertTypes.Error);
+                    }
+                }
+                else
+                {
+                    var resultPost = await Http.PostAsJsonAsync($"collections?invitationId={id}", id);
+                    var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
+                    if (data.Successful)
+                    {
+                        Invitation.CollectionCount++;
+                        await PopupService.AlertAsync("收藏成功");
+                    }
+                    else
+                    {
+                        await PopupService.AlertAsync("收藏失败", AlertTypes.Error);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                _collect = !_collect;
+            }
+        }
+
+    }
+
+    //举报
+    private async Task OnClickReport()
+    {
+        var IsAuthenticated = await AuthService.IsAuthenticated();
+        if (!IsAuthenticated)
+        {
+            var confirm = await PopupService.ConfirmAsync("提示", "检测到您尚未登录,是否登录？");
+
+            if (confirm)
+            {
+                await LocalStorage.RemoveItemAsync("oldUrl");
+                await LocalStorage.SetItemAsync("oldUrl", Navigation.Uri);
+                Navigation.NavigateTo("login");
+            }
+        }
+        else
+        {
+            try
+            {
+                if (_report)
+                {
+                    await PopupService.AlertAsync("已经举报过了");
+                }
+                else
+                {
+                    var input = await PopupService.PromptAsync(param =>
+                    {
+                        param.Title = "举报";
+                        param.Content = "请详细输入举报理由";
+                    });
+
+                    if (!string.IsNullOrWhiteSpace(input))
+                    {
+                        var report = new ReportDTOAdd()
+                            {
+                                InvitationId = id,
+                                Content = input
+                            };
+                        var resultPost = await Http.PostAsJsonAsync("reports", report);
+                        var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Report>>().Result;
+                        if (data.Successful)
+                        {
+                            _report = true;
+                            await PopupService.AlertAsync("举报成功");
+                        }
+                        else
+                        {
+                            await PopupService.AlertAsync("举报失败", AlertTypes.Error);
+                        }
                     }
                 }
             }
-        }
-        catch (Exception)
-        {
+            catch (Exception)
+            {
 
-            throw;
+                throw;
+            }
         }
+
     }
 
     //增加浏览量
@@ -464,32 +523,37 @@
     //发送评论
     private async Task HandleOnValidSubmit()
     {
-        var text = await _editor.GetTextAsync();
-        if (string.IsNullOrWhiteSpace(text)) return;
+        SendLoading = true;
 
-        CommentAdd.InvitationId = id;
-        try
+        var text = await _editor.GetTextAsync();
+        if (!string.IsNullOrWhiteSpace(text))
         {
-            var result = await Http.PostAsJsonAsync<CommentDTOAdd>("comments", CommentAdd);
-            var data = result.Content.ReadFromJsonAsync<ApiResult<Comment>>().Result;
-            if (data.Successful)
+            CommentAdd.InvitationId = id;
+            try
             {
-                page = 1;
-                CommentAdd = new();
-                Invitation.CommentCount++;
-                StateHasChanged();
-                await PopupService.AlertAsync("发布成功");
-                Navigation.NavigateTo(Navigation.Uri);
+                var result = await Http.PostAsJsonAsync<CommentDTOAdd>("comments", CommentAdd);
+                var data = result.Content.ReadFromJsonAsync<ApiResult<Comment>>().Result;
+                if (data.Successful)
+                {
+                    page = 1;
+                    CommentAdd = new();
+                    Invitation.CommentCount++;
+                    StateHasChanged();
+                    await PopupService.AlertAsync("发布成功");
+                    Navigation.NavigateTo(Navigation.Uri);
+                }
+                else
+                {
+                    await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
+                await PopupService.AlertAsync(ex);
             }
         }
-        catch (Exception ex)
-        {
-            await PopupService.AlertAsync(ex);
-        }
+
+        SendLoading = false;
     }
     //清除评论内容
     private void OnClickClearContent()

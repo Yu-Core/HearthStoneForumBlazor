@@ -2,7 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager navigation
 
-<div class="main">
+<div class="main @(Loading?"d-none":"")">
     <div class="notice-wrap">
         <div class="breadcrumbs">
             你所在的位置：
@@ -36,25 +36,31 @@
     </div>
 </div>
 
+<SharedLoad Value="Loading"></SharedLoad>
+
 @code {
     public List<Notice> Notices{ get; set; } = new();
+    private bool Loading = true;
     private int _page = 1;
     private int page {
         get => _page;
         set{
             _page = value;
-            ChangeNotices();
+            Task.Run(async () =>
+            {
+                await ChangeNotices();
+            });
         }
     }
     private int size = 20;
     private int total = 0;
     private int pageLength = 0;
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        ChangeNotices();
-        return base.OnInitializedAsync();
+        await ChangeNotices();
+        Loading = false;
     }
-    private async void ChangeNotices()
+    private async Task ChangeNotices()
     {
         try
         {

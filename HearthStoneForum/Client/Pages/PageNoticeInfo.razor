@@ -2,7 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager navigation
 
-<div class="main @(Display?"":"d-none")">
+<div class="main @(Loading?"d-none":"")">
     <div class="notice-wrap">
         <div class="breadcrumbs">
             你所在的位置：
@@ -24,11 +24,13 @@
     <SharedScrollButton Float ScrollTarget="scrolling" Icon="mdi-arrow-up-thick"></SharedScrollButton>
 </div>
 
+<SharedLoad Value="Loading"></SharedLoad>
+
 @code {
     [Parameter]
     public int id { get; set; }
     private Notice Notice = new();
-    private bool Display { get; set; } = false;
+    private bool Loading = true;
 
     protected async override Task OnInitializedAsync()
     {
@@ -46,6 +48,6 @@
             navigation.NavigateTo("404");
         }
 
-        Display = true;
+        Loading = false;
     }
 }
