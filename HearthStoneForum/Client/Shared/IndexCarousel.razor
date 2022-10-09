@@ -1,4 +1,4 @@
-﻿
+﻿@implements IAsyncDisposable
 @inject IJSRuntime JS
 
 <div class="carousel-wrap" id="carousel-wrap">
@@ -33,6 +33,13 @@
             module = await JS.InvokeAsync<IJSObjectReference>("import",
                 "./js/carousel.js");
             await module.InvokeVoidAsync("CarouselStart");
+        }
+    }
+    public async ValueTask DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
         }
     }
 }

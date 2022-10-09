@@ -140,6 +140,36 @@
                                          @bind-Value="@(CommentAdd.Content)"
                                          ContentStyle="height:200px;"
                                          Placeholder="请输入内容">
+                                    <ToolbarContent>
+                                        <select class="ql-header">
+                                            <option selected=""></option>
+                                            <option value="1"></option>
+                                            <option value="2"></option>
+                                            <option value="3"></option>
+                                            <option value="4"></option>
+                                            <option value="5"></option>
+                                        </select>
+                                        <span class="ql-formats">
+                                            <button class="ql-bold"></button>
+                                            <button class="ql-italic"></button>
+                                            <button class="ql-underline"></button>
+                                            <button class="ql-strike"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-color"></select>
+                                            <select class="ql-background"></select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-list" value="ordered"></button>
+                                            <button class="ql-list" value="bullet"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-link"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-image"></button>
+                                        </span>
+                                    </ToolbarContent>
                                 </MEditor>
                                 <div class="d-flex justify-content-between mt-4">
                                     <MButton Color="primary"
@@ -210,6 +240,7 @@
             await SetHasLike();
             await SetHasCollection();
             await SetHasReport();
+            await ChangeToolbarImage();
         }
 
         Loading = false;
@@ -602,5 +633,10 @@
             // to, so we call the JavaScript method to take care of this for us.
             await JS.InvokeVoidAsync("anchorLink.scrollIntoView", elementId);
         }
+    }
+
+    private async Task ChangeToolbarImage()
+    {
+        await JS.InvokeVoidAsync("ChangeToolbarImage", _editor.ContentRef);
     }
 }

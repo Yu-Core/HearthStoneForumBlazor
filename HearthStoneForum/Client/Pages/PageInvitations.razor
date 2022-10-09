@@ -2,6 +2,8 @@
 @inject HttpClient Http
 @inject NavigationManager navigation
 @inject IPopupService PopupService
+@inject IAuthService AuthService
+@inject IJSRuntime JS
 
 <div class="main @(Loading?"d-none":"")">
     <div class="invitation-wrap">
@@ -67,7 +69,36 @@
                                      @bind-Value="@(InvitationAdd.Content)"
                                      ContentStyle="height:200px;"
                                      Placeholder="请输入内容">
-
+                                <ToolbarContent>
+                                    <select class="ql-header">
+                                        <option selected=""></option>
+                                        <option value="1"></option>
+                                        <option value="2"></option>
+                                        <option value="3"></option>
+                                        <option value="4"></option>
+                                        <option value="5"></option>
+                                    </select>
+                                    <span class="ql-formats">
+                                        <button class="ql-bold"></button>
+                                        <button class="ql-italic"></button>
+                                        <button class="ql-underline"></button>
+                                        <button class="ql-strike"></button>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <select class="ql-color"></select>
+                                        <select class="ql-background"></select>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-list" value="ordered"></button>
+                                        <button class="ql-list" value="bullet"></button>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-link"></button>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-image"></button>
+                                    </span>
+                                </ToolbarContent>
                             </MEditor>
                             <div class="d-flex justify-content-between mt-4">
                                 <MButton Color="primary"
@@ -88,7 +119,7 @@
             <SharedScrollButton ScrollTarget="invitation-send" Icon="mdi-pencil"></SharedScrollButton>
             <SharedScrollButton ScrollTarget="scrolling" Icon="mdi-arrow-up-thick"></SharedScrollButton>
         </div>
-        
+
 
     </div>
 </div>
@@ -127,9 +158,17 @@
         await SetArea();
 
         ChangeInvitations();
+        
+        var IsAuthenticated = await AuthService.IsAuthenticated();
+        if (IsAuthenticated)
+        {
+            await ChangeToolbarImage();
+        }
 
         Loading = false;
+
     }
+
 
     private async Task SetArea()
     {
@@ -212,5 +251,11 @@
     private void OnClickClearContent()
     {
         InvitationAdd = new();
+    }
+
+    //执行JS中覆盖MEditor工具栏的图片上传的点击
+    private async Task ChangeToolbarImage()
+    {
+        await JS.InvokeVoidAsync("ChangeToolbarImage", _editor.ContentRef);
     }
 }
