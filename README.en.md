@@ -29,7 +29,7 @@ Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum)
 
 #### Usage Method
 
-1.Configure a file to store connection strings [appsettings.json](./HearthStoneForum.WebApi/appsettings.json).
+1.Configure a file to store connection strings [appsettings.json](./HearthStoneForum.WebApi/appsettings.json)[appsettings.json](./HearthStoneForum.JWT/appsettings.json).
 
 2.Because using Code First，need edit [BaseRepository.cs](./HearthStoneForum.Repository/BaseRepository.cs). Uncomment the following section.
 
@@ -43,5 +43,3 @@ Blazor Remake of [HearthStoneForum](https://github.com/Yu-Core/HearthstoneForum)
 //};
 //base.Context.CodeFirst.InitTables(types);
 ```
-
-3.if you need test data，Attach [HearthStoneForumDB.mdf](./TestData/HearthStoneForumDB.mdf) to database. T-Sql scripts(Additional)：[additional.sql](./TestData/additional.sql)（need edit）
