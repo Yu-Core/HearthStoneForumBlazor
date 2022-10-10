@@ -17,4 +17,20 @@ namespace HearthStoneForum.Model.DTOAdd
         public string? Content { get; set; }
         public int AreaId { get; set; }
     }
+
+    public class InvitationDTOAddPlus : InvitationDTOAdd
+    {
+        [Required(ErrorMessage = "内容不能为空")]
+        public string ContentValidation
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Content))
+                {
+                    return string.Empty;
+                }
+                return Content.Replace("<p><br></p>", string.Empty);
+            }
+        }
+    }
 }

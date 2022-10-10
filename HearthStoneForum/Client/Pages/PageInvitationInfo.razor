@@ -223,7 +223,7 @@
     public int id { get; set; }
     private InvitationDTOView Invitation { get; set; } = new();
     private List<CommentDTOView> Comments { get; set; } = new();
-    private CommentDTOAdd CommentAdd { get; set; } = new();
+    private CommentDTOAddPlus CommentAdd { get; set; } = new();
     private MEditor? _editor;
     private bool Loading = true;
     private bool SendLoading = false;
@@ -559,7 +559,7 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<ViewRecord>>($"viewRecords/search?invitationId={id}");
-            if(!result.Successful)
+            if (!result.Successful)
             {
                 var resultPost = await Http.PostAsJsonAsync($"viewRecords?invitationId={id}", id);
                 var data = resultPost.Content.ReadFromJsonAsync<ApiResult<Collection>>().Result;
@@ -578,32 +578,30 @@
     {
         SendLoading = true;
 
-        var text = await _editor.GetTextAsync();
-        if (!string.IsNullOrWhiteSpace(text))
+        CommentDTOAdd CommentAdd = this.CommentAdd;
+
+        CommentAdd.InvitationId = id;
+        try
         {
-            CommentAdd.InvitationId = id;
-            try
+            var result = await Http.PostAsJsonAsync<CommentDTOAdd>("comments", CommentAdd);
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Comment>>().Result;
+            if (data.Successful)
             {
-                var result = await Http.PostAsJsonAsync<CommentDTOAdd>("comments", CommentAdd);
-                var data = result.Content.ReadFromJsonAsync<ApiResult<Comment>>().Result;
-                if (data.Successful)
-                {
-                    page = 1;
-                    CommentAdd = new();
-                    Invitation.CommentCount++;
-                    StateHasChanged();
-                    await PopupService.AlertAsync("发布成功");
-                    Navigation.NavigateTo(Navigation.Uri);
-                }
-                else
-                {
-                    await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
-                }
+                page = 1;
+                this.CommentAdd = new();
+                Invitation.CommentCount++;
+                StateHasChanged();
+                await PopupService.AlertAsync("发布成功");
+                Navigation.NavigateTo(Navigation.Uri);
             }
-            catch (Exception ex)
+            else
             {
-                await PopupService.AlertAsync(ex);
+                await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
             }
+        }
+        catch (Exception ex)
+        {
+            await PopupService.AlertAsync(ex);
         }
 
         SendLoading = false;

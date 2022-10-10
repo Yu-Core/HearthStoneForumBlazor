@@ -154,7 +154,7 @@
 
     private AreaDTOView Area { get; set; } = new AreaDTOView();
     private List<InvitationDTOView> Invitations { get; set; } = new();
-    private InvitationDTOAdd InvitationAdd { get; set; } = new();
+    private InvitationDTOAddPlus InvitationAdd { get; set; } = new();
     private MEditor? _editor;
     private bool Loading = true;
     private bool SendLoading = false;
@@ -173,6 +173,8 @@
     private int size = 20;
     private int total = 0;
     private int pageLength = 0;
+
+    
 
 
     protected override async Task OnInitializedAsync()
@@ -238,39 +240,37 @@
     private async Task HandleOnValidSubmit()
     {
         SendLoading = true;
-        var text = await _editor.GetTextAsync();
-        if (!string.IsNullOrWhiteSpace(text))
-        {
-            InvitationAdd.AreaId = id;
+        
+        InvitationDTOAdd InvitationAdd = this.InvitationAdd;
+        InvitationAdd.AreaId = id;
 
-            try
+        try
+        {
+            var result = await Http.PostAsJsonAsync<InvitationDTOAdd>("invitations", InvitationAdd);
+            var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
+            if (data.Successful)
             {
-                var result = await Http.PostAsJsonAsync<InvitationDTOAdd>("invitations", InvitationAdd);
-                var data = result.Content.ReadFromJsonAsync<ApiResult<Invitation>>().Result;
-                if (data.Successful)
-                {
-                    page = 1;
-                    InvitationAdd = new();
-                    StateHasChanged();
-                    await PopupService.AlertAsync("发布成功");
-                    navigation.NavigateTo(navigation.Uri);
-                }
-                else
-                {
-                    await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
-                }
+                page = 1;
+                this.InvitationAdd = new();
+                StateHasChanged();
+                await PopupService.AlertAsync("发布成功");
+                navigation.NavigateTo(navigation.Uri);
             }
-            catch (Exception ex)
+            else
             {
-                await PopupService.AlertAsync(ex);
+                await PopupService.AlertAsync(data.Msg, AlertTypes.Error);
             }
+        }
+        catch (Exception ex)
+        {
+            await PopupService.AlertAsync(ex);
         }
 
         SendLoading = false;
 
     }
     //清除发帖内容
-    private void OnClickClearContent()
+    private async void OnClickClearContent()
     {
         InvitationAdd = new();
     }

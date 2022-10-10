@@ -14,4 +14,20 @@ namespace HearthStoneForum.Model.DTOAdd
         [Required(ErrorMessage = "内容不能为空")]
         public string? Content { get; set; }
     }
+
+    public class CommentDTOAddPlus : CommentDTOAdd
+    {
+        [Required(ErrorMessage = "内容不能为空")]
+        public string ContentValidation
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Content))
+                {
+                    return string.Empty;
+                }
+                return Content.Replace("<p><br></p>", string.Empty);
+            }
+        }
+    }
 }

@@ -13,7 +13,9 @@ postimage.output = function (i, res, co) {
     }
     
     //调用insertEmbed 将图片插入到编辑器
-    w.quillobj.insertEmbed(w.quillselection.index, "image", url);
+    if (url.length > 0) {
+        w.quillobj.insertEmbed(w.quillselection.index, "image", url);
+    }
     /*area.value = area.value + res;*/
     if (co && opener != null) {
         opener.focus();
