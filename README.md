@@ -29,7 +29,7 @@
 
 #### 使用方法
 
-1.配置好存储连接字符串的文件 [appsettings.json](./HearthStoneForum.WebApi/appsettings.json)。
+1.更改连接字符串 [appsettings.json](./HearthStoneForum.WebApi/appsettings.json)[appsettings.json](./HearthStoneForum.JWT/appsettings.json)。
 
 2.由于采用了代码优先，修改 [BaseRepository.cs](./HearthStoneForum.Repository/BaseRepository.cs)，将下面这部分取消注释。
 
@@ -45,4 +45,3 @@
 //base.Context.CodeFirst.InitTables(types);
 ```
 
-3.如果需要测试数据，将 [HearthStoneForumDB.mdf](./TestData/HearthStoneForumDB.mdf) 附加到数据库，附加的T-Sql脚本：[additional.sql](./TestData/additional.sql)（需要修改）
