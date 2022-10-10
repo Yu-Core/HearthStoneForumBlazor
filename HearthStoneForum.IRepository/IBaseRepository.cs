@@ -11,6 +11,7 @@ namespace HearthStoneForum.IRepository
     public interface IBaseRepository<T> where T : class,new()
     {
         Task<bool> CreateAsync(T entity);
+        int CreateAsync(List<T> entities);
         Task<bool> DeleteAsync(int id);
         Task<bool> EditAsync(T entity);
         Task<T> FindAsync(int id);

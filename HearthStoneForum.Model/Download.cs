@@ -9,13 +9,9 @@ namespace HearthStoneForum.Model
 {
     public class Download : BaseId
     {
-        [SugarColumn(ColumnDataType = "nvarchar(64)")]
         public string? Name { get; set; }
-        [SugarColumn(ColumnDataType = "nvarchar(64)")]
         public string? Title { get; set; }
-        [SugarColumn(ColumnDataType = "nvarchar(32)")]
         public string? Icon { get; set; }
-        [SugarColumn(ColumnDataType = "nvarchar(2083)")]
         public string? UrlPath { get; set; }
     }
 }

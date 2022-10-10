@@ -18,6 +18,11 @@ namespace HearthStoneForum.Service
             return _iBaseRepository.CreateAsync(entity);
         }
 
+        public int CreateAsync(List<T> entities)
+        {
+            return _iBaseRepository.CreateAsync(entities);
+        }
+
         public Task<bool> DeleteAsync(int id)
         {
             return _iBaseRepository.DeleteAsync(id);

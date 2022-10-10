@@ -20,6 +20,7 @@ namespace HearthStoneForum.WebApi.Controllers
         public async Task<ActionResult<ApiResult>> GetRaceYear()
         {
             var data = await _iRaceYearService.QueryAsync();
+            data = data.OrderBy(data => data.Id).ToList();
             if (data.Count == 0) return ApiResultHelper.Error("没有更多的值");
             return ApiResultHelper.Success(data);
         }

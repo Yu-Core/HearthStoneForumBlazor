@@ -46,6 +46,11 @@ namespace HearthStoneForum.Repository
             return base.InsertAsync(entity);
         }
 
+        public int CreateAsync(List<T> entities)
+        {
+            return base.Context.Insertable(entities).ExecuteCommand();
+        }
+
         public Task<bool> DeleteAsync(int id)
         {
             return base.DeleteByIdAsync(id);
