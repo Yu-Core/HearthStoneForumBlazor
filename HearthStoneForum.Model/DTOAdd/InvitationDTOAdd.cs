@@ -18,7 +18,7 @@ namespace HearthStoneForum.Model.DTOAdd
         public int AreaId { get; set; }
     }
 
-    public class InvitationDTOAddPlus : InvitationDTOAdd
+    public class InvitationDTOAddPlus : InvitationDTOAdd, IMEditorModel
     {
         [Required(ErrorMessage = "内容不能为空")]
         public string ContentValidation
@@ -31,6 +31,17 @@ namespace HearthStoneForum.Model.DTOAdd
                 }
                 return Content.Replace("<p><br></p>", string.Empty);
             }
+            set
+            {
+                ContentValidation = value;
+            }
         }
+    }
+
+
+    public interface IMEditorModel
+    {
+        string? Content { get; set; }
+        string ContentValidation { get; set; }
     }
 }

@@ -1,0 +1,110 @@
+﻿@inject IJSRuntime JS
+@inject IAuthService AuthService
+<MEditor @ref="@_editor"
+         Value="@(Model.Content)"
+         ValueChanged="()=>ValueChange()"
+         ContentStyle="height:200px;"
+         ToolbarClass="d-flex"
+         Placeholder="请输入内容">
+    <ToolbarContent>
+        <span class="ql-formats">
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <button class="ql-strike"></button>
+            <select class="ql-color"></select>
+            <select class="ql-background"></select>
+            <button class="ql-clean"></button>
+        </span>
+        <span class="ql-formats">
+            <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+            </select>
+        </span>
+
+        <span class="ql-formats">
+            <select class="ql-header">
+                <option selected=""></option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+            </select>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-script" value="sub"></button>
+            <button class="ql-script" value="super"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-blockquote"></button>
+            <button class="ql-code-block"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+            <button class="ql-emoji"></button>
+        </span>
+    </ToolbarContent>
+</MEditor>
+<div class="m-text-field__details ps-3">
+    <div class="m-messages theme--light error--text">
+        <div class="m-messages__wrapper">
+            <ValidationMessage class="m-messages__message" For="@(()=>Model.ContentValidation)"></ValidationMessage>
+        </div>
+    </div>
+</div>
+
+@code {
+    private MEditor? _editor { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public IMEditorModel? Model { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback OnChange { get; set; }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var IsAuthenticated = await AuthService.IsAuthenticated();
+            if (IsAuthenticated)
+            {
+                await ChangeToolbarImage();
+            }
+        }
+    }
+
+    private async Task ValueChange()
+    {
+        if (Model.Content == _editor.Value) return;
+        if (Model.Content == null)//清空后Model.Content为空
+        {
+            Model.Content = _editor.Value;
+        }
+        else{
+            Model.Content = _editor.Value;
+            await OnChange.InvokeAsync();//验证
+        }
+    }
+
+    //执行JS中覆盖MEditor工具栏的图片上传的点击
+    private async Task ChangeToolbarImage()
+    {
+        await JS.InvokeVoidAsync("ChangeToolbarImage", _editor.ContentRef);
+    }
+}

@@ -2,7 +2,6 @@
 @inject HttpClient Http
 @inject NavigationManager navigation
 @inject IPopupService PopupService
-@inject IAuthService AuthService
 @inject IJSRuntime JS
 
 <div class="main @(Loading?"d-none":"")">
@@ -56,7 +55,7 @@
         <AuthorizeView>
             <Authorized>
                 <div id="invitation-send" class="invitation-send">
-                    <MForm EnableValidation Model="InvitationAdd" OnValidSubmit="HandleOnValidSubmit">
+                    <MForm @ref="_mForm" EnableValidation Model="InvitationAdd" OnValidSubmit="HandleOnValidSubmit">
                         <ChildContent Context="mformContext">
                             <h5>发布新贴</h5>
                             <MTextField @bind-Value="@(InvitationAdd.Title)"
@@ -65,63 +64,10 @@
                                         Dense
                                         Placeholder="请输入标题">
                             </MTextField>
-                            <MEditor @ref="@_editor"
-                                     @bind-Value="@(InvitationAdd.Content)"
-                                     ContentStyle="height:200px;"
-                                     ToolbarClass="d-flex"
-                                     Placeholder="请输入内容">
-                                <ToolbarContent>
-                                    <span class="ql-formats">
-                                        <button class="ql-bold"></button>
-                                        <button class="ql-italic"></button>
-                                        <button class="ql-underline"></button>
-                                        <button class="ql-strike"></button>
-                                        <select class="ql-color"></select>
-                                        <select class="ql-background"></select>
-                                        <button class="ql-clean"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <select class="ql-align">
-                                            <option selected></option>
-                                            <option value="center"></option>
-                                            <option value="right"></option>
-                                            <option value="justify"></option>
-                                        </select>
-                                    </span>
-                                    
-                                    <span class="ql-formats">
-                                        <select class="ql-header">
-                                            <option selected=""></option>
-                                            <option value="1"></option>
-                                            <option value="2"></option>
-                                            <option value="3"></option>
-                                            <option value="4"></option>
-                                            <option value="5"></option>
-                                        </select>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-list" value="ordered"></button>
-                                        <button class="ql-list" value="bullet"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-indent" value="-1"></button>
-                                        <button class="ql-indent" value="+1"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-script" value="sub"></button>
-                                        <button class="ql-script" value="super"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-blockquote"></button>
-                                        <button class="ql-code-block"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-link"></button>
-                                        <button class="ql-image"></button>
-                                        <button class="ql-emoji"></button>
-                                    </span>
-                                </ToolbarContent>
-                            </MEditor>
+                            <SharedEditor Model="InvitationAdd"
+                                          OnChange="()=>_mForm.ValidateAsync()">
+                            </SharedEditor>
+
                             <div class="d-flex justify-content-between mt-4">
                                 <MButton Color="primary"
                                          Loading="SendLoading"
@@ -155,7 +101,9 @@
     private AreaDTOView Area { get; set; } = new AreaDTOView();
     private List<InvitationDTOView> Invitations { get; set; } = new();
     private InvitationDTOAddPlus InvitationAdd { get; set; } = new();
-    private MEditor? _editor;
+    private MForm? _mForm;
+
+    //private MEditor? _editor;
     private bool Loading = true;
     private bool SendLoading = false;
 
@@ -174,7 +122,7 @@
     private int total = 0;
     private int pageLength = 0;
 
-    
+
 
 
     protected override async Task OnInitializedAsync()
@@ -183,15 +131,11 @@
 
         ChangeInvitations();
 
-        var IsAuthenticated = await AuthService.IsAuthenticated();
-        if (IsAuthenticated)
-        {
-            await ChangeToolbarImage();
-        }
 
         Loading = false;
 
     }
+
 
 
     private async Task SetArea()
@@ -240,7 +184,7 @@
     private async Task HandleOnValidSubmit()
     {
         SendLoading = true;
-        
+
         InvitationDTOAdd InvitationAdd = this.InvitationAdd;
         InvitationAdd.AreaId = id;
 
@@ -251,10 +195,9 @@
             if (data.Successful)
             {
                 page = 1;
-                this.InvitationAdd = new();
+                await OnClickClearContent();
                 StateHasChanged();
                 await PopupService.AlertAsync("发布成功");
-                navigation.NavigateTo(navigation.Uri);
             }
             else
             {
@@ -267,17 +210,16 @@
         }
 
         SendLoading = false;
-
     }
     //清除发帖内容
-    private async void OnClickClearContent()
+    private async Task OnClickClearContent()
     {
+
         InvitationAdd = new();
+        
+        await _mForm.ResetValidationAsync();
+
     }
 
-    //执行JS中覆盖MEditor工具栏的图片上传的点击
-    private async Task ChangeToolbarImage()
-    {
-        await JS.InvokeVoidAsync("ChangeToolbarImage", _editor.ContentRef);
-    }
+
 }
