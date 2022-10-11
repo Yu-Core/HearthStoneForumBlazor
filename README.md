@@ -29,7 +29,7 @@
 
 #### 使用方法
 
-1.更改连接字符串 [appsettings.json](./HearthStoneForum.WebApi/appsettings.json)[appsettings.json](./HearthStoneForum.JWT/appsettings.json)。
+1.更改连接字符串 [appsettings.json](./HearthStoneForum.WebApi/appsettings.json)[appsettings.json](./HearthStoneForum.JWT/appsettings.json)[appsettings.json](./HearthStoneForum.Test/appsettings.json)。
 
 2.由于采用了代码优先，修改 [BaseRepository.cs](./HearthStoneForum.Repository/BaseRepository.cs)，将下面这部分取消注释。
 
@@ -44,4 +44,6 @@
 //};
 //base.Context.CodeFirst.InitTables(types);
 ```
+
+3.插入一些基础数据，运行[TestController.cs](./HearthStoneForum.Test/Controllers/TestController.cs)这个控制器
 
