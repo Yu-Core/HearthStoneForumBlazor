@@ -1,5 +1,5 @@
 {
-  "Area": [
+  "Areas": [
     {
       "name": "综合讨论区",
       "description": "曼妙的音乐已然响起，旅店老板也已经把桌子准备好了，欢迎加入《炉石传说》！",
@@ -78,7 +78,7 @@
       "id": 9
     }
   ],
-  "Carousel": [
+  "Carousels": [
     {
       "title": "购买酒馆战棋赛季通行证",
       "imagePath": "https://hearthstone.nosdn.127.net/a/images/2022/8/31/0e4f88b9cd3d7e759e3fd02e075cda20.jpg",
@@ -95,7 +95,7 @@
       "id": 5
     }
   ],
-  "Expansion": [
+  "Expansions": [
     {
       "name": "纳克萨玛斯的诅咒",
       "mode": "冒险模式",
@@ -347,7 +347,7 @@
       "id": 26
     }
   ],
-  "Portrait": [
+  "Portraits": [
     {
       "urlPath": "https://i.postimg.cc/XJMSM0sV/Fantasyshow-1.jpg",
       "id": 1
@@ -457,7 +457,7 @@
       "id": 27
     }
   ],
-  "RaceYear": [
+  "RaceYears": [
     {
       "name": "经典系列",
       "year": "2014-2015",

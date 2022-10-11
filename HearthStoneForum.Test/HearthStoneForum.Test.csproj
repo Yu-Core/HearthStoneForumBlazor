@@ -17,4 +17,6 @@
     <ProjectReference Include="..\HearthStoneForum.WebApi\HearthStoneForum.WebApi.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 </Project>

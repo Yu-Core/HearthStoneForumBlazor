@@ -4,6 +4,7 @@ using HearthStoneForum.Model.DTOView;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace HearthStoneForum.Test.Controllers
@@ -39,19 +40,42 @@ namespace HearthStoneForum.Test.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResult>> AddTestData()
         {
-            using FileStream openStream = System.IO.File.OpenRead(json);
-            DataObj? obj = await JsonSerializer.DeserializeAsync<DataObj>(openStream);
+            //读取json文件，并反序列化
+            string jsonString = System.IO.File.ReadAllText(json);
+            DataObj? obj = JsonConvert.DeserializeObject<DataObj>(jsonString);
 
-            var num = _iAreaService.CreateAsync(obj.Areas);
-            if (num == 0) return ApiResultHelper.Error("Areas创建失败");
-            var num2 = _iCarouselService.CreateAsync(obj.Carousels);
-            if (num2 == 0) return ApiResultHelper.Error("Carousels创建失败");
-            var num3 = _iExpansionService.CreateAsync(obj.Expansions);
-            if (num3 == 0) return ApiResultHelper.Error("Expansions创建失败");
-            var num4 = _iPortraitService.CreateAsync(obj.Portraits);
-            if (num4 == 0) return ApiResultHelper.Error("Portraits创建失败");
-            var num5 = _iRaceYearService.CreateAsync(obj.RaceYears);
-            if (num5 == 0) return ApiResultHelper.Error("RaceYears创建失败");
+            //查询数据，如果数据为空，将json中的数据插入数据库
+            var areas = await _iAreaService.QueryAsync();
+            if(areas.Count == 0)
+            {
+                var row = _iAreaService.CreateAsync(obj.Areas);
+                if (row == 0) return ApiResultHelper.Error("Areas插入失败");
+            }
+            var carousels = await _iCarouselService.QueryAsync();
+            if(carousels.Count == 0)
+            {
+                var row = _iCarouselService.CreateAsync(obj.Carousels);
+                if (row == 0) return ApiResultHelper.Error("Carousels插入失败");
+            }
+            var expansions = await _iExpansionService.QueryAsync();
+            if(expansions.Count == 0)
+            {
+                var row = _iExpansionService.CreateAsync(obj.Expansions);
+                if (row == 0) return ApiResultHelper.Error("Expansions插入失败");
+            }
+            var portaits = await _iPortraitService.QueryAsync();
+            if(portaits.Count == 0)
+            {
+                var row = _iPortraitService.CreateAsync(obj.Portraits);
+                if (row == 0) return ApiResultHelper.Error("Portraits插入失败");
+            }
+            var raceYears = await _iRaceYearService.QueryAsync();
+            if(raceYears.Count == 0)
+            {
+                var row = _iRaceYearService.CreateAsync(obj.RaceYears);
+                if (row == 0) return ApiResultHelper.Error("RaceYears插入失败");
+            }
+            
 
             return ApiResultHelper.Success(null);
         }
