@@ -1,9 +1,12 @@
 ﻿using HearthStoneForum.IService;
 using HearthStoneForum.Model;
+using HearthStoneForum.Service;
 using HearthStoneForum.WebApi.Utility.ApiResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SqlSugar;
+using System.Drawing;
 
 namespace HearthStoneForum.WebApi.Controllers
 {
@@ -48,11 +51,15 @@ namespace HearthStoneForum.WebApi.Controllers
             return ApiResultHelper.Success(notice);
         }
         [HttpGet("search")]
-        public async Task<ActionResult<ApiResult>> GetNoticeByName(string name)
+        public async Task<ActionResult<ApiResult>> GetNoticeByName(string searchText, int page, int size)
         {
-            var data = await _iNoticeService.QueryAsync(it => it.Title.ToLower().Contains(name.ToLower()));
-            if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的用户");
-            return ApiResultHelper.Success(data);
+            RefAsync<int> total = 0;
+            var data = await _iNoticeService.QueryAsync(
+                it => it.Title.ToLower().Contains(searchText.ToLower()) ,
+                page, size, total);
+
+            if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");
+            return ApiResultHelper.Success(data,total);
         }
         [HttpPost]
         public async Task<ActionResult<ApiResult>> Create(Notice notice)

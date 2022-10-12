@@ -21,8 +21,18 @@
             </div>
         </MListItemGroup>
         <MSpacer Class="d-flex d-md-none"></MSpacer>
-        <MTextField Class="navigation-search" Dense TValue="string" HideDetails="@("false")" Solo Placeholder="搜索" AppendIcon="mdi-magnify"></MTextField>
+        <MTextField @bind-Value="@(SearchText)"
+                    Class="navigation-search"
+                    Dense TValue="string"
+                    HideDetails="@("false")"
+                    Solo
+                    Placeholder="搜索"
+                    AppendIcon="mdi-magnify"
+                    OnAppendClick="()=>Search()">
+        </MTextField>
         <MSpacer Class="d-flex d-md-none"></MSpacer>
+
+
 
         <AuthorizeView>
             <Authorized>
@@ -72,7 +82,7 @@
                     <MListItemAvatar Color="primary" Size="100">
                         <SharedPortrait Src="@(UserInfoSimple.PortraitUrl)"
                                         Text="@(UserInfoSimple.Name)">
-                        </SharedPortrait>                  
+                        </SharedPortrait>
                     </MListItemAvatar>
 
                     <MListItemContent>
@@ -114,7 +124,7 @@
     <MMain Id="scrolling" Class="overflow-y-auto" Style="background-color:#F7F8F9;color:#282828;">
         <!-- 给应用提供合适的间距 -->
         <MContainer Fluid>
-                @Body
+            @Body
         </MContainer>
     </MMain>
 
@@ -145,7 +155,13 @@
     private bool drawer;
     private bool drawerRight;
     StringNumber selectItem = 0;
-    private UserInfoDTOViewSimple UserInfoSimple{
+    private string? SearchText
+    {
+        get => LayoutState.SearchText;
+        set => LayoutState.SearchText = value;
+    }
+    private UserInfoDTOViewSimple UserInfoSimple
+    {
         get => LayoutState.UserInfoSimple;
     }
     private class NavigationButton
@@ -179,12 +195,13 @@
     protected override async Task OnInitializedAsync()
     {
         var IsAuthenticated = await AuthService.IsAuthenticated();
-        if(IsAuthenticated){
+        if (IsAuthenticated)
+        {
             var user = await AuthService.GetUser();
             var id = user.FindFirst("userId").Value;
             var PortraitUrl = (await Http.GetFromJsonAsync<ApiResult<string>>("userInfos/portrait?userId=" + id)).Data ?? string.Empty;
             var Name = (await Http.GetFromJsonAsync<ApiResult<string>>("userInfos/name?userId=" + id)).Data ?? string.Empty;
-            
+
             LayoutState.OnChange += StateHasChanged;
 
             LayoutState.SetUserInfoSimple(new() { Name = Name, PortraitUrl = PortraitUrl });
@@ -193,7 +210,10 @@
 
     public void Dispose() => LayoutState.OnChange -= StateHasChanged;
 
-    
-    
+    public void Search()
+    {
+        Navigation.NavigateTo($"/search");
+    }
+
 }
 

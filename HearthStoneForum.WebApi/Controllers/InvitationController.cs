@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SqlSugar;
 using System.Drawing;
+using System.Linq;
 using System.Security.Policy;
 using System.Xml.Linq;
 
@@ -86,11 +87,15 @@ namespace HearthStoneForum.WebApi.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<ApiResult>> GetInvitationByName(string name)
+        public async Task<ActionResult<ApiResult>> GetInvitationByName(string searchText,int page,int size)
         {
-            var data = await _iInvitationService.QueryDTOAsync<InvitationDTOView>(it => it.Title.ToLower().Contains(name.ToLower()));
+            RefAsync<int> total = 0;
+            var data = await _iInvitationService.QueryAsync(
+                it => it.Title.ToLower().Contains(searchText.ToLower()),
+                page,size, total);
+
             if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");
-            return ApiResultHelper.Success(data);
+            return ApiResultHelper.Success(data,total);
         }
 
         [HttpGet("new")]

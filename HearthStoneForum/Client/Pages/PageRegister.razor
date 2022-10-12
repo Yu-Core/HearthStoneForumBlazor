@@ -168,7 +168,7 @@
 
     private void Next_step1()
     {
-        _form.ValidateAsync();
+        _form.Validate();
         if (_valid)
         {
             if (!_check_agreement)
@@ -186,7 +186,7 @@
     }
     private async void Next_step2()
     {
-        await _form.ValidateAsync();
+        _form.Validate();
         if (_valid)
         {
             _step = 3;

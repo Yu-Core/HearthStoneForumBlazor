@@ -65,7 +65,7 @@
                                         Placeholder="请输入标题">
                             </MTextField>
                             <SharedEditor Model="InvitationAdd"
-                                          OnChange="()=>_mForm.ValidateAsync()">
+                                          OnChange="()=>_mForm.Validate()">
                             </SharedEditor>
 
                             <div class="d-flex justify-content-between mt-4">
@@ -195,7 +195,7 @@
             if (data.Successful)
             {
                 page = 1;
-                await OnClickClearContent();
+                OnClickClearContent();
                 StateHasChanged();
                 await PopupService.AlertAsync("发布成功");
             }
@@ -212,12 +212,12 @@
         SendLoading = false;
     }
     //清除发帖内容
-    private async Task OnClickClearContent()
+    private void OnClickClearContent()
     {
 
         InvitationAdd = new();
         
-        await _mForm.ResetValidationAsync();
+        _mForm.ResetValidation();
 
     }
 

@@ -138,7 +138,7 @@
                                 <h6>发布评论</h6>
 
                                 <SharedEditor Model="CommentAdd"
-                                              OnChange="()=>_mForm.ValidateAsync()">
+                                              OnChange="()=>_mForm.Validate()">
                                 </SharedEditor>
 
                                 <div class="d-flex justify-content-between mt-4">
@@ -536,7 +536,7 @@
             if (data.Successful)
             {
                 page = 1;
-                await OnClickClearContent();
+                OnClickClearContent();
                 Invitation.CommentCount++;
                 StateHasChanged();
                 await PopupService.AlertAsync("发布成功");
@@ -555,10 +555,10 @@
         SendLoading = false;
     }
     //清除评论内容
-    private async Task OnClickClearContent()
+    private void OnClickClearContent()
     {
         CommentAdd = new();
-        await _mForm.ResetValidationAsync();
+        _mForm.ResetValidation();
     }
 
     //删除评论

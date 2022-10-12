@@ -1,0 +1,177 @@
+﻿@page "/search"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@implements IDisposable
+@inject MainLayoutState LayoutState
+
+<div class="main @(Loading?"d-none":"")">
+    <div class="search-wrap">
+        <div class="breadcrumbs">
+            你所在的位置：
+            <MBreadcrumbs>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Href="">炉石论坛</MBreadcrumbsItem>
+                <MBreadcrumbsItem Style="font-size:0.9rem" Disabled>搜索结果</MBreadcrumbsItem>
+            </MBreadcrumbs>
+        </div>
+        <div class="search-head">
+            <h2>搜索结果</h2>
+        </div>
+        <div>
+            <MRadioGroup @bind-Value="SearchMode"
+                         Row>
+                <MRadio Label="公告"
+                        Value="@("notices")">
+                </MRadio>
+                <MRadio Label="帖子"
+                        Value="@("invitations")">
+                </MRadio>
+            </MRadioGroup>
+        </div>
+        <div class="search-content">
+            <div @ref="_elementNotices" class="search-list @(SearchMode == "notices"?"":"d-none")">
+                @for (var i = 0; i < Notices.Count; i++)
+                {
+                    <a href="@("noticeInfo/"+Notices[i].Id)" class="rounded-lg">
+                        <div class="search-row rounded-lg">
+                            <div class="search-title">
+                                @Notices[i].Title
+                            </div>
+                            <div class="search-time">
+                                @Notices[i].CreatedTime.ToString("d")
+                            </div>
+                        </div>
+                    </a>
+                }
+                <MInfiniteScroll HasMore="@_hasMoreNotices"
+                                 OnLoadMore="@LoadMoreNotices"
+                                 Parent="@_elementNotices">
+                </MInfiniteScroll>
+            </div>
+
+            <div @ref="_elementInvitations" class="search-list @(SearchMode == "invitations"?"":"d-none")">
+                @for (var i = 0; i < Invitations.Count; i++)
+                {
+                    <a href="@("invitationInfo/"+Invitations[i].Id)" class="rounded-lg">
+                        <div class="search-row rounded-lg">
+                            <div class="search-title">
+                                @Invitations[i].Title
+                            </div>
+                            <div class="search-time">
+                                @Invitations[i].CreatedTime.ToString("d")
+                            </div>
+                        </div>
+                    </a>
+                }
+                <MInfiniteScroll HasMore="@_hasMoreInvitations"
+                                 OnLoadMore="@LoadMoreInvitations"
+                                 Parent="@_elementInvitations">
+                </MInfiniteScroll>
+            </div>
+
+
+        </div>
+        
+
+
+        <SharedLoad Value="Loading"></SharedLoad>
+        <SharedScrollButton Float ScrollTarget="scrolling" Icon="mdi-arrow-up-thick"></SharedScrollButton>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string? SearchText
+    {
+        get  => LayoutState.SearchText;
+        set => LayoutState.SearchText = value;
+    }
+    private string? SearchMode { get; set; } = "notices";
+    private List<Notice> Notices { get; set; } = new();
+    private List<Invitation> Invitations { get; set; } = new();
+    private ElementReference _elementNotices { get; set; }
+    private ElementReference _elementInvitations { get; set; }
+
+    private bool _hasMoreInvitations = true;
+    private bool _hasMoreNotices = true;
+
+    private bool Loading = true;
+
+    private int pageNotices = 0;
+    private int sizeNotices = 10;
+    private int totalNotices = 0;
+    private int pageInvitations = 0;
+    private int sizeInvitations = 10;
+    private int totalInvitations = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMoreNotices();
+        await LoadMoreInvitations();
+        Loading = false;
+    }
+
+    private async Task<List<Notice>> GetNotices()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/search?searchText={SearchText}&page={pageNotices}&size={sizeNotices}");
+            if (result.Successful)
+            {
+                pageNotices++;
+                totalNotices = result.Total;
+                return result.Data ?? new();
+            }
+            return new();
+        }
+        catch (Exception)
+        {
+            Navigation.NavigateTo("404");
+            throw;
+        }
+    }
+    private async Task<List<Invitation>> GetInvitations()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"invitations/search?searchText={SearchText}&page={pageInvitations}&size={sizeInvitations}");
+            if (result.Successful)
+            {
+                pageInvitations++;
+                totalInvitations = result.Total;
+                return result.Data ?? new();
+
+            }
+            return new();
+        }
+        catch (Exception)
+        {
+            Navigation.NavigateTo("404");
+            throw;
+        }
+    }
+
+
+    //加载更多公告
+    private async Task LoadMoreNotices()
+    {
+        if (_hasMoreNotices)
+        {
+            var data = await GetNotices();
+            Notices.AddRange(data);
+            _hasMoreNotices = totalNotices > Notices.Count;
+        }
+    }
+    //加载更多帖子
+    private async Task LoadMoreInvitations()
+    {
+        if (_hasMoreInvitations)
+        {
+            var data = await GetInvitations();
+            Invitations.AddRange(data);
+            _hasMoreInvitations = totalInvitations > Invitations.Count;
+        }
+
+    }
+    public void Dispose() => SearchText = string.Empty;
+}
