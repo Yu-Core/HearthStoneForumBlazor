@@ -18,5 +18,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<MainLayoutState>();
+builder.Services.AddScoped<SearchState>();
 
 await builder.Build().RunAsync();

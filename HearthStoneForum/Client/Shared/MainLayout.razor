@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @implements IDisposable
 @inject MainLayoutState LayoutState
+@inject SearchState SearchState
 @inject NavigationManager Navigation
 
 <MApp AlertParameters='param => { param.Centered = true;}'>
@@ -155,11 +156,7 @@
     private bool drawer;
     private bool drawerRight;
     StringNumber selectItem = 0;
-    private string? SearchText
-    {
-        get => LayoutState.SearchText;
-        set => LayoutState.SearchText = value;
-    }
+    private string? SearchText { get; set; }
     private UserInfoDTOViewSimple UserInfoSimple
     {
         get => LayoutState.UserInfoSimple;
@@ -203,16 +200,28 @@
             var Name = (await Http.GetFromJsonAsync<ApiResult<string>>("userInfos/name?userId=" + id)).Data ?? string.Empty;
 
             LayoutState.OnChange += StateHasChanged;
+            SearchState.OnChange += StateHasChanged;
 
             LayoutState.SetUserInfoSimple(new() { Name = Name, PortraitUrl = PortraitUrl });
         }
     }
 
-    public void Dispose() => LayoutState.OnChange -= StateHasChanged;
+    public void Dispose()
+    {
+        LayoutState.OnChange -= StateHasChanged;
+        SearchState.OnChange -= StateHasChanged;
+    }
 
     public void Search()
     {
-        Navigation.NavigateTo($"/search");
+        SearchState.SetSearchText(SearchText);
+
+        SearchText = string.Empty;
+
+        if ((Navigation.BaseUri + "search") != Navigation.Uri)
+        {
+            Navigation.NavigateTo("/search");
+        }
     }
 
 }

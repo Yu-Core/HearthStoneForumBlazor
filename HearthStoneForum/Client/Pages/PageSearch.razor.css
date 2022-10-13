@@ -24,8 +24,6 @@
 .search-content {
     margin-top: 16px;
     margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
 }
 
 
@@ -57,10 +55,4 @@
 }
 
 .search-time {
-}
-
-.search-list{
-    height:300px;
-    overflow:auto;
-    margin:0 auto;
 }

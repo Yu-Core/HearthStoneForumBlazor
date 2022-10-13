@@ -2,9 +2,10 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @implements IDisposable
+@inject SearchState SearchState
 @inject MainLayoutState LayoutState
 
-<div class="main @(Loading?"d-none":"")">
+<div class="main">
     <div class="search-wrap">
         <div class="breadcrumbs">
             你所在的位置：
@@ -14,101 +15,143 @@
             </MBreadcrumbs>
         </div>
         <div class="search-head">
-            <h2>搜索结果</h2>
+            <h2><span style="color:#757575;">@(SearchText.GetCutOutByLength(20))</span>的搜索结果</h2>
         </div>
-        <div>
-            <MRadioGroup @bind-Value="SearchMode"
-                         Row>
-                <MRadio Label="公告"
-                        Value="@("notices")">
-                </MRadio>
-                <MRadio Label="帖子"
-                        Value="@("invitations")">
-                </MRadio>
-            </MRadioGroup>
+        <div class="@(NotFound?"d-none":"")">
+            <MButton Outlined="@(searchMode !=SearchMode.Notices)"
+                     Dark="@(searchMode ==SearchMode.Notices)"
+                     Color="indigo"
+                     Rounded
+                     OnClick="()=>ChangeSearchMode(SearchMode.Notices)">
+                公告
+            </MButton>
+            <MButton Outlined="@(searchMode !=SearchMode.Invitations)"
+                     Dark="@(searchMode ==SearchMode.Invitations)"
+                     Color="indigo"
+                     Rounded
+                     OnClick="()=>ChangeSearchMode(SearchMode.Invitations)">
+                帖子
+            </MButton>
         </div>
-        <div class="search-content">
-            <div @ref="_elementNotices" class="search-list @(SearchMode == "notices"?"":"d-none")">
-                @for (var i = 0; i < Notices.Count; i++)
-                {
-                    <a href="@("noticeInfo/"+Notices[i].Id)" class="rounded-lg">
-                        <div class="search-row rounded-lg">
-                            <div class="search-title">
-                                @Notices[i].Title
+        <div class="search-content @(NotFound?"d-none":"")">
+            @if (searchMode == SearchMode.Notices)
+            {
+                <MVirtualScroll Height="300"
+                            Items="Notices"
+                            @ref="_vsNotices">
+                    <ItemContent>
+                        <a href="@("noticeInfo/"+context.Id)" class="rounded-lg">
+                            <div class="search-row rounded-lg">
+                                <div class="search-title">
+                                    @context.Title
+                                </div>
+                                <div class="search-time">
+                                    @context.CreatedTime.ToString("d")
+                                </div>
                             </div>
-                            <div class="search-time">
-                                @Notices[i].CreatedTime.ToString("d")
+                        </a>
+                    </ItemContent>
+                    <FooterContent>
+                        <MInfiniteScroll HasMore="@_hasMoreNotices"
+                                     OnLoadMore="@LoadMoreNotices"
+                                     Parent="@_vsNotices?.Ref">
+                        </MInfiniteScroll>
+                    </FooterContent>
+                </MVirtualScroll>
+            }
+            @if (searchMode == SearchMode.Invitations)
+            {
+                <MVirtualScroll Height="300"
+                            Items="Invitations"
+                            @ref="_vsInvitations">
+                    <ItemContent>
+                        <a href="@("invitationInfo/"+context.Id)" class="rounded-lg">
+                            <div class="search-row rounded-lg">
+                                <div class="search-title">
+                                    @context.Title
+                                </div>
+                                <div class="search-time">
+                                    @context.CreatedTime.ToString("d")
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                }
-                <MInfiniteScroll HasMore="@_hasMoreNotices"
-                                 OnLoadMore="@LoadMoreNotices"
-                                 Parent="@_elementNotices">
-                </MInfiniteScroll>
-            </div>
-
-            <div @ref="_elementInvitations" class="search-list @(SearchMode == "invitations"?"":"d-none")">
-                @for (var i = 0; i < Invitations.Count; i++)
-                {
-                    <a href="@("invitationInfo/"+Invitations[i].Id)" class="rounded-lg">
-                        <div class="search-row rounded-lg">
-                            <div class="search-title">
-                                @Invitations[i].Title
-                            </div>
-                            <div class="search-time">
-                                @Invitations[i].CreatedTime.ToString("d")
-                            </div>
-                        </div>
-                    </a>
-                }
-                <MInfiniteScroll HasMore="@_hasMoreInvitations"
-                                 OnLoadMore="@LoadMoreInvitations"
-                                 Parent="@_elementInvitations">
-                </MInfiniteScroll>
-            </div>
+                        </a>
+                    </ItemContent>
+                    <FooterContent>
+                        <MInfiniteScroll HasMore="@_hasMoreInvitations"
+                                     OnLoadMore="@LoadMoreInvitations"
+                                     Parent="@_vsInvitations?.Ref">
+                        </MInfiniteScroll>
+                    </FooterContent>
+                </MVirtualScroll>
+            }
 
 
         </div>
-        
-
-
-        <SharedLoad Value="Loading"></SharedLoad>
+        <div class="text-center @(NotFound?"":"d-none")">
+            <h4>搜索结果为空</h4>
+        </div>
         <SharedScrollButton Float ScrollTarget="scrolling" Icon="mdi-arrow-up-thick"></SharedScrollButton>
     </div>
 </div>
 
 
 @code {
-    [Parameter]
-    public string? SearchText
+    private string? SearchText
     {
-        get  => LayoutState.SearchText;
-        set => LayoutState.SearchText = value;
+        get
+        {
+            return SearchState.SearchText;
+        }
     }
-    private string? SearchMode { get; set; } = "notices";
+    private SearchMode searchMode { get; set; } = SearchMode.Notices;
     private List<Notice> Notices { get; set; } = new();
     private List<Invitation> Invitations { get; set; } = new();
-    private ElementReference _elementNotices { get; set; }
-    private ElementReference _elementInvitations { get; set; }
+    private MVirtualScroll<Notice>? _vsNotices;
+    private MVirtualScroll<Invitation>? _vsInvitations;
+    private bool NotFound;
 
-    private bool _hasMoreInvitations = true;
-    private bool _hasMoreNotices = true;
+    private bool _hasMoreInvitations;
+    private bool _hasMoreNotices;
 
-    private bool Loading = true;
 
-    private int pageNotices = 0;
+    private int pageNotices = 1;
     private int sizeNotices = 10;
-    private int totalNotices = 0;
-    private int pageInvitations = 0;
+    private int pageInvitations = 1;
     private int sizeInvitations = 10;
-    private int totalInvitations = 0;
+    private bool firstLoadNotices = true;
+    private bool firstLoadInvitations = true;
 
-    protected override async Task OnInitializedAsync()
+    private enum SearchMode
     {
-        await LoadMoreNotices();
-        await LoadMoreInvitations();
-        Loading = false;
+        Notices, Invitations
+    }
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            NotFound = true;
+        }
+        SearchState.OnChange += InitializedSearch;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!NotFound)
+            {
+                await LoadMoreNotices();
+                //await LoadMoreInvitations();
+                StateHasChanged();
+            }
+
+        }
+    }
+
+    public void Dispose()
+    {
+        SearchState.OnChange -= InitializedSearch;
     }
 
     private async Task<List<Notice>> GetNotices()
@@ -116,13 +159,17 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/search?searchText={SearchText}&page={pageNotices}&size={sizeNotices}");
-            if (result.Successful)
+            if (!result.Successful)
             {
-                pageNotices++;
-                totalNotices = result.Total;
-                return result.Data ?? new();
+                return new();
             }
-            return new();
+            await Task.Delay(1000);
+            pageNotices++;
+            if (firstLoadNotices)
+            {
+                firstLoadNotices = false;
+            }
+            return result.Data ?? new();
         }
         catch (Exception)
         {
@@ -135,14 +182,17 @@
         try
         {
             var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"invitations/search?searchText={SearchText}&page={pageInvitations}&size={sizeInvitations}");
-            if (result.Successful)
+            if (!result.Successful)
             {
-                pageInvitations++;
-                totalInvitations = result.Total;
-                return result.Data ?? new();
-
+                return new();
             }
-            return new();
+            await Task.Delay(1000);
+            pageInvitations++;
+            if (firstLoadInvitations)
+            {
+                firstLoadInvitations = false;
+            }
+            return result.Data ?? new();
         }
         catch (Exception)
         {
@@ -155,23 +205,66 @@
     //加载更多公告
     private async Task LoadMoreNotices()
     {
-        if (_hasMoreNotices)
-        {
-            var data = await GetNotices();
-            Notices.AddRange(data);
-            _hasMoreNotices = totalNotices > Notices.Count;
-        }
+        var data = await GetNotices();
+        Notices.AddRange(data);
+        _hasMoreNotices = data.Count > 0;
     }
     //加载更多帖子
     private async Task LoadMoreInvitations()
     {
-        if (_hasMoreInvitations)
+        var data = await GetInvitations();
+        Invitations.AddRange(data);
+        _hasMoreInvitations = data.Count > 0;
+
+    }
+    //改变搜索类型
+    private async Task ChangeSearchMode(SearchMode mode)
+    {
+        searchMode = mode;
+        if (firstLoadInvitations)
         {
-            var data = await GetInvitations();
-            Invitations.AddRange(data);
-            _hasMoreInvitations = totalInvitations > Invitations.Count;
+            if (mode == SearchMode.Invitations)
+            {
+                await LoadMoreInvitations();
+            }
+        }
+        if (firstLoadNotices)
+        {
+            if (mode == SearchMode.Notices)
+            {
+                await LoadMoreNotices();
+            }
         }
 
     }
-    public void Dispose() => SearchText = string.Empty;
+
+    private async void InitializedSearch()
+    {
+        
+        Notices = new();
+        Invitations= new();
+        NotFound = false;
+
+
+
+        pageNotices = 1;
+        sizeNotices = 10;
+        pageInvitations = 1;
+        sizeInvitations = 10;
+        firstLoadNotices = true;
+        firstLoadInvitations = true;
+
+        searchMode = SearchMode.Notices;
+
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            NotFound = true;
+        }
+        if (!NotFound)
+        {
+            await LoadMoreNotices();
+            await LoadMoreNotices();
+        }
+        StateHasChanged();
+    }
 }
