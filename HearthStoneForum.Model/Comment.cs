@@ -9,7 +9,7 @@ namespace HearthStoneForum.Model
 {
     public class Comment : Likes
     {
-        [SugarColumn(ColumnDataType = "ntext")]
+        [SugarColumn(ColumnDataType = "nvarchar(MAX)")]
         public string? Content { get; set; }
     }
 }

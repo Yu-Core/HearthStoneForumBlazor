@@ -14,8 +14,8 @@
                 <MBreadcrumbsItem Style="font-size:0.9rem" Disabled>搜索结果</MBreadcrumbsItem>
             </MBreadcrumbs>
         </div>
-        <div class="search-head">
-            <h2><span style="color:#757575;">@(SearchText.GetCutOutByLength(20))</span>的搜索结果</h2>
+        <div class="search-head @(NotFound?"d-none":"")">
+            <h2><span class="text-primary" >@(SearchText.GetCutOutByLength(20))</span>的搜索结果</h2>
         </div>
         <div class="@(NotFound?"d-none":"")">
             <MButton Outlined="@(searchMode !=SearchMode.Notices)"
@@ -142,22 +142,22 @@
             if (!NotFound)
             {
                 await LoadMoreNotices();
-                //await LoadMoreInvitations();
                 StateHasChanged();
             }
-
         }
     }
-
+    //实现IDisposable接口的方法，在组件注销时触发
     public void Dispose()
     {
+        //取消对搜索内容改变的订阅
         SearchState.OnChange -= InitializedSearch;
     }
-
+    //获取符合搜索内容的公告
     private async Task<List<Notice>> GetNotices()
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(SearchText)) return new();
             var result = await Http.GetFromJsonAsync<ApiResult<List<Notice>>>($"notices/search?searchText={SearchText}&page={pageNotices}&size={sizeNotices}");
             if (!result.Successful)
             {
@@ -177,10 +177,12 @@
             throw;
         }
     }
+    //获取符合搜索内容的帖子
     private async Task<List<Invitation>> GetInvitations()
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(SearchText)) return new();
             var result = await Http.GetFromJsonAsync<ApiResult<List<Invitation>>>($"invitations/search?searchText={SearchText}&page={pageInvitations}&size={sizeInvitations}");
             if (!result.Successful)
             {
@@ -238,13 +240,12 @@
 
     }
 
+    //初始化，适用于在本页搜索，通过事件订阅了搜索内容的改变
     private async void InitializedSearch()
     {
-        
         Notices = new();
         Invitations= new();
         NotFound = false;
-
 
 
         pageNotices = 1;

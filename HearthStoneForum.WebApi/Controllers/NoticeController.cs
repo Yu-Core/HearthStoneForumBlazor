@@ -55,7 +55,7 @@ namespace HearthStoneForum.WebApi.Controllers
         {
             RefAsync<int> total = 0;
             var data = await _iNoticeService.QueryAsync(
-                it => it.Title.ToLower().Contains(searchText.ToLower()) ,
+                it => it.Title.ToLower().Contains(searchText.ToLower())||it.Description.ToLower().Contains(searchText.ToLower()) ,
                 page, size, total);
 
             if (data.Count == 0) return ApiResultHelper.Error("未找到想要搜索的数据");

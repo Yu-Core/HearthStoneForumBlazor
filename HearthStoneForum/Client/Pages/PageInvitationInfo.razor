@@ -539,6 +539,7 @@
                 OnClickClearContent();
                 Invitation.CommentCount++;
                 StateHasChanged();
+                _mForm.ResetValidation();
                 await PopupService.AlertAsync("发布成功");
                 Navigation.NavigateTo(Navigation.Uri);
             }

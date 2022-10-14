@@ -11,7 +11,7 @@ namespace HearthStoneForum.Model
     {
         [SugarColumn(ColumnDataType = "nvarchar(64)")]
         public string? Title { get; set; }
-        [SugarColumn(ColumnDataType = "text")]
+        [SugarColumn(ColumnDataType = "nvarchar(MAX)")]
         public string? Description { get; set; }
         public DateTime CreatedTime { get; set; }
     }
