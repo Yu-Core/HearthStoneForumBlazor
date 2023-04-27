@@ -39,7 +39,17 @@ namespace HearthStoneForum.Client.Utility
         public static string GetStemBranch(DateTime time)
         {
             int sexagenaryYear = calendar.GetSexagenaryYear(time);
-            string stemBranch = CelestialStem.Substring(sexagenaryYear % 10 - 1, 1) + TerrestrialBranch.Substring(sexagenaryYear % 12 - 1, 1);
+            int celestialStemIndex = sexagenaryYear % 10 - 1;
+            if (celestialStemIndex < 0)
+            {
+                celestialStemIndex = 0;
+            }
+            int terrestrialBranchIndex = sexagenaryYear % 12 - 1;
+            if (terrestrialBranchIndex < 0)
+            {
+                terrestrialBranchIndex = 0;
+            }
+            string stemBranch = CelestialStem.Substring(celestialStemIndex, 1) + TerrestrialBranch.Substring(terrestrialBranchIndex, 1);
             return stemBranch;
         }
 
